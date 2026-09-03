@@ -32,7 +32,7 @@ function finishOpen(){
   scene?.classList.remove('is-opening');
   scene?.classList.add('is-open','is-dismissed');
   invitation?.setAttribute('aria-hidden','false');
-  effects.setPetalIntensity(.55);
+  effects.setPetalIntensity(.58);
   unlockScroll();
   window.scrollTo(0,0);
 }
@@ -72,9 +72,100 @@ function setupCopyDemo(){
   });
 }
 
+function setupCountdown(){
+  const root=document.querySelector('#sakuraCountdown');
+  if(!root)return ()=>{};
+  const target=new Date(root.dataset.target||'').getTime();
+  if(!Number.isFinite(target))return ()=>{};
+  const nodes={days:root.querySelector('[data-count="days"]'),hours:root.querySelector('[data-count="hours"]'),minutes:root.querySelector('[data-count="minutes"]'),seconds:root.querySelector('[data-count="seconds"]')};
+  let last={};
+  const render=()=>{
+    const diff=Math.max(0,target-Date.now());
+    const values={days:Math.floor(diff/86400000),hours:Math.floor(diff/3600000)%24,minutes:Math.floor(diff/60000)%60,seconds:Math.floor(diff/1000)%60};
+    Object.entries(values).forEach(([key,value])=>{
+      const node=nodes[key];if(!node)return;
+      const text=String(value).padStart(2,'0');
+      if(last[key]!==text){
+        node.textContent=text;
+        const card=node.closest('.count-item');
+        card?.classList.remove('tick');
+        requestAnimationFrame(()=>card?.classList.add('tick'));
+        last[key]=text;
+      }
+    });
+  };
+  render();
+  const timer=window.setInterval(render,1000);
+  return ()=>window.clearInterval(timer);
+}
+
+function setupStoryCarousel(){
+  const track=document.querySelector('#storyTrack');
+  if(!track)return ()=>{};
+  const slides=[...track.querySelectorAll('.story-card')];
+  const dots=document.querySelector('#storyDots');
+  const prev=document.querySelector('[data-story-prev]');
+  const next=document.querySelector('[data-story-next]');
+  if(slides.length<2)return ()=>{};
+  let index=0;
+  let timer=0;
+  dots.innerHTML=slides.map((_,i)=>`<i class="${i===0?'is-active':''}"></i>`).join('');
+  const dotNodes=[...dots.children];
+  const go=value=>{
+    index=(value+slides.length)%slides.length;
+    track.style.transform=`translate3d(${-index*100}%,0,0)`;
+    slides.forEach((slide,i)=>slide.classList.toggle('is-current',i===index));
+    dotNodes.forEach((dot,i)=>dot.classList.toggle('is-active',i===index));
+  };
+  const restart=()=>{
+    window.clearInterval(timer);
+    if(!effects.reduced)timer=window.setInterval(()=>go(index+1),5200);
+  };
+  const onPrev=()=>{go(index-1);restart()};
+  const onNext=()=>{go(index+1);restart()};
+  prev?.addEventListener('click',onPrev);next?.addEventListener('click',onNext);
+  track.parentElement?.addEventListener('pointerenter',()=>window.clearInterval(timer));
+  track.parentElement?.addEventListener('pointerleave',restart);
+  restart();
+  return ()=>{window.clearInterval(timer);prev?.removeEventListener('click',onPrev);next?.removeEventListener('click',onNext)};
+}
+
+function setupSceneChoreography(){
+  const sections=[...document.querySelectorAll('[data-sakura-scene]')];
+  if(!sections.length)return ()=>{};
+  const observer=new IntersectionObserver(entries=>{
+    const visible=entries.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];
+    if(!visible)return;
+    const section=visible.target;
+    const intensity=Number(section.dataset.petalIntensity||.5);
+    effects.setPetalIntensity(intensity);
+    sections.forEach(s=>s.classList.toggle('is-scene-active',s===section));
+    document.documentElement.dataset.sakuraScene=section.dataset.sakuraScene||'';
+  },{threshold:[.22,.45,.7],rootMargin:'-12% 0px -12% 0px'});
+  sections.forEach(section=>observer.observe(section));
+  return ()=>observer.disconnect();
+}
+
+function setupMusicSeal(){
+  const button=document.querySelector('#musicSeal');
+  if(!button)return ()=>{};
+  const onClick=()=>{
+    const hasAudio=Boolean(document.querySelector('audio[data-sakura-music]'));
+    if(!hasAudio){
+      button.animate?.([{transform:'scale(1)'},{transform:'scale(.94)'},{transform:'scale(1)'}],{duration:260,easing:'ease-out'});
+      button.title='Audio asli belum dipasang';
+      return;
+    }
+  };
+  button.addEventListener('click',onClick);
+  return ()=>button.removeEventListener('click',onClick);
+}
+
+const cleanups=[setupCountdown(),setupStoryCarousel(),setupSceneChoreography(),setupMusicSeal()];
+
 document.querySelector('#openInvitation')?.addEventListener('click',openScene);
 window.addEventListener('beforeunload',()=>window.scrollTo(0,0));
-window.addEventListener('pagehide',()=>effects.destroy(),{once:true});
+window.addEventListener('pagehide',()=>{cleanups.forEach(fn=>fn?.());effects.destroy()},{once:true});
 
 setupCopyDemo();
 invitation?.setAttribute('aria-hidden','true');
