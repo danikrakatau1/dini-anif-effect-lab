@@ -1,0 +1,74 @@
+/* Sakura V3.4 — Premium Detail & Micro-Interaction Pass */
+:root{--sakura-ring:0 0 0 4px rgba(170,130,75,.14);--sakura-press:scale(.982);--sakura-micro:220ms cubic-bezier(.2,.7,.2,1)}
+
+/* global tactile polish */
+button,a,input,select,textarea{ -webkit-tap-highlight-color:transparent }
+button,a{touch-action:manipulation}
+.vintage-btn,.open-invitation,.story-controls button,.music-seal,.gallery-tile{transition-property:transform,box-shadow,filter,background,border-color,opacity;transition-duration:.3s;transition-timing-function:var(--sakura-ease-out)}
+.vintage-btn:active,.story-controls button:active,.music-seal:active{transform:scale(.968)!important}
+.open-invitation:active{transform:scale(.965)!important}
+.gallery-tile:active{transform:scale(.985)!important}
+
+/* keyboard focus */
+.vintage-btn:focus-visible,.open-invitation:focus-visible,.story-controls button:focus-visible,.music-seal:focus-visible,.gallery-tile:focus-visible,.field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible{outline:none;box-shadow:var(--sakura-ring),0 12px 28px rgba(79,49,38,.12)}
+
+/* button premium sheen */
+.vintage-btn,.open-invitation{position:relative;overflow:hidden;isolation:isolate}
+.vintage-btn::after,.open-invitation::after{content:"";position:absolute;inset:-40% auto -40% -50%;width:32%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transform:skewX(-18deg);opacity:0;pointer-events:none}
+.vintage-btn:hover::after,.open-invitation:hover::after{animation:sakuraMicroGlint 1.1s ease-out}
+
+/* card micro-depth */
+.paper-card{transform-origin:center;backface-visibility:hidden}
+.paper-card::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(255,255,255,.16),transparent 28%,transparent 72%,rgba(109,56,50,.04));opacity:.65;pointer-events:none}
+.paper-card:hover::after{opacity:.9}
+
+/* countdown tick refinement */
+.count-item{transform-origin:center bottom}
+.count-item.tick strong{animation:sakuraDigitTick .42s var(--sakura-ease-out)}
+.count-item.tick{box-shadow:0 18px 44px rgba(91,53,42,.14),0 0 0 1px rgba(184,139,77,.08)}
+
+/* story controls */
+.story-controls button{box-shadow:0 8px 18px rgba(90,52,41,.08)}
+.story-controls button:hover{box-shadow:0 12px 24px rgba(90,52,41,.14)}
+.story-dots i{box-shadow:0 0 0 0 rgba(116,52,59,0)}
+.story-dots i.is-active{box-shadow:0 0 0 5px rgba(116,52,59,.07)}
+
+/* gallery polish */
+.gallery-tile{cursor:zoom-in}
+.gallery-tile:focus-visible{transform:translateY(-4px) scale(1.01)}
+.gallery-tile::before{content:"";position:absolute;inset:0;z-index:1;background:radial-gradient(circle at 30% 20%,rgba(255,244,217,.16),transparent 34%);opacity:.5;transition:opacity .45s ease;pointer-events:none}
+.gallery-tile:hover::before{opacity:.85}
+
+/* form */
+.field input,.field select,.field textarea{transition:border-color .24s ease,box-shadow .24s ease,background .24s ease,transform .24s ease}
+.field input:hover,.field select:hover,.field textarea:hover{border-color:rgba(151,107,72,.36);background:rgba(255,248,234,.84)}
+.field input:focus,.field select:focus,.field textarea:focus{transform:translateY(-1px)}
+.field label{transition:color .24s ease,letter-spacing .24s ease}
+.field:focus-within label{color:var(--sakura-maroon);letter-spacing:.1em}
+
+/* music seal */
+.music-seal{box-shadow:0 12px 28px rgba(61,36,34,.2),inset 0 1px rgba(255,255,255,.08)}
+.music-seal:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(61,36,34,.24),inset 0 1px rgba(255,255,255,.1)}
+.music-seal.is-playing .music-disc{animation:sakuraDiscSpin 6s linear infinite}
+.music-seal.is-ready:not(.is-playing) .music-disc{animation:sakuraDiscIdle 5s ease-in-out infinite}
+
+/* lightbox */
+.sakura-lightbox{backdrop-filter:blur(16px) saturate(.9)}
+.sakura-lightbox__dialog{box-shadow:0 30px 90px rgba(41,24,22,.38)}
+.sakura-lightbox__close{transition:transform .25s var(--sakura-ease-out),background .25s ease}
+.sakura-lightbox__close:hover{transform:rotate(6deg) scale(1.05)}
+.sakura-lightbox__close:active{transform:scale(.94)}
+
+/* finishing grain/glow */
+.invitation-main::after{content:"";position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.022;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.3'/%3E%3C/svg%3E")}
+.inv-section.is-scene-active .inv-title{text-shadow:0 8px 32px rgba(255,238,205,.22)}
+
+/* touch/mobile restraint */
+@media(pointer:coarse){.paper-card:hover,.gallery-tile:hover,.vintage-btn:hover,.story-controls button:hover,.music-seal:hover{transform:none}.vintage-btn,.open-invitation,.story-controls button,.music-seal{min-height:44px}.gallery-tile span{opacity:.9;transform:none}.paper-card{transition-duration:.22s}.field input,.field select,.field textarea{font-size:16px}}
+@media(max-width:600px){.music-seal{right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));padding-right:10px}.music-label{font-size:10px}.story-controls{gap:12px}.story-controls button{width:44px;height:44px}}
+@media(prefers-reduced-motion:reduce){.vintage-btn::after,.open-invitation::after,.music-seal .music-disc,.count-item.tick strong{animation:none!important}.paper-card,.gallery-tile,.vintage-btn,.open-invitation,.story-controls button,.music-seal{transition-duration:.001ms!important}}
+
+@keyframes sakuraMicroGlint{0%{left:-50%;opacity:0}18%{opacity:.55}100%{left:120%;opacity:0}}
+@keyframes sakuraDigitTick{0%{transform:translateY(0) scale(1);filter:blur(0)}40%{transform:translateY(-3px) scale(1.035);filter:blur(.3px)}100%{transform:translateY(0) scale(1);filter:blur(0)}}
+@keyframes sakuraDiscSpin{to{transform:rotate(360deg)}}
+@keyframes sakuraDiscIdle{0%,100%{transform:rotate(0deg) scale(1)}50%{transform:rotate(4deg) scale(1.025)}}
