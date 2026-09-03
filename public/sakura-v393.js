@@ -4,7 +4,13 @@ if(!document.querySelector(`link[href="${v394Href}"]`)){
   const link=document.createElement('link');link.rel='stylesheet';link.href=v394Href;document.head.appendChild(link);
 }
 await import('./sakura-v394.js');
-document.body.dataset.sakuraFinalCandidate='v3.9.4';
+
+const v395Href='/sakura-v395.css';
+if(!document.querySelector(`link[href="${v395Href}"]`)){
+  const link=document.createElement('link');link.rel='stylesheet';link.href=v395Href;document.head.appendChild(link);
+}
+await import('./sakura-v395.js');
+document.body.dataset.sakuraFinalCandidate='v3.9.5';
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse = matchMedia('(pointer: coarse)').matches;
