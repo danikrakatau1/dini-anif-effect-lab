@@ -1,4 +1,4 @@
-/* Sakura V4.2.1 — LOCKED: Readable World Build → Name Frame → Final Name */
+/* Sakura V4.2.2 — LOCKED: Continuous Matte World Build → Name Frame → Final Name */
 let gsap=window.gsap;
 const systemReducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const params=new URLSearchParams(location.search);
@@ -18,7 +18,7 @@ let coverObserver=null;
 
 function mark(state){
   if(document.body)document.body.dataset.v42State=state;
-  document.documentElement.dataset.sakuraOpeningEngine='v4.2.1';
+  document.documentElement.dataset.sakuraOpeningEngine='v4.2.2';
   document.documentElement.dataset.systemReducedMotion=systemReducedMotion?'1':'0';
 }
 
@@ -80,6 +80,12 @@ function showStroke(path){
   path.style.strokeDashoffset='0';
 }
 
+function setMaskSize(node,size){
+  if(!node)return;
+  node.style.webkitMaskSize=size;
+  node.style.maskSize=size;
+}
+
 function setStatic(){
   if(!opening)return;
   const stage=opening.querySelector('.v42-world-stage');
@@ -123,19 +129,28 @@ function prepare(){
   window.dispatchEvent(new CustomEvent('sakura:petals-pause'));
   gsap.killTweensOf(moving);
 
-  [top,center,left,right,bottom,compositeImg,panel,frame,title].forEach(el=>{if(el)el.style.willChange='transform,opacity,filter'});
-  gsap.set(top,{opacity:0,y:-90,scale:1.11,filter:'blur(3px)'});
-  gsap.set(center,{opacity:0,y:110,scale:1.18,filter:'blur(4px)'});
-  gsap.set(left,{opacity:0,x:-100,scale:1.08,filter:'blur(3px)'});
-  gsap.set(right,{opacity:0,x:100,scale:1.08,filter:'blur(3px)'});
-  gsap.set(bottom,{opacity:0,y:130,scale:1.14,filter:'blur(4px)'});
+  [top,center,left,right,bottom,compositeImg,panel,frame,title].forEach(el=>{if(el)el.style.willChange='opacity,filter,-webkit-mask-size,mask-size'});
+
+  /* Keep every artwork copy perfectly aligned. Only its soft matte changes size. */
+  gsap.set([top,center,left,right,bottom],{opacity:1});
+  setMaskSize(top,'100% 1%');
+  setMaskSize(center,'2% 2%');
+  setMaskSize(left,'1% 100%');
+  setMaskSize(right,'1% 100%');
+  setMaskSize(bottom,'100% 1%');
+  gsap.set(top,{filter:'blur(1.8px) saturate(.97) contrast(1.01)'});
+  gsap.set(center,{filter:'blur(2.2px) saturate(.97) contrast(1.01)'});
+  gsap.set(left,{filter:'blur(1.8px) saturate(.97) contrast(1.01)'});
+  gsap.set(right,{filter:'blur(1.8px) saturate(.97) contrast(1.01)'});
+  gsap.set(bottom,{filter:'blur(2px) saturate(.97) contrast(1.01)'});
+
   gsap.set(composite,{opacity:0});
-  gsap.set(compositeImg,{scale:1.025,y:5});
+  gsap.set(compositeImg,{scale:1.012,y:2});
   gsap.set(atmosphere,{opacity:0});
-  gsap.set(panel,{opacity:0,y:30,scale:.91});
+  gsap.set(panel,{opacity:0,y:22,scale:.94});
   gsap.set(frame,{opacity:0});
   primeStroke(outer);primeStroke(inner);primeStroke(accent);
-  gsap.set(title,{opacity:0,y:24,scale:.9,filter:'blur(8px)'});
+  gsap.set(title,{opacity:0,y:18,scale:.94,filter:'blur(7px)'});
   mark('prepared');
 
   return{stage,top,center,left,right,bottom,composite,compositeImg,atmosphere,panel,frame,outer,inner,accent,title};
@@ -165,39 +180,39 @@ function play(){
 
   const p=prepare();if(!p){started=false;return}
   const fast=coarse||saveData||lowMemory;
-  const speed=fast ? .96 : 1;
+  const speed=fast ? .97 : 1;
   mark('playing-world');
 
   timeline=gsap.timeline({defaults:{overwrite:'auto'},onComplete:()=>settle(p)});
   timeline
-    /* WORLD BUILD — each visual zone travels visibly into its exact final position. */
-    .to(p.top,{opacity:1,y:0,scale:1,filter:'blur(0px)',duration:.76*speed,ease:'power3.out',onStart:()=>mark('world-top')},.06)
-    .to(p.center,{opacity:1,y:0,scale:1,filter:'blur(0px)',duration:.88*speed,ease:'power3.out',onStart:()=>mark('world-fuji')},.96)
-    .to(p.left,{opacity:1,x:0,scale:1,filter:'blur(0px)',duration:.7*speed,ease:'power3.out',onStart:()=>mark('world-left')},1.96)
-    .to(p.right,{opacity:1,x:0,scale:1,filter:'blur(0px)',duration:.7*speed,ease:'power3.out',onStart:()=>mark('world-right')},2.76)
-    .to(p.bottom,{opacity:1,y:0,scale:1,filter:'blur(0px)',duration:.88*speed,ease:'power3.out',onStart:()=>mark('world-floral')},3.56)
-    .to(p.atmosphere,{opacity:.12,duration:.4*speed,ease:'sine.out'},4.0)
+    /* CONTINUOUS WORLD BUILD — soft mattes grow over a perfectly aligned master image. */
+    .to(p.top,{webkitMaskSize:'100% 73%',maskSize:'100% 73%',filter:'blur(0px) saturate(.97) contrast(1.01)',duration:1.32*speed,ease:'sine.inOut',onStart:()=>mark('world-top')},.06)
+    .to(p.center,{webkitMaskSize:'92% 70%',maskSize:'92% 70%',filter:'blur(0px) saturate(.97) contrast(1.01)',duration:1.48*speed,ease:'power2.inOut',onStart:()=>mark('world-fuji')},.9)
+    .to(p.left,{webkitMaskSize:'58% 100%',maskSize:'58% 100%',filter:'blur(0px) saturate(.97) contrast(1.01)',duration:1.16*speed,ease:'sine.inOut',onStart:()=>mark('world-left')},1.92)
+    .to(p.right,{webkitMaskSize:'58% 100%',maskSize:'58% 100%',filter:'blur(0px) saturate(.97) contrast(1.01)',duration:1.16*speed,ease:'sine.inOut',onStart:()=>mark('world-right')},2.52)
+    .to(p.bottom,{webkitMaskSize:'100% 62%',maskSize:'100% 62%',filter:'blur(0px) saturate(.97) contrast(1.01)',duration:1.42*speed,ease:'power2.inOut',onStart:()=>mark('world-floral')},3.14)
+    .to(p.atmosphere,{opacity:.11,duration:.68*speed,ease:'sine.inOut'},3.78)
 
-    /* Seamless merge into the exact full original artwork only after all pieces are in place. */
-    .to(p.composite,{opacity:1,duration:.48*speed,ease:'sine.inOut',onStart:()=>mark('world-merge')},4.48)
-    .to([p.top,p.center,p.left,p.right,p.bottom],{opacity:0,duration:.4*speed,ease:'sine.inOut'},4.58)
-    .to(p.compositeImg,{scale:1,y:0,duration:.62*speed,ease:'power2.out'},4.48)
-    .call(()=>mark('world-complete'),null,5.0)
+    /* Overlapping feathered mattes dissolve into the exact full artwork without a seam. */
+    .to(p.composite,{opacity:1,duration:1.08*speed,ease:'sine.inOut',onStart:()=>mark('world-merge')},4.4)
+    .to([p.top,p.center,p.left,p.right,p.bottom],{opacity:0,duration:.82*speed,ease:'sine.inOut'},4.86)
+    .to(p.compositeImg,{scale:1,y:0,duration:.9*speed,ease:'power2.out'},4.42)
+    .call(()=>mark('world-complete'),null,5.58)
 
-    /* HOLD — completed background gets its own beat. */
-    .call(()=>mark('world-hold'),null,5.34)
+    /* HOLD — completed background gets a clean visual breath. */
+    .call(()=>mark('world-hold'),null,5.92)
 
-    /* NAME FRAME — no text exists yet. */
-    .to(p.panel,{opacity:1,y:0,scale:1,duration:.64*speed,ease:'power3.out',onStart:()=>mark('frame-paper')},5.58)
-    .to(p.frame,{opacity:1,duration:.08,onStart:()=>mark('frame-outer')},6.1)
-    .to(p.outer,{strokeDashoffset:0,duration:.78*speed,ease:'power1.inOut'},6.14)
-    .to(p.inner,{strokeDashoffset:0,duration:.62*speed,ease:'power1.inOut',onStart:()=>mark('frame-inner')},6.94)
-    .to(p.accent,{strokeDashoffset:0,duration:.36*speed,ease:'power1.inOut',onStart:()=>mark('frame-accent')},7.6)
-    .call(()=>mark('frame-complete'),null,7.98)
+    /* NAME FRAME — background is already complete; no text yet. */
+    .to(p.panel,{opacity:1,y:0,scale:1,duration:.7*speed,ease:'power3.out',onStart:()=>mark('frame-paper')},6.18)
+    .to(p.frame,{opacity:1,duration:.08,onStart:()=>mark('frame-outer')},6.8)
+    .to(p.outer,{strokeDashoffset:0,duration:.8*speed,ease:'power1.inOut'},6.84)
+    .to(p.inner,{strokeDashoffset:0,duration:.64*speed,ease:'power1.inOut',onStart:()=>mark('frame-inner')},7.68)
+    .to(p.accent,{strokeDashoffset:0,duration:.38*speed,ease:'power1.inOut',onStart:()=>mark('frame-accent')},8.36)
+    .call(()=>mark('frame-complete'),null,8.76)
 
-    /* FINAL REVEAL — locked name is the last new visual element. */
-    .to(p.title,{opacity:1,y:0,scale:1,filter:'blur(0px)',duration:.9*speed,ease:'power3.out',onStart:()=>mark('final-name')},8.34)
-    .to(p.atmosphere,{opacity:.07,duration:.38*speed,ease:'sine.out'},9.08);
+    /* FINAL REVEAL — locked name remains the last new visual element. */
+    .to(p.title,{opacity:1,y:0,scale:1,filter:'blur(0px)',duration:.92*speed,ease:'power3.out',onStart:()=>mark('final-name')},9.08)
+    .to(p.atmosphere,{opacity:.065,duration:.42*speed,ease:'sine.out'},9.86);
 }
 
 function start(){if(started)return;started=true;mark('starting');play()}
@@ -209,10 +224,10 @@ function coverHasPassedReveal(){return Boolean(cover?.classList.contains('is-ope
 
 suppressGlobalOpeningReveal();
 buildStage();
-window.__SAKURA_TARGET_VERSION='v4.2.1';
-document.body.dataset.sakuraFinalCandidate='v4.2.1';
-document.title='Sakura Vintage V4.2.1 Motion Readability · Dini Anif Effect Lab';
-const labState=document.querySelector('.lab-state');if(labState)labState.textContent='Sakura Vintage · V4.2.1 Motion Readability';
+window.__SAKURA_TARGET_VERSION='v4.2.2';
+document.body.dataset.sakuraFinalCandidate='v4.2.2';
+document.title='Sakura Vintage V4.2.2 Continuous Matte Reveal · Dini Anif Effect Lab';
+const labState=document.querySelector('.lab-state');if(labState)labState.textContent='Sakura Vintage · V4.2.2 Continuous Matte Reveal';
 if(reduceMotion)setStatic();
 
 openButton?.addEventListener('click',onOpenClick,{capture:true});
