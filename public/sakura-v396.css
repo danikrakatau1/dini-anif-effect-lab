@@ -1,7 +1,6 @@
 /* Sakura V3.9.6 — Mobile Performance Rescue */
 :root{--v396-maroon:#742f3a;--v396-gold:#c29a61;--v396-paper:rgba(249,239,219,.9)}
 
-/* V3.9.6 owns opening stage; legacy heavy opening stages never display. */
 .scene-opening>.v394-opening-cinema,.scene-opening>.v395-stage{display:none!important}
 .scene-opening{background:#ead8bb!important;contain:paint}
 .scene-opening>.inv-shell{z-index:20;opacity:0;transform:translate3d(0,22px,0) scale(.965);filter:none!important;background:linear-gradient(180deg,rgba(252,244,228,.9),rgba(244,226,199,.86));box-shadow:0 22px 52px rgba(65,39,34,.13),inset 0 0 0 5px rgba(255,250,239,.24)}
@@ -14,8 +13,6 @@
 .v396-far img,.v396-near img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;transform:translateZ(0);backface-visibility:hidden}
 .v396-far{z-index:1;clip-path:inset(0 12% 0 12% round 34px)}
 .v396-far img{transform:translate3d(0,14px,0) scale(1.115)}
-
-/* One near texture serves both upper branches and lower florals. */
 .v396-near{z-index:4;opacity:0;-webkit-mask-image:linear-gradient(to bottom,#000 0 38%,transparent 46% 64%,#000 73% 100%);mask-image:linear-gradient(to bottom,#000 0 38%,transparent 46% 64%,#000 73% 100%);-webkit-mask-size:100% 100%;mask-size:100% 100%}
 .v396-near img{transform:translate3d(0,24px,0) scale(1.155)}
 .v396-haze{z-index:6;opacity:0;background:radial-gradient(circle at 54% 28%,rgba(255,233,190,.42),transparent 30%),linear-gradient(180deg,rgba(255,249,232,.1),transparent 48%,rgba(105,62,51,.05))}
@@ -28,28 +25,29 @@
 .v396-burst{z-index:17;overflow:hidden}
 .v396-petal{position:absolute;left:50%;top:52%;width:8px;height:13px;border-radius:75% 15% 75% 25%;background:linear-gradient(145deg,#f2d6d2,#b97079);opacity:0;transform:translateZ(0)}
 
-/* Mobile: aggressively remove expensive continuous paint. */
 @media(pointer:coarse){
   .invitation-main::before{display:none!important}
   .inv-section::before{animation:none!important;opacity:.42!important}
+  html.v396-intro-active .v393-butterfly-layer{display:none!important}
   .inv-section:not(.is-scene-active)>.v393-butterfly-layer{display:none!important}
   .v393-butterfly-layer .v393-butterfly:nth-child(n+2){display:none!important}
   .v393-butterfly::before,.v393-butterfly::after{animation-duration:.7s!important}
   .continuity-petal:nth-child(n+6){display:none!important}
   .continuity-petal{filter:none!important}
+
+  /* Only visible scene decor is painted; side image duplicates are removed on mobile. */
+  .inv-section:not(.is-scene-active)>.v394-ornament-layer{display:none!important}
+  .v394-ornament-layer>.v394-edge.left,.v394-ornament-layer>.v394-edge.right{display:none!important}
+  .v394-ornament-layer>.v394-edge.bottom{height:118px!important;opacity:.38!important;filter:none!important}
+
   .scene-opening.v396-complete .v396-far img,.scene-opening.v396-complete .v396-near img{animation:none!important;will-change:auto!important}
   .v396-beam{filter:none!important}
   .v396-stage,.v396-far,.v396-near{will-change:auto}
   .scene-date .countdown-grid,.scene-gift .gift-card,.scene-event .event-grid,.scene-couple .couple-grid{filter:none!important}
 }
 
-/* Desktop may keep one very slow breathing layer. */
-@media(pointer:fine) and (prefers-reduced-motion:no-preference){
-  .scene-opening.v396-complete .v396-far img{animation:v396FarIdle 20s ease-in-out infinite alternate}
-}
-
+@media(pointer:fine) and (prefers-reduced-motion:no-preference){.scene-opening.v396-complete .v396-far img{animation:v396FarIdle 20s ease-in-out infinite alternate}}
 @keyframes v396FarIdle{from{transform:translate3d(0,-3px,0) scale(1.035)}to{transform:translate3d(-3px,-7px,0) scale(1.05)}}
-
 @media(max-width:430px){.v396-portal,.v396-shimmer{inset:22px 15px}.scene-opening>.inv-shell{width:calc(100% - 40px);padding:44px 24px}}
 @media(max-width:350px){.v396-portal,.v396-shimmer{inset:17px 11px}.scene-opening>.inv-shell{width:calc(100% - 30px);padding:40px 20px}}
 @media(prefers-reduced-motion:reduce){.v396-veil,.v396-beam,.v396-burst,.v396-shimmer{display:none!important}.v396-far{clip-path:none!important}.v396-far img,.v396-near img{transform:none!important;animation:none!important}.v396-near{opacity:.32!important}.v396-haze{opacity:.16!important}.v396-portal{opacity:1!important;transform:none!important}.scene-opening>.inv-shell,.scene-opening .inv-eyebrow,.scene-opening .inv-title,.scene-opening .inv-rule,.scene-opening .inv-copy{opacity:1!important;transform:none!important}}
