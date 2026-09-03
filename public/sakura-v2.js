@@ -18,6 +18,7 @@ artwork?.addEventListener('load',()=>{if(guard)guard.hidden=true;scene?.classLis
 function finishOpen(){
   scene?.classList.remove('is-opening');scene?.classList.add('is-open','is-dismissed');
   invitation?.setAttribute('aria-hidden','false');effects.setPetalIntensity(stability.lowPower ? .46 : .58);unlockScroll();window.scrollTo(0,0);
+  requestAnimationFrame(()=>window.dispatchEvent(new CustomEvent('sakura:opened',{detail:{version:'v3.9.3'}})));
 }
 function openScene(){
   if(!scene||scene.classList.contains('is-open')||scene.classList.contains('is-opening'))return;
