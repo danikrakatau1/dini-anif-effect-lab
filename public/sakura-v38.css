@@ -1,0 +1,26 @@
+/* Sakura V3.8 — Final Visual QA & Calibration */
+:root{--safe-top:max(12px,env(safe-area-inset-top));--safe-bottom:max(12px,env(safe-area-inset-bottom));--safe-left:max(12px,env(safe-area-inset-left));--safe-right:max(12px,env(safe-area-inset-right))}
+html,body{max-width:100%;overscroll-behavior-x:none}
+body.lightbox-open{overflow:hidden!important;touch-action:none}
+.sakura-cover,.invitation-main{contain:paint}
+.cover-copy{padding-top:calc(var(--safe-top) + 18px);padding-bottom:calc(var(--safe-bottom) + 42px)}
+.artwork-image{object-position:50% 50%}
+.inv-section{scroll-margin-top:12px}
+.inv-shell{min-width:0}
+.inv-title,.closing-name,.couple-card h3{overflow-wrap:anywhere;text-wrap:balance}
+.inv-copy,.event-card p,.story-card p,.message-card p{overflow-wrap:anywhere}
+.story-viewport{touch-action:pan-y;user-select:none}.gallery-tile{touch-action:manipulation}
+.vintage-btn,.open-invitation,.story-controls button,.music-seal,.gallery-lightbox-close{min-width:44px;min-height:44px}
+.gallery-lightbox{padding:var(--safe-top) var(--safe-right) var(--safe-bottom) var(--safe-left)}
+.gallery-lightbox-card{max-height:calc(100dvh - var(--safe-top) - var(--safe-bottom) - 20px)}
+.gallery-lightbox-art{min-height:min(66dvh,620px)}
+.music-seal{bottom:calc(var(--safe-bottom) + 2px);max-width:190px}
+.countdown-grid,.event-grid,.couple-grid,.gallery-grid{min-width:0}
+.count-item strong{font-variant-numeric:tabular-nums lining-nums}
+.field input,.field select,.field textarea{max-width:100%}
+@media(max-width:430px){.sakura-cover{min-height:100svh}.artwork-stage{inset:-2.5%;width:105%;height:105%}.artwork-image{object-position:50% 50%}.cover-copy{transform:none;padding-left:calc(var(--safe-left) + 8px);padding-right:calc(var(--safe-right) + 8px)}.wedding-label{font-size:11px;letter-spacing:.2em}.couple-names span{font-size:clamp(46px,15vw,66px)}.guest-copy{font-size:11px;line-height:1.45}.open-invitation{width:min(210px,78vw)}.inv-section{padding-top:76px;padding-bottom:76px}.inv-section--compact{padding-top:68px;padding-bottom:68px}.inv-shell{max-width:390px}.inv-title{font-size:clamp(40px,13vw,57px)}.inv-eyebrow{letter-spacing:.19em}.inv-copy{margin-top:20px}.couple-grid{margin-top:34px}.couple-card{padding:30px 20px}.couple-card h3{font-size:clamp(39px,12vw,52px)}.countdown-grid{margin-top:30px}.event-grid{margin-top:32px;gap:14px}.event-card{padding-top:32px;padding-bottom:32px}.story-carousel{margin-top:34px}.gallery-grid{margin-top:34px}.gift-card,.form-card,.message-list{margin-top:32px}.scene-date .inv-shell,.scene-event .inv-shell,.scene-gift .inv-shell,.scene-rsvp .inv-shell{max-width:390px}.music-seal{right:var(--safe-right)}}
+@media(max-width:390px){.inv-section{padding-left:18px;padding-right:18px}.scene-date .inv-shell,.scene-event .inv-shell,.scene-gift .inv-shell,.scene-rsvp .inv-shell{width:100%}.gallery-grid{grid-auto-rows:142px}.gallery-tile{border-radius:18px}.closing-note{font-size:15px;letter-spacing:.04em}.music-label{display:none}.music-seal{width:48px;height:48px;padding:6px;border-radius:50%}.music-disc{width:34px;height:34px}}
+@media(max-width:350px){.couple-names{gap:7px}.couple-names span{font-size:43px}.couple-names i{font-size:22px}.countdown-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.count-item{padding:17px 5px}.gallery-grid{grid-auto-rows:132px}.inv-title{font-size:39px}.event-card,.gift-card,.form-card{padding-left:18px;padding-right:18px}.story-card{padding-left:20px;padding-right:20px}}
+@media(min-width:431px){body{min-height:100vh}.invitation-main{border-left:1px solid rgba(255,255,255,.15);border-right:1px solid rgba(255,255,255,.15)}.sakura-cover{border-left:1px solid rgba(255,255,255,.15);border-right:1px solid rgba(255,255,255,.15)}.gallery-lightbox{max-width:430px}}
+@media(orientation:landscape) and (max-height:560px){.music-seal{bottom:8px}.gallery-lightbox-art{min-height:62vh}.inv-section{min-height:100vh}.cover-copy{padding-top:12px;padding-bottom:12px}}
+@media(prefers-contrast:more){.paper-card,.field input,.field select,.field textarea{border-color:rgba(91,53,44,.48)}.inv-copy,.event-card p,.story-card p{color:#4f3731}.vintage-btn,.open-invitation{border-color:#a67a44}}
