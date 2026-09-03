@@ -1,0 +1,19 @@
+/* Sakura V3.5 — Mobile-First Stage Layout Pass */
+:root{--sakura-stage:430px;--sakura-stage-shadow:0 0 0 1px rgba(93,57,46,.08),0 28px 80px rgba(55,35,30,.17)}
+html{background:#d9c4a8;overflow-x:hidden}
+body{position:relative;min-width:320px;overflow-x:hidden;background:linear-gradient(90deg,#d6bea1 0%,#ead9c0 22%,#ead9c0 78%,#d6bea1 100%)}
+body::before{content:"";position:fixed;inset:0;z-index:-2;background:linear-gradient(rgba(70,43,38,.3),rgba(70,43,38,.22)),url('/assets/sakura-v2-landscape.png') center/cover no-repeat;filter:blur(18px) saturate(.65) sepia(.12);transform:scale(1.08);opacity:.42;pointer-events:none}
+body::after{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(ellipse at center,rgba(244,228,200,.22),rgba(58,38,34,.2));pointer-events:none}
+.invitation-main{width:min(100%,var(--sakura-stage));margin-inline:auto;box-shadow:var(--sakura-stage-shadow);min-height:100svh}
+.sakura-cover{width:min(100vw,var(--sakura-stage))!important;left:50%!important;right:auto!important;margin-left:calc(var(--sakura-stage) / -2);box-shadow:var(--sakura-stage-shadow)}
+.inv-section{padding-inline:clamp(20px,6vw,32px)}
+.inv-shell{width:100%;max-width:390px}
+.inv-title{font-size:clamp(42px,13vw,64px)}
+.inv-copy{font-size:clamp(15px,4.4vw,18px);line-height:1.66}
+.paper-card{border-radius:24px}
+.gallery-grid{grid-template-columns:1fr 1fr;grid-auto-rows:150px;gap:10px}.gallery-tile:first-child{grid-row:span 2}.gallery-tile:nth-child(4){grid-column:span 1}
+.music-seal{max-width:calc(var(--sakura-stage) - 28px)}
+@media(max-width:430px){body{background:var(--sakura-cream)}body::before,body::after{display:none}.invitation-main{width:100%;box-shadow:none}.sakura-cover{left:0!important;margin-left:0;width:100vw!important;box-shadow:none}.inv-section{padding-left:max(18px,env(safe-area-inset-left));padding-right:max(18px,env(safe-area-inset-right))}.cover-copy{padding-left:max(18px,env(safe-area-inset-left));padding-right:max(18px,env(safe-area-inset-right))}}
+@media(min-width:431px){.music-seal{right:calc((100vw - var(--sakura-stage))/2 + 14px)}.gallery-lightbox,.sakura-lightbox{width:var(--sakura-stage);left:50%;right:auto;transform:translateX(-50%)}}
+@media(max-width:380px){:root{--sakura-stage:100vw}.inv-title{font-size:clamp(38px,13vw,52px)}.countdown-grid{gap:8px}.count-item{padding:19px 7px}.event-card,.gift-card,.form-card{padding-left:20px;padding-right:20px}}
+@supports(height:100dvh){.sakura-cover{height:100dvh!important}.inv-section:first-child{min-height:100dvh}}
