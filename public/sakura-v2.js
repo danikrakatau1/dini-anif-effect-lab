@@ -17,11 +17,11 @@ artwork?.addEventListener('load',()=>{if(guard)guard.hidden=true;scene?.classLis
 
 function finishOpen(){
   scene?.classList.remove('is-opening');scene?.classList.add('is-open','is-dismissed');
-  invitation?.setAttribute('aria-hidden','false');effects.setPetalIntensity(stability.lowPower?.46:.58);unlockScroll();window.scrollTo(0,0);
+  invitation?.setAttribute('aria-hidden','false');effects.setPetalIntensity(stability.lowPower ? .46 : .58);unlockScroll();window.scrollTo(0,0);
 }
 function openScene(){
   if(!scene||scene.classList.contains('is-open')||scene.classList.contains('is-opening'))return;
-  scene.classList.add('is-opening');effects.setPetalIntensity(stability.lowPower?.55:.72);
+  scene.classList.add('is-opening');effects.setPetalIntensity(stability.lowPower ? .55 : .72);
   if(effects.reduced||!gsap){scene.style.display='none';finishOpen();return}
   const tl=gsap.timeline({defaults:{overwrite:'auto'},onComplete:finishOpen});
   tl.to('#openInvitation',{scale:.96,duration:.12,ease:'power1.out'})
