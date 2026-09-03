@@ -1,45 +1,85 @@
-/* Sakura V4.1.2 — Reference Timing Calibration + true SVG border draw */
-:root{--v41-maroon:#742f3a;--v41-gold:#bd955d;--v41-paper:#f8ecd8;--v41-paper-soft:rgba(249,239,219,.90)}
+/* Sakura V4.2 — Locked World Build → Name Frame → Final Name */
+:root{--v42-maroon:#742f3a;--v42-gold:#bd955d;--v42-paper:rgba(250,240,220,.91);--v42-ink:#68483e}
 
-/* V4.1.2 owns the opening visual grammar. Legacy opening layers remain disabled. */
-.scene-opening{background:#ead9bf!important}
-.scene-opening>.v41-stage{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;background:#ead9bf}
-.v41-stage .v40-far,.v41-stage .v40-mid,.v41-stage .v40-branches,.v41-stage .v40-floral,.v41-stage .v40-atmosphere{position:absolute;inset:0;pointer-events:none}
-.v41-stage .v40-far{z-index:1;opacity:1}
-.v41-stage .v40-far img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 50%;transform:translate3d(0,0,0) scale(1.2);backface-visibility:hidden}
+/* V4.2 owns only the post-cover opening scene. The artwork itself is never redrawn. */
+.scene-opening{min-height:100svh;overflow:hidden;background:#ead9bf!important;isolation:isolate;contain:paint}
+.scene-opening>.v394-opening-cinema,.scene-opening>.v395-stage,.scene-opening>.v396-stage,.scene-opening>.v40-stage,.scene-opening>.v41-stage{display:none!important}
 
-/* Lightweight soft depth zones from the proven master artwork. */
-.v41-stage .v40-mid{z-index:2;opacity:0;background:url('/assets/sakura-v2-landscape.png') center/cover no-repeat;-webkit-mask-image:linear-gradient(to bottom,transparent 0%,transparent 39%,rgba(0,0,0,.24) 48%,#000 58%,#000 83%,transparent 97%);mask-image:linear-gradient(to bottom,transparent 0%,transparent 39%,rgba(0,0,0,.24) 48%,#000 58%,#000 83%,transparent 97%)}
-.v41-stage .v40-branches{z-index:3;opacity:0;background:url('/assets/sakura-v2-landscape.png') center/cover no-repeat;-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 31%,rgba(0,0,0,.86) 46%,rgba(0,0,0,.24) 61%,transparent 73%);mask-image:linear-gradient(to bottom,#000 0%,#000 31%,rgba(0,0,0,.86) 46%,rgba(0,0,0,.24) 61%,transparent 73%)}
-.v41-stage .v40-floral{z-index:4;opacity:0;background:url('/assets/sakura-v2-landscape.png') center/cover no-repeat;-webkit-mask-image:linear-gradient(to top,#000 0%,#000 18%,rgba(0,0,0,.88) 28%,rgba(0,0,0,.22) 40%,transparent 53%);mask-image:linear-gradient(to top,#000 0%,#000 18%,rgba(0,0,0,.88) 28%,rgba(0,0,0,.22) 40%,transparent 53%)}
-.v41-stage .v40-atmosphere{z-index:5;opacity:0;background:radial-gradient(circle at 55% 30%,rgba(255,235,195,.23),transparent 35%),linear-gradient(180deg,rgba(255,250,236,.025),transparent 58%,rgba(94,57,45,.035))}
+/* ---------- WORLD BUILD ---------- */
+.scene-opening>.v42-world-stage{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;background:#ead9bf}
+.v42-world-stage>.v42-piece,.v42-world-stage>.v42-composite,.v42-world-stage>.v42-atmosphere,.v42-world-stage>.v42-paper-base{position:absolute;inset:0;pointer-events:none}
+.v42-paper-base{z-index:0;background:linear-gradient(180deg,#f1dfc5 0%,#ead7bb 52%,#e6ceb0 100%)}
+.v42-piece{z-index:2;opacity:0;background-image:url('/assets/sakura-v2-landscape.png');background-position:50% 50%;background-size:cover;background-repeat:no-repeat;transform:translate3d(0,0,0);backface-visibility:hidden}
 
-/* Seed: the panel is born from one vertical ivory line. */
-.v41-slit{position:absolute;z-index:12;left:50%;top:50%;width:2px;height:0;transform:translate(-50%,-50%);border-radius:999px;background:linear-gradient(180deg,rgba(189,149,93,.08),rgba(255,247,225,.98) 22%,rgba(255,247,225,.98) 78%,rgba(189,149,93,.08));box-shadow:0 0 20px rgba(255,241,206,.36);opacity:0}
+/* Every zone is a masked view of the original master artwork, not a CSS reconstruction. */
+.v42-top{
+  z-index:3;
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 29%,rgba(0,0,0,.92) 40%,rgba(0,0,0,.3) 54%,transparent 66%);
+  mask-image:linear-gradient(to bottom,#000 0%,#000 29%,rgba(0,0,0,.92) 40%,rgba(0,0,0,.3) 54%,transparent 66%);
+}
+.v42-center{
+  z-index:2;
+  -webkit-mask-image:radial-gradient(ellipse 74% 48% at 50% 58%,#000 0%,#000 58%,rgba(0,0,0,.72) 72%,transparent 100%);
+  mask-image:radial-gradient(ellipse 74% 48% at 50% 58%,#000 0%,#000 58%,rgba(0,0,0,.72) 72%,transparent 100%);
+}
+.v42-sides{
+  z-index:4;
+  -webkit-mask-image:linear-gradient(90deg,#000 0%,rgba(0,0,0,.92) 18%,transparent 39%,transparent 61%,rgba(0,0,0,.92) 82%,#000 100%);
+  mask-image:linear-gradient(90deg,#000 0%,rgba(0,0,0,.92) 18%,transparent 39%,transparent 61%,rgba(0,0,0,.92) 82%,#000 100%);
+}
+.v42-bottom{
+  z-index:5;
+  -webkit-mask-image:linear-gradient(to top,#000 0%,#000 22%,rgba(0,0,0,.9) 31%,rgba(0,0,0,.28) 44%,transparent 56%);
+  mask-image:linear-gradient(to top,#000 0%,#000 22%,rgba(0,0,0,.9) 31%,rgba(0,0,0,.28) 44%,transparent 56%);
+}
+.v42-composite{z-index:6;opacity:0}
+.v42-composite img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 50%;transform:translate3d(0,0,0);backface-visibility:hidden}
+.v42-atmosphere{z-index:7;opacity:0;background:radial-gradient(circle at 52% 36%,rgba(255,239,204,.2),transparent 34%),linear-gradient(180deg,rgba(255,248,228,.025),transparent 61%,rgba(94,57,45,.045))}
 
-/* True draw-on border. GSAP animates SVG stroke-dashoffset path-by-path. */
-.v41-border{position:absolute;z-index:14;inset:24px 17px;opacity:0;pointer-events:none}
-.v41-border svg{display:block;width:100%;height:100%;overflow:visible}
-.v41-border path{fill:none;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round;opacity:1}
-.v41-border .v41-border-outer{stroke:rgba(116,47,58,.84);stroke-width:1.6}
-.v41-border .v41-border-inner{stroke:rgba(189,149,93,.68);stroke-width:1.05}
-
-.v41-crest{position:absolute;z-index:16;left:50%;top:49px;width:42px;height:42px;transform:translateX(-50%) scale(.5) rotate(45deg);opacity:0;border:1px solid rgba(189,149,93,.72);background:rgba(250,240,220,.74);box-shadow:0 6px 18px rgba(81,48,39,.08)}
-.v41-crest::before,.v41-crest::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-45deg);background:var(--v41-gold)}
-.v41-crest::before{width:12px;height:1px}.v41-crest::after{width:1px;height:12px}
-
-/* Paper body appears before border/content. */
-.scene-opening>.inv-shell{z-index:13!important;width:calc(100% - 40px)!important;max-width:356px!important;padding:48px 25px!important;opacity:0;clip-path:inset(0 49.8% 0 49.8% round 42px);transform:translate3d(0,0,0);background:linear-gradient(180deg,rgba(252,246,233,.94),rgba(244,228,203,.9))!important;border:0!important;border-radius:42px!important;box-shadow:0 22px 54px rgba(69,43,36,.12),inset 0 0 0 1px rgba(255,250,238,.5)!important}
+/* ---------- NAME FRAME ---------- */
+.scene-opening>.inv-shell{
+  position:relative!important;z-index:12!important;
+  width:calc(100% - 72px)!important;max-width:330px!important;min-height:196px!important;
+  margin:auto!important;padding:62px 26px 46px!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  opacity:0;transform:translate3d(0,12px,0) scale(.965);
+  background:linear-gradient(180deg,rgba(252,246,233,.92),rgba(244,228,203,.88))!important;
+  border:0!important;border-radius:46% 46% 30px 30px/24% 24% 30px 30px!important;
+  box-shadow:0 24px 58px rgba(69,43,36,.13),inset 0 0 0 1px rgba(255,250,238,.52)!important;
+  overflow:visible!important;
+}
 .scene-opening>.inv-shell::before{display:none!important}
-.scene-opening .inv-eyebrow,.scene-opening .inv-title,.scene-opening .inv-rule,.scene-opening .inv-copy{opacity:0;transform:translate3d(0,12px,0);filter:none!important}
-.scene-opening .inv-title{color:var(--v41-maroon)!important}
+.scene-opening .inv-eyebrow,.scene-opening .inv-rule,.scene-opening .inv-copy{display:none!important}
 
-.scene-opening.v41-complete>.inv-shell{opacity:1!important;clip-path:inset(0 0 0 0 round 42px)!important}
-.scene-opening.v41-complete .inv-eyebrow,.scene-opening.v41-complete .inv-title,.scene-opening.v41-complete .inv-rule,.scene-opening.v41-complete .inv-copy{opacity:1!important;transform:none!important}
-.scene-opening.v41-complete .v41-border{opacity:1!important}
-.scene-opening.v41-complete .v41-crest{opacity:1!important;transform:translateX(-50%) scale(1) rotate(45deg)!important}
+.v42-name-frame{position:absolute;inset:8px;z-index:1;pointer-events:none;opacity:0}
+.v42-name-frame svg{display:block;width:100%;height:100%;overflow:visible}
+.v42-name-frame path{fill:none;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round}
+.v42-name-frame .v42-frame-outer{stroke:rgba(116,47,58,.88);stroke-width:1.7}
+.v42-name-frame .v42-frame-inner{stroke:rgba(189,149,93,.72);stroke-width:1.05}
+.v42-name-frame .v42-frame-accent{stroke:rgba(189,149,93,.68);stroke-width:1.05}
 
-@media(pointer:coarse){.v41-stage,.v41-stage .v40-far img,.v41-stage .v40-mid,.v41-stage .v40-branches,.v41-stage .v40-floral{will-change:auto!important}}
-@media(max-width:350px){.v41-border{inset:18px 12px}.v41-crest{top:42px}.scene-opening>.inv-shell{width:calc(100% - 30px)!important;padding:43px 20px!important}}
+/* Locked name styling: same elegant maroon Bodoni identity, now the final reveal. */
+.scene-opening .inv-title{
+  position:relative;z-index:3;margin:0!important;
+  color:var(--v42-maroon)!important;
+  font-family:"Bodoni Moda",serif!important;
+  font-size:clamp(42px,12vw,62px)!important;font-weight:400!important;
+  line-height:.98!important;letter-spacing:-.045em!important;
+  text-align:center!important;white-space:nowrap;
+  opacity:0;transform:translate3d(0,13px,0) scale(.965);filter:blur(5px)!important;
+  text-shadow:0 2px 16px rgba(255,247,229,.48);
+}
 
-/* Effect Lab deliberately keeps motion ON. Use ?motion=reduced for explicit static QA. */
+.scene-opening.v42-complete>.inv-shell{opacity:1!important;transform:none!important}
+.scene-opening.v42-complete .v42-name-frame{opacity:1!important}
+.scene-opening.v42-complete .inv-title{opacity:1!important;transform:none!important;filter:none!important}
+
+@media(max-width:350px){
+  .scene-opening>.inv-shell{width:calc(100% - 50px)!important;min-height:178px!important;padding:56px 20px 42px!important}
+  .scene-opening .inv-title{font-size:clamp(38px,12vw,52px)!important}
+}
+@media(pointer:coarse){
+  .v42-piece,.v42-composite img{will-change:auto!important}
+}
+
+/* Effect Lab keeps motion ON by default. Use ?motion=reduced for explicit static QA. */
