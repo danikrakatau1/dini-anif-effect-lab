@@ -1,0 +1,47 @@
+/* Sakura V4.1 — Reference-Accurate Step-by-Step Reveal */
+:root{--v41-maroon:#742f3a;--v41-gold:#bd955d;--v41-paper:#f8ecd8;--v41-paper-soft:rgba(249,239,219,.90)}
+
+/* V4.1 reuses the lightweight V4 stage but changes the reveal grammar completely. */
+.scene-opening{background:#ead9bf!important}
+.scene-opening>.v41-stage{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;background:#ead9bf}
+.v41-stage .v40-far,.v41-stage .v40-mid,.v41-stage .v40-branches,.v41-stage .v40-floral,.v41-stage .v40-atmosphere{position:absolute;inset:0;pointer-events:none}
+.v41-stage .v40-far{z-index:1;opacity:1}
+.v41-stage .v40-far img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 50%;transform:translate3d(0,0,0) scale(1.18);backface-visibility:hidden}
+
+/* Soft depth plates: same proven master artwork, feathered so there are no hard crop boxes. */
+.v41-stage .v40-mid{z-index:2;opacity:0;background:url('/assets/sakura-v2-landscape.png') center/cover no-repeat;-webkit-mask-image:linear-gradient(to bottom,transparent 0%,transparent 39%,rgba(0,0,0,.24) 48%,#000 58%,#000 83%,transparent 97%);mask-image:linear-gradient(to bottom,transparent 0%,transparent 39%,rgba(0,0,0,.24) 48%,#000 58%,#000 83%,transparent 97%)}
+.v41-stage .v40-branches{z-index:3;opacity:0;background:url('/assets/sakura-v2-landscape.png') center/cover no-repeat;-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 31%,rgba(0,0,0,.86) 46%,rgba(0,0,0,.24) 61%,transparent 73%);mask-image:linear-gradient(to bottom,#000 0%,#000 31%,rgba(0,0,0,.86) 46%,rgba(0,0,0,.24) 61%,transparent 73%)}
+.v41-stage .v40-floral{z-index:4;opacity:0;background:url('/assets/sakura-v2-landscape.png') center/cover no-repeat;-webkit-mask-image:linear-gradient(to top,#000 0%,#000 18%,rgba(0,0,0,.88) 28%,rgba(0,0,0,.22) 40%,transparent 53%);mask-image:linear-gradient(to top,#000 0%,#000 18%,rgba(0,0,0,.88) 28%,rgba(0,0,0,.22) 40%,transparent 53%)}
+.v41-stage .v40-atmosphere{z-index:5;opacity:0;background:radial-gradient(circle at 55% 30%,rgba(255,235,195,.26),transparent 34%),linear-gradient(180deg,rgba(255,250,236,.03),transparent 56%,rgba(94,57,45,.035))}
+
+/* The panel is born from one vertical seed, then the paper body expands. */
+.v41-slit{position:absolute;z-index:12;left:50%;top:50%;width:2px;height:0;transform:translate(-50%,-50%);border-radius:999px;background:linear-gradient(180deg,rgba(189,149,93,.08),rgba(255,247,225,.96) 24%,rgba(255,247,225,.96) 76%,rgba(189,149,93,.08));box-shadow:0 0 18px rgba(255,241,206,.32);opacity:0}
+
+.v41-border{position:absolute;z-index:14;inset:24px 17px;opacity:0;clip-path:inset(100% 0 0 0);border:1.5px solid rgba(116,47,58,.78);border-radius:46% 46% 34px 34px/13% 13% 34px 34px;box-shadow:inset 0 0 0 7px rgba(255,250,237,.22)}
+.v41-border::before{content:"";position:absolute;inset:12px;border:1px solid rgba(189,149,93,.5);border-radius:44% 44% 25px 25px/11% 11% 25px 25px;clip-path:inset(100% 0 0 0)}
+.v41-border.is-inner-drawn::before{clip-path:inset(0 0 0 0);transition:clip-path .5s cubic-bezier(.22,.68,.2,1)}
+
+.v41-crest{position:absolute;z-index:16;left:50%;top:49px;width:42px;height:42px;transform:translateX(-50%) scale(.5) rotate(45deg);opacity:0;border:1px solid rgba(189,149,93,.72);background:rgba(250,240,220,.72);box-shadow:0 6px 18px rgba(81,48,39,.08)}
+.v41-crest::before,.v41-crest::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-45deg);background:var(--v41-gold)}
+.v41-crest::before{width:12px;height:1px}.v41-crest::after{width:1px;height:12px}
+
+/* Existing content shell becomes the paper body. Body first, border later. */
+.scene-opening>.inv-shell{z-index:13!important;width:calc(100% - 40px)!important;max-width:356px!important;padding:48px 25px!important;opacity:0!important;clip-path:inset(0 49.8% 0 49.8% round 42px);transform:translate3d(0,0,0)!important;background:linear-gradient(180deg,rgba(252,246,233,.93),rgba(244,228,203,.89))!important;border:0!important;border-radius:42px!important;box-shadow:0 22px 54px rgba(69,43,36,.12),inset 0 0 0 1px rgba(255,250,238,.5)!important}
+.scene-opening>.inv-shell::before{display:none!important}
+.scene-opening .inv-eyebrow,.scene-opening .inv-title,.scene-opening .inv-rule,.scene-opening .inv-copy{opacity:0!important;transform:translate3d(0,12px,0)!important;filter:none!important}
+.scene-opening .inv-title{color:var(--v41-maroon)!important}
+
+.scene-opening.v41-complete>.inv-shell{opacity:1!important;clip-path:inset(0 0 0 0 round 42px)!important}
+.scene-opening.v41-complete .inv-eyebrow,.scene-opening.v41-complete .inv-title,.scene-opening.v41-complete .inv-rule,.scene-opening.v41-complete .inv-copy{opacity:1!important;transform:none!important}
+.scene-opening.v41-complete .v41-border{opacity:1!important;clip-path:inset(0 0 0 0)!important}
+.scene-opening.v41-complete .v41-crest{opacity:1!important;transform:translateX(-50%) scale(1) rotate(45deg)!important}
+
+@media(pointer:coarse){
+  .v41-stage,.v41-stage .v40-far img,.v41-stage .v40-mid,.v41-stage .v40-branches,.v41-stage .v40-floral{will-change:auto!important}
+}
+@media(max-width:350px){.v41-border{inset:18px 12px}.v41-crest{top:42px}.scene-opening>.inv-shell{width:calc(100% - 30px)!important;padding:43px 20px!important}}
+@media(prefers-reduced-motion:reduce){
+  .v41-stage .v40-far img{transform:none!important}.v41-stage .v40-mid,.v41-stage .v40-branches,.v41-stage .v40-floral{opacity:.4!important;transform:none!important}
+  .v41-slit{display:none!important}.v41-border{opacity:1!important;clip-path:none!important}.v41-crest{opacity:1!important;transform:translateX(-50%) rotate(45deg)!important}
+  .scene-opening>.inv-shell{opacity:1!important;clip-path:none!important}.scene-opening .inv-eyebrow,.scene-opening .inv-title,.scene-opening .inv-rule,.scene-opening .inv-copy{opacity:1!important;transform:none!important}
+}
