@@ -41,9 +41,10 @@ Production: NOT TOUCHED
 - V3.6 layered scenes: 177efb62ba059414dc16c3adedca03f15a3c0031
 - V3.7 stability controller: b976bb2cf5ee03afbdd4aea302addb1963f26edc
 - V3.7 stability CSS: 91ef0c78eec37b4d071e6c1c37a1ab4316f054bd
-- V3.7 JS integration: 58afa363cf18d2fa044a189995d61959c93b222b
+- V3.7 JS integration (corrected): 58afa363cf18d2fa044a189995d61959c93b222b
 - V3.8 calibration CSS: 010e03ad5e76d9324c17491fbd1143535885208c
 - V3.8 QA document: 721946b670d48d6a4da506d7e1874aabe068d288
+- V3.9 final root activation: 8080cd5de0d158e73117efaca070c20d395e7713
 
 ## Post-freeze rule
 
