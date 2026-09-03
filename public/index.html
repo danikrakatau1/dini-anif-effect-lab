@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#efe0c8" />
-  <title>Sakura Vintage V3 · Dini Anif Effect Lab</title>
+  <title>Sakura Vintage V3.1 · Dini Anif Effect Lab</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
@@ -13,8 +13,7 @@
   <link rel="stylesheet" href="/sakura-v3.css" />
 </head>
 <body>
-  <!-- COVER: artwork asli, tidak direkonstruksi dengan CSS/vector. -->
-  <section class="sakura-v2 sakura-cover" id="sakuraV2" data-sakura-parallax-root data-sakura-ambient aria-label="Sakura Vintage V3 cover">
+  <section class="sakura-v2 sakura-cover" id="sakuraV2" data-sakura-parallax-root data-sakura-ambient aria-label="Sakura Vintage V3.1 cover">
     <div class="artwork-stage" data-depth="0.055" aria-hidden="true">
       <img id="sakuraArtwork" class="artwork-image" data-sakura-kenburns="soft" src="/assets/sakura-v2-landscape.png" alt="" decoding="async" fetchpriority="high" />
     </div>
@@ -29,7 +28,7 @@
       <div class="fine-rule reveal-item" data-sakura-intro="focus" aria-hidden="true"><span></span><b>◆</b><span></span></div>
       <p class="guest-copy reveal-item" data-sakura-intro="rise">Kepada Bapak/Ibu/Saudara/i<br><strong>Di Tempat</strong></p>
       <button class="open-invitation reveal-item" data-sakura-intro="rise" id="openInvitation" type="button"><span>Buka Undangan</span></button>
-      <p class="lab-state">Sakura Vintage · V3 Full Effect System</p>
+      <p class="lab-state">Sakura Vintage · V3.1 Visual Choreography</p>
     </div>
 
     <div class="asset-guard" id="assetGuard" hidden>
@@ -39,9 +38,8 @@
   </section>
 
   <main class="invitation-main" id="invitationMain" aria-hidden="true">
-    <!-- 01 OPENING -->
-    <section class="inv-section sakura-art-section" data-sakura-ambient>
-      <div class="section-petal p1" aria-hidden="true"></div><div class="section-petal p2" aria-hidden="true"></div>
+    <section class="inv-section sakura-art-section scene-opening" data-sakura-scene="opening" data-petal-intensity="0.58" data-sakura-ambient>
+      <div class="living-wash" aria-hidden="true"></div><div class="section-petal p1" aria-hidden="true"></div><div class="section-petal p2" aria-hidden="true"></div>
       <div class="inv-shell" data-sakura-cascade>
         <p class="inv-eyebrow" data-sakura-reveal="rise">Assalamu’alaikum</p>
         <h2 class="inv-title" data-sakura-reveal="bloom">Faqih &amp; Dini</h2>
@@ -50,37 +48,35 @@
       </div>
     </section>
 
-    <!-- 02 COUPLE -->
-    <section class="inv-section" data-sakura-ambient>
+    <section class="inv-section scene-couple" data-sakura-scene="couple" data-petal-intensity="0.42" data-sakura-ambient>
       <div class="section-ambient" aria-hidden="true"></div><div class="section-petal p3" aria-hidden="true"></div>
       <div class="inv-shell">
         <p class="inv-eyebrow" data-sakura-reveal="rise">The Bride &amp; Groom</p>
         <h2 class="inv-title" data-sakura-reveal="bloom">Mempelai</h2>
         <div class="couple-grid" data-sakura-cascade>
-          <article class="paper-card couple-card" data-sakura-reveal="drift-right"><h3>Faqih</h3><p>Nama lengkap mempelai pria<br>Putra dari Bapak &amp; Ibu</p></article>
+          <article class="paper-card couple-card" data-sakura-reveal="drift-right"><span class="card-glow" aria-hidden="true"></span><h3>Faqih</h3><p>Nama lengkap mempelai pria<br>Putra dari Bapak &amp; Ibu</p></article>
           <div class="couple-amp" data-sakura-reveal="focus">&amp;</div>
-          <article class="paper-card couple-card" data-sakura-reveal="drift-left"><h3>Dini</h3><p>Nama lengkap mempelai wanita<br>Putri dari Bapak &amp; Ibu</p></article>
+          <article class="paper-card couple-card" data-sakura-reveal="drift-left"><span class="card-glow" aria-hidden="true"></span><h3>Dini</h3><p>Nama lengkap mempelai wanita<br>Putri dari Bapak &amp; Ibu</p></article>
         </div>
       </div>
     </section>
 
-    <!-- 03 SAVE THE DATE -->
-    <section class="inv-section sakura-art-section" data-sakura-ambient>
+    <section class="inv-section sakura-art-section scene-date" data-sakura-scene="date" data-petal-intensity="0.72" data-sakura-ambient>
+      <div class="living-wash" aria-hidden="true"></div>
       <div class="inv-shell">
         <p class="inv-eyebrow" data-sakura-reveal="rise">Save The Date</p>
         <h2 class="inv-title" data-sakura-reveal="bloom">Hari Bahagia</h2>
         <p class="inv-copy" data-sakura-reveal="rise">“Dan di antara tanda-tanda kebesaran-Nya ialah Dia menciptakan pasangan-pasangan untukmu...” — QS. Ar-Rum: 21</p>
-        <div class="countdown-grid" data-sakura-cascade>
-          <div class="paper-card count-item" data-sakura-reveal="bloom"><strong>00</strong><span>Hari</span></div>
-          <div class="paper-card count-item" data-sakura-reveal="bloom"><strong>00</strong><span>Jam</span></div>
-          <div class="paper-card count-item" data-sakura-reveal="bloom"><strong>00</strong><span>Menit</span></div>
-          <div class="paper-card count-item" data-sakura-reveal="bloom"><strong>00</strong><span>Detik</span></div>
+        <div class="countdown-grid" id="sakuraCountdown" data-target="2026-09-25T08:00:00+07:00" data-sakura-cascade aria-label="Hitung mundur hari pernikahan">
+          <div class="paper-card count-item" data-sakura-reveal="bloom"><strong data-count="days">00</strong><span>Hari</span></div>
+          <div class="paper-card count-item" data-sakura-reveal="bloom"><strong data-count="hours">00</strong><span>Jam</span></div>
+          <div class="paper-card count-item" data-sakura-reveal="bloom"><strong data-count="minutes">00</strong><span>Menit</span></div>
+          <div class="paper-card count-item" data-sakura-reveal="bloom"><strong data-count="seconds">00</strong><span>Detik</span></div>
         </div>
       </div>
     </section>
 
-    <!-- 04 EVENT -->
-    <section class="inv-section inv-section--compact" data-sakura-ambient>
+    <section class="inv-section inv-section--compact scene-event" data-sakura-scene="event" data-petal-intensity="0.36" data-sakura-ambient>
       <div class="section-ambient" aria-hidden="true"></div>
       <div class="inv-shell">
         <p class="inv-eyebrow" data-sakura-reveal="rise">Wedding Event</p>
@@ -92,32 +88,37 @@
       </div>
     </section>
 
-    <!-- 05 STORY -->
-    <section class="inv-section sakura-art-section" data-sakura-ambient>
+    <section class="inv-section sakura-art-section scene-story" data-sakura-scene="story" data-petal-intensity="0.54" data-sakura-ambient>
+      <div class="living-wash" aria-hidden="true"></div>
       <div class="inv-shell">
         <p class="inv-eyebrow" data-sakura-reveal="rise">Our Story</p>
         <h2 class="inv-title" data-sakura-reveal="bloom">Perjalanan Kami</h2>
-        <div class="story-track" data-sakura-cascade>
-          <article class="paper-card story-card" data-sakura-reveal="rise"><span>01</span><h3>Pertemuan</h3><p>Tempat untuk cerita awal pertemuan Faqih &amp; Dini.</p></article>
-          <article class="paper-card story-card" data-sakura-reveal="rise"><span>02</span><h3>Lamaran</h3><p>Tempat untuk momen ketika dua keluarga menyatukan niat baik.</p></article>
-          <article class="paper-card story-card" data-sakura-reveal="rise"><span>03</span><h3>Pernikahan</h3><p>Bab baru yang akan dimulai bersama.</p></article>
+        <div class="story-carousel" data-sakura-reveal="rise" aria-roledescription="carousel">
+          <div class="story-viewport">
+            <div class="story-track" id="storyTrack">
+              <article class="paper-card story-card is-current"><span>01</span><h3>Pertemuan</h3><p>Tempat untuk cerita awal pertemuan Faqih &amp; Dini.</p></article>
+              <article class="paper-card story-card"><span>02</span><h3>Lamaran</h3><p>Tempat untuk momen ketika dua keluarga menyatukan niat baik.</p></article>
+              <article class="paper-card story-card"><span>03</span><h3>Pernikahan</h3><p>Bab baru yang akan dimulai bersama.</p></article>
+            </div>
+          </div>
+          <div class="story-controls"><button type="button" data-story-prev aria-label="Cerita sebelumnya">←</button><div class="story-dots" id="storyDots" aria-hidden="true"></div><button type="button" data-story-next aria-label="Cerita berikutnya">→</button></div>
         </div>
       </div>
     </section>
 
-    <!-- 06 GALLERY -->
-    <section class="inv-section inv-section--compact" data-sakura-ambient>
+    <section class="inv-section inv-section--compact scene-gallery" data-sakura-scene="gallery" data-petal-intensity="0.3" data-sakura-ambient>
+      <div class="gallery-ambient" aria-hidden="true"></div>
       <div class="inv-shell">
         <p class="inv-eyebrow" data-sakura-reveal="rise">Our Moments</p>
         <h2 class="inv-title" data-sakura-reveal="bloom">Gallery</h2>
         <div class="gallery-grid" data-sakura-cascade aria-label="Slot gallery Sakura Vintage">
-          <div class="gallery-tile" data-sakura-reveal="focus"></div><div class="gallery-tile" data-sakura-reveal="focus"></div><div class="gallery-tile" data-sakura-reveal="focus"></div><div class="gallery-tile" data-sakura-reveal="focus"></div><div class="gallery-tile" data-sakura-reveal="focus"></div>
+          <div class="gallery-tile gallery-art" data-sakura-reveal="focus"><span>Moment I</span></div><div class="gallery-tile" data-sakura-reveal="focus"><span>Moment II</span></div><div class="gallery-tile" data-sakura-reveal="focus"><span>Moment III</span></div><div class="gallery-tile" data-sakura-reveal="focus"><span>Moment IV</span></div><div class="gallery-tile gallery-art" data-sakura-reveal="focus"><span>Moment V</span></div>
         </div>
       </div>
     </section>
 
-    <!-- 07 GIFT -->
-    <section class="inv-section sakura-art-section" data-sakura-ambient>
+    <section class="inv-section sakura-art-section scene-gift" data-sakura-scene="gift" data-petal-intensity="0.46" data-sakura-ambient>
+      <div class="living-wash" aria-hidden="true"></div>
       <div class="inv-shell">
         <p class="inv-eyebrow" data-sakura-reveal="drift-right">Wedding Gift</p>
         <h2 class="inv-title" data-sakura-reveal="bloom">Tanda Kasih</h2>
@@ -126,8 +127,7 @@
       </div>
     </section>
 
-    <!-- 08 RSVP -->
-    <section class="inv-section inv-section--compact" data-sakura-ambient>
+    <section class="inv-section inv-section--compact scene-rsvp" data-sakura-scene="rsvp" data-petal-intensity="0.24" data-sakura-ambient>
       <div class="section-ambient" aria-hidden="true"></div>
       <div class="inv-shell">
         <p class="inv-eyebrow" data-sakura-reveal="rise">Répondez S’il Vous Plaît</p>
@@ -144,8 +144,8 @@
       </div>
     </section>
 
-    <!-- 09 UCAPAN -->
-    <section class="inv-section sakura-art-section" data-sakura-ambient>
+    <section class="inv-section sakura-art-section scene-wishes" data-sakura-scene="wishes" data-petal-intensity="0.64" data-sakura-ambient>
+      <div class="living-wash" aria-hidden="true"></div>
       <div class="inv-shell">
         <p class="inv-eyebrow" data-sakura-reveal="rise">Warm Wishes</p>
         <h2 class="inv-title" data-sakura-reveal="bloom">Ucapan &amp; Doa</h2>
@@ -156,8 +156,7 @@
       </div>
     </section>
 
-    <!-- 10 CLOSING -->
-    <section class="inv-section" data-sakura-ambient>
+    <section class="inv-section scene-closing" data-sakura-scene="closing" data-petal-intensity="0.95" data-sakura-ambient>
       <div class="section-ambient" aria-hidden="true"></div><div class="section-petal p1" aria-hidden="true"></div><div class="section-petal p2" aria-hidden="true"></div>
       <div class="inv-shell">
         <p class="inv-eyebrow" data-sakura-reveal="rise">Terima Kasih</p>
@@ -167,6 +166,10 @@
       </div>
     </section>
   </main>
+
+  <button class="music-seal" id="musicSeal" type="button" aria-pressed="false" aria-label="Kontrol musik" title="Audio belum dipasang">
+    <span class="music-disc" aria-hidden="true">♪</span><span class="music-label">Music</span>
+  </button>
 
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
   <script type="module" src="/sakura-v2.js"></script>
