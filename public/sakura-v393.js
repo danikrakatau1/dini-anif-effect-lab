@@ -6,7 +6,7 @@ const sections = [...document.querySelectorAll('[data-sakura-scene]')];
 
 function setupDelayedPanels(){
   if(!sections.length) return ()=>{};
-  const delayed = sections.filter(section => section.querySelector('.paper-card,.story-carousel,.form-card,.gift-card,.message-list'));
+  const delayed = sections.filter(section => section.dataset.sakuraScene !== 'opening' && section.querySelector('.paper-card,.story-carousel,.form-card,.gift-card,.message-list'));
   delayed.forEach(section=>section.dataset.v393Panel = reduceMotion ? 'ready' : 'waiting');
   if(reduceMotion) return ()=>{};
   const timers = new Map();
@@ -29,6 +29,29 @@ function setupDelayedPanels(){
   return ()=>{observer.disconnect();timers.forEach(clearTimeout);timers.clear()};
 }
 
+function setupOpeningCinematic(){
+  const opening=document.querySelector('.scene-opening');
+  const trigger=document.querySelector('#openInvitation');
+  if(!opening||!trigger) return ()=>{};
+  opening.dataset.v393Panel=reduceMotion?'ready':'waiting';
+  if(reduceMotion) return ()=>{};
+  let t1=0,t2=0,t3=0;
+  const start=()=>{
+    opening.dataset.v393Panel='waiting';
+    opening.classList.remove('panel-focused','v393-camera-focus');
+    opening.classList.add('v393-camera-enter');
+    clearTimeout(t1);clearTimeout(t2);clearTimeout(t3);
+    t1=setTimeout(()=>opening.classList.add('v393-camera-focus'),1450);
+    t2=setTimeout(()=>{
+      opening.dataset.v393Panel='ready';
+      opening.classList.add('panel-focused');
+    },2150);
+    t3=setTimeout(()=>opening.classList.remove('v393-camera-enter'),3300);
+  };
+  trigger.addEventListener('click',start,{passive:true});
+  return ()=>{trigger.removeEventListener('click',start);clearTimeout(t1);clearTimeout(t2);clearTimeout(t3)};
+}
+
 function setupFakeCameraDepth(){
   if(reduceMotion || lowPower || !sections.length) return ()=>{};
   const artSections = sections.filter(s=>s.classList.contains('sakura-art-section'));
@@ -38,6 +61,7 @@ function setupFakeCameraDepth(){
     raf=0;
     const vh=innerHeight||1;
     artSections.forEach(section=>{
+      if(section.classList.contains('v393-camera-enter')) return;
       const r=section.getBoundingClientRect();
       const progress=Math.max(-1,Math.min(1,(r.top+r.height/2-vh/2)/(vh*.9)));
       const proximity=1-Math.abs(progress);
@@ -64,8 +88,7 @@ function setupButterflies(){
       const top=12+((sceneIndex*17+i*27)%56);
       const flight=10+((i+sceneIndex)%4)*1.8;
       const delay=-(i*2.4+sceneIndex*.8);
-      const scale=.72+((i+1)%3)*.12;
-      return `<span class="v393-butterfly" style="left:${left}%;top:${top}%;--flight:${flight}s;--delay:${delay}s;transform:scale(${scale})"><i></i></span>`;
+      return `<span class="v393-butterfly" style="left:${left}%;top:${top}%;--flight:${flight}s;--delay:${delay}s"><i></i></span>`;
     }).join('');
     section.appendChild(layer);
   });
@@ -88,23 +111,17 @@ function setupCopyFeedback(){
   const buttons=[...document.querySelectorAll('.copy-demo')];
   const local=[];
   buttons.forEach(button=>{
-    const onClick=()=>{
-      button.classList.add('is-copied');
-      const t=setTimeout(()=>button.classList.remove('is-copied'),900);
-      local.push(()=>clearTimeout(t));
-    };
-    button.addEventListener('click',onClick);
-    local.push(()=>button.removeEventListener('click',onClick));
+    const onClick=()=>{button.classList.add('is-copied');const t=setTimeout(()=>button.classList.remove('is-copied'),900);local.push(()=>clearTimeout(t));};
+    button.addEventListener('click',onClick);local.push(()=>button.removeEventListener('click',onClick));
   });
   return ()=>local.forEach(fn=>fn());
 }
 
 function setupVisibilityGuard(){
   const onVisibility=()=>document.documentElement.classList.toggle('v393-paused',document.hidden);
-  document.addEventListener('visibilitychange',onVisibility);
-  onVisibility();
+  document.addEventListener('visibilitychange',onVisibility);onVisibility();
   return ()=>document.removeEventListener('visibilitychange',onVisibility);
 }
 
-const cleanup=[setupDelayedPanels(),setupFakeCameraDepth(),setupButterflies(),setupSceneFocus(),setupCopyFeedback(),setupVisibilityGuard()];
+const cleanup=[setupDelayedPanels(),setupOpeningCinematic(),setupFakeCameraDepth(),setupButterflies(),setupSceneFocus(),setupCopyFeedback(),setupVisibilityGuard()];
 addEventListener('pagehide',()=>cleanup.forEach(fn=>fn?.()),{once:true});
