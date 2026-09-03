@@ -1,11 +1,10 @@
-/* Sakura V4.0.2 — No-Blank Seamless Reveal behavior */
+/* Sakura V4.0.3 — Visible Seamless Reveal */
 const gsap=window.gsap;
 const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse=matchMedia('(pointer: coarse)').matches;
 const saveData=Boolean(navigator.connection?.saveData);
 const lowMemory=Number(navigator.deviceMemory||8)<=4;
 const opening=document.querySelector('.scene-opening');
-const openButton=document.querySelector('#openInvitation');
 const artworkSrc='/assets/sakura-v2-landscape.png';
 let timeline=null;
 let started=false;
@@ -64,16 +63,16 @@ function prepare(){
   gsap.killTweensOf(moving);
 
   [farImg,mid,branches,floral,frame,panel].forEach(el=>{if(el)el.style.willChange='transform,opacity'});
-  gsap.set(far,{opacity:1});gsap.set(farImg,{scale:1.045,y:8});
-  gsap.set(mid,{opacity:0,y:18,scale:1.045});
-  gsap.set(branches,{opacity:0,x:14,y:-20,scale:1.035});
-  gsap.set(floral,{opacity:0,y:27,scale:1.025});
+  gsap.set(far,{opacity:1});gsap.set(farImg,{scale:1.052,y:10});
+  gsap.set(mid,{opacity:0,y:18,scale:1.05});
+  gsap.set(branches,{opacity:0,x:16,y:-22,scale:1.04});
+  gsap.set(floral,{opacity:0,y:30,scale:1.03});
   gsap.set(atmosphere,{opacity:0});gsap.set(light,{opacity:0,xPercent:-18});
   gsap.set(veil,{clipPath:'inset(0 50% 0 50%)',opacity:.46});
-  gsap.set(frame,{opacity:0,y:8,scale:.94});
+  gsap.set(frame,{opacity:0,y:9,scale:.935});
   gsap.set(shimmer,{opacity:0});gsap.set(shimmerBar,{xPercent:0});
-  gsap.set(panel,{opacity:0,y:18,scale:.975});
-  gsap.set([eyebrow,title,rule,copy],{opacity:0,y:10});
+  gsap.set(panel,{opacity:0,y:20,scale:.972});
+  gsap.set([eyebrow,title,rule,copy],{opacity:0,y:11});
 
   petals.forEach((petal,i)=>{
     const angle=-145+i*(290/Math.max(1,petals.length-1));
@@ -110,41 +109,39 @@ function play(){
   const speed=(fast ? .9 : 1);
   timeline=gsap.timeline({defaults:{overwrite:'auto'},onComplete:()=>settle(p)});
   timeline
-    .to(p.farImg,{scale:1.012,y:0,duration:1.25*speed,ease:'power2.out'},0)
-    .to(p.veil,{clipPath:'inset(0 0% 0 0%)',opacity:.1,duration:.38*speed,ease:'power3.inOut'},.02)
-    .to(p.mid,{opacity:.78,y:0,scale:1,duration:.58*speed,ease:'power3.out'},.16)
-    .to(p.branches,{opacity:.82,x:0,y:0,scale:1,duration:.62*speed,ease:'power3.out'},.42)
-    .to(p.floral,{opacity:.86,y:0,scale:1,duration:.62*speed,ease:'power3.out'},.52)
-    .to(p.atmosphere,{opacity:.32,duration:.38*speed,ease:'power1.out'},.48)
-    .to(p.light,{opacity:.4,xPercent:175,duration:.68*speed,ease:'power2.inOut'},.62)
-    .add(()=>burstPetals(p.petals),.78)
-    .to(p.frame,{opacity:1,y:0,scale:1.014,duration:.46*speed,ease:'back.out(1.45)'},.94)
-    .to(p.frame,{scale:1,duration:.16*speed,ease:'power2.out'},1.34)
-    .to(p.shimmer,{opacity:1,duration:.04},1.08)
-    .to(p.shimmerBar,{xPercent:620,duration:.42*speed,ease:'power2.inOut'},1.1)
-    .to(p.shimmer,{opacity:0,duration:.12},1.5)
-    .to(p.panel,{opacity:1,y:0,scale:1,duration:.52*speed,ease:'power3.out'},1.38)
-    .to(p.eyebrow,{opacity:1,y:0,duration:.26*speed,ease:'power2.out'},1.62)
-    .to(p.title,{opacity:1,y:0,duration:.36*speed,ease:'power3.out'},1.74)
-    .to(p.rule,{opacity:1,y:0,duration:.24*speed,ease:'power2.out'},1.92)
-    .to(p.copy,{opacity:1,y:0,duration:.34*speed,ease:'power2.out'},2.02)
-    .to(p.atmosphere,{opacity:.12,duration:.4*speed,ease:'power1.out'},2.22)
-    .to(p.veil,{opacity:0,duration:.24*speed,ease:'power1.out'},2.26);
+    .to(p.farImg,{scale:1.012,y:0,duration:1.35*speed,ease:'power2.out'},0)
+    .to(p.veil,{clipPath:'inset(0 0% 0 0%)',opacity:.08,duration:.34*speed,ease:'power3.inOut'},.02)
+    .to(p.mid,{opacity:.76,y:0,scale:1,duration:.64*speed,ease:'power3.out'},.12)
+    .to(p.branches,{opacity:.86,x:0,y:0,scale:1,duration:.72*speed,ease:'power3.out'},.32)
+    .to(p.floral,{opacity:.9,y:0,scale:1,duration:.72*speed,ease:'power3.out'},.42)
+    .to(p.atmosphere,{opacity:.34,duration:.4*speed,ease:'power1.out'},.38)
+    .to(p.light,{opacity:.44,xPercent:175,duration:.76*speed,ease:'power2.inOut'},.5)
+    .add(()=>burstPetals(p.petals),.7)
+    .to(p.frame,{opacity:1,y:0,scale:1.016,duration:.52*speed,ease:'back.out(1.5)'},.82)
+    .to(p.frame,{scale:1,duration:.18*speed,ease:'power2.out'},1.26)
+    .to(p.shimmer,{opacity:1,duration:.04},.96)
+    .to(p.shimmerBar,{xPercent:620,duration:.46*speed,ease:'power2.inOut'},.98)
+    .to(p.shimmer,{opacity:0,duration:.12},1.42)
+    .to(p.panel,{opacity:1,y:0,scale:1,duration:.58*speed,ease:'power3.out'},1.22)
+    .to(p.eyebrow,{opacity:1,y:0,duration:.28*speed,ease:'power2.out'},1.48)
+    .to(p.title,{opacity:1,y:0,duration:.4*speed,ease:'power3.out'},1.6)
+    .to(p.rule,{opacity:1,y:0,duration:.24*speed,ease:'power2.out'},1.8)
+    .to(p.copy,{opacity:1,y:0,duration:.36*speed,ease:'power2.out'},1.9)
+    .to(p.atmosphere,{opacity:.12,duration:.4*speed,ease:'power1.out'},2.14)
+    .to(p.veil,{opacity:0,duration:.22*speed,ease:'power1.out'},2.18);
 }
 
 function start(){if(started)return;started=true;play()}
-function onOpeningStart(){start()}
+function onOpeningReveal(){start()}
 function onOpened(){if(!started)start()}
 function onVisibility(){if(!timeline)return;document.hidden?timeline.pause():timeline.resume()}
 
 buildStage();
-window.__SAKURA_TARGET_VERSION='v4.0.2';
-document.body.dataset.sakuraFinalCandidate='v4.0.2';
-document.title='Sakura Vintage V4.0.2 No-Blank Seamless Reveal · Dini Anif Effect Lab';
+window.__SAKURA_TARGET_VERSION='v4.0.3';
+document.body.dataset.sakuraFinalCandidate='v4.0.3';
+document.title='Sakura Vintage V4.0.3 Visible Seamless Reveal · Dini Anif Effect Lab';
 if(reduceMotion)setStatic();
-/* Capture click starts V4 under the still-visible fixed cover. */
-openButton?.addEventListener('click',onOpeningStart,{capture:true});
-window.addEventListener('sakura:opening-start',onOpeningStart,{capture:true});
+window.addEventListener('sakura:opening-reveal',onOpeningReveal,{capture:true});
 window.addEventListener('sakura:opened',onOpened,{capture:true});
 document.addEventListener('visibilitychange',onVisibility);
-window.addEventListener('pagehide',()=>{openButton?.removeEventListener('click',onOpeningStart,{capture:true});window.removeEventListener('sakura:opening-start',onOpeningStart,{capture:true});window.removeEventListener('sakura:opened',onOpened,{capture:true});document.removeEventListener('visibilitychange',onVisibility);timeline?.kill()},{once:true});
+window.addEventListener('pagehide',()=>{window.removeEventListener('sakura:opening-reveal',onOpeningReveal,{capture:true});window.removeEventListener('sakura:opened',onOpened,{capture:true});document.removeEventListener('visibilitychange',onVisibility);timeline?.kill()},{once:true});
