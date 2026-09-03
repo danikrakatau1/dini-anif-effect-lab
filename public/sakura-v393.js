@@ -20,13 +20,13 @@ if(!document.querySelector(`link[href="${v396Href}"]`)){
   const link=document.createElement('link');link.rel='stylesheet';link.href=v396Href;document.head.appendChild(link);
 }
 
-/* V4.1.2 is the only opening engine. Move its stylesheet after every legacy stylesheet so it wins the cascade. */
-window.__SAKURA_TARGET_VERSION='v4.1.2';
-let v41Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v41.css'));
-if(!v41Link){v41Link=document.createElement('link');v41Link.rel='stylesheet';v41Link.href='/sakura-v41.css'}
-document.head.appendChild(v41Link);
+/* V4.2 is the only opening engine. Keep its stylesheet last so it owns the opening cascade. */
+window.__SAKURA_TARGET_VERSION='v4.2';
+let v42Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v41.css'));
+if(!v42Link){v42Link=document.createElement('link');v42Link.rel='stylesheet';v42Link.href='/sakura-v41.css'}
+document.head.appendChild(v42Link);
 await import('./sakura-v41.js');
-document.body.dataset.sakuraFinalCandidate='v4.1.2';
+document.body.dataset.sakuraFinalCandidate='v4.2';
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse = matchMedia('(pointer: coarse)').matches;
