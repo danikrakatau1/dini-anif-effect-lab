@@ -5,11 +5,14 @@ const guard = document.querySelector('#assetGuard');
 const canvas = document.querySelector('#petalCanvas');
 const ctx = canvas?.getContext('2d');
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
 let raf = 0;
 let petals = [];
 let w = 0;
 let h = 0;
 let dpr = 1;
+let tiltX = 0;
+let tiltY = 0;
 
 function showAssetGuard(){
   if(guard) guard.hidden = false;
@@ -35,26 +38,34 @@ function resizeCanvas(){
 }
 
 function newPetal(initial=false){
+  const depth = Math.random();
+  const sideDrift = (Math.random()-.5) * .24;
   return {
     x: Math.random()*w,
-    y: initial ? Math.random()*h : -30-Math.random()*120,
-    rx: 2.2+Math.random()*3.4,
-    ry: 4.5+Math.random()*5.8,
-    speed: .2+Math.random()*.42,
-    drift: .12+Math.random()*.42,
+    y: initial ? Math.random()*h : -40-Math.random()*140,
+    rx: 1.8 + depth*3.6,
+    ry: 3.8 + depth*6.2,
+    speed: .16 + depth*.48,
+    drift: .08 + depth*.38,
+    sideDrift,
     phase: Math.random()*Math.PI*2,
     rot: Math.random()*Math.PI*2,
-    spin: (Math.random()-.5)*.012,
-    alpha: .22+Math.random()*.36,
-    tint: Math.random()>.5 ? '#e8b9b4' : '#f1d4c8'
+    spin: (Math.random()-.5)*(.006 + depth*.011),
+    alpha: .16 + depth*.42,
+    wobble: .00028 + Math.random()*.00035,
+    tint: Math.random()>.52 ? '#e7b1af' : (Math.random()>.5 ? '#f2d2c8' : '#edc1bd')
   };
 }
 
 function seedPetals(){
-  petals = Array.from({length:Math.min(16,Math.max(9,Math.round(w/95)))},()=>newPetal(true));
+  const density = coarsePointer ? 115 : 90;
+  const min = coarsePointer ? 8 : 10;
+  const max = coarsePointer ? 13 : 18;
+  petals = Array.from({length:Math.min(max,Math.max(min,Math.round(w/density)))},()=>newPetal(true));
 }
 
 function drawPetal(p){
+  if(!ctx) return;
   ctx.save();
   ctx.translate(p.x,p.y);
   ctx.rotate(p.rot);
@@ -71,9 +82,9 @@ function tick(t){
   ctx.clearRect(0,0,w,h);
   petals.forEach((p,i)=>{
     p.y += p.speed;
-    p.x += Math.sin(t*.00042+p.phase)*p.drift;
+    p.x += Math.sin(t*p.wobble+p.phase)*p.drift + p.sideDrift;
     p.rot += p.spin;
-    if(p.y>h+30 || p.x<-40 || p.x>w+40) petals[i] = newPetal(false);
+    if(p.y>h+45 || p.x<-60 || p.x>w+60) petals[i] = newPetal(false);
     drawPetal(p);
   });
   raf = requestAnimationFrame(tick);
@@ -81,59 +92,87 @@ function tick(t){
 
 function intro(){
   if(reduced || !gsap) return;
+  gsap.killTweensOf('.reveal-item');
   gsap.fromTo('.reveal-item',
-    {opacity:0,y:22,filter:'blur(5px)'},
-    {opacity:1,y:0,filter:'blur(0px)',duration:1,stagger:.14,ease:'power3.out',delay:.2}
+    {opacity:0,y:18,filter:'blur(4px)'},
+    {opacity:1,y:0,filter:'blur(0px)',duration:1.05,stagger:.13,ease:'power3.out',delay:.18}
   );
+  gsap.fromTo('.artwork-stage',{scale:1.012},{scale:1,duration:1.8,ease:'power2.out'});
 }
 
-function setParallax(x,y){
-  if(reduced || !gsap || scene?.classList.contains('is-open')) return;
-  document.querySelectorAll('[data-depth]').forEach(layer=>{
-    const depth = Number(layer.dataset.depth || 0);
-    gsap.to(layer,{x:x*depth,y:y*depth,duration:1.2,ease:'power2.out',overwrite:'auto'});
+function applyParallax(x,y){
+  if(!scene || reduced || scene.classList.contains('is-open') || scene.classList.contains('is-opening')) return;
+  tiltX += (x-tiltX)*.22;
+  tiltY += (y-tiltY)*.22;
+  scene.style.setProperty('--parallax-x', `${tiltX}px`);
+  scene.style.setProperty('--parallax-y', `${tiltY}px`);
+  if(gsap){
+    gsap.to('.ambient-light',{x:tiltX*.35,y:tiltY*.3,duration:1.35,ease:'power2.out',overwrite:'auto'});
+  }
+}
+
+if(!coarsePointer){
+  scene?.addEventListener('pointermove',e=>{
+    const nx = (e.clientX/window.innerWidth-.5)*7;
+    const ny = (e.clientY/window.innerHeight-.5)*5;
+    applyParallax(nx,ny);
   });
+  scene?.addEventListener('pointerleave',()=>applyParallax(0,0));
 }
-
-scene?.addEventListener('pointermove',e=>{
-  const nx = (e.clientX/window.innerWidth-.5)*18;
-  const ny = (e.clientY/window.innerHeight-.5)*14;
-  setParallax(nx,ny);
-});
-scene?.addEventListener('pointerleave',()=>setParallax(0,0));
 
 function openScene(){
-  if(!scene || scene.classList.contains('is-open')) return;
-  scene.classList.add('is-open');
+  if(!scene || scene.classList.contains('is-open') || scene.classList.contains('is-opening')) return;
+  scene.classList.add('is-opening');
   const panel = document.querySelector('#openedPanel');
   panel?.setAttribute('aria-hidden','false');
+
   if(reduced || !gsap){
+    scene.classList.remove('is-opening');
+    scene.classList.add('is-open');
     if(panel){panel.style.opacity='1';panel.style.visibility='visible';}
     return;
   }
-  const tl = gsap.timeline();
-  tl.to('#openInvitation',{scale:.975,duration:.12})
-    .to('#coverCopy',{opacity:0,y:-24,scale:.99,duration:.72,ease:'power2.inOut'},.1)
-    .to('.artwork-stage',{scale:1.035,duration:1.15,ease:'power2.inOut'},.12)
-    .to('.ambient-light',{opacity:.6,duration:.8},.2)
-    .set(panel,{visibility:'visible'})
-    .to(panel,{opacity:1,duration:.7,ease:'power2.out'},.54)
-    .fromTo('.opened-inner',{opacity:0,y:22},{opacity:1,y:0,duration:.78,ease:'power3.out'},.7);
+
+  const tl = gsap.timeline({
+    defaults:{overwrite:'auto'},
+    onComplete(){
+      scene.classList.remove('is-opening');
+      scene.classList.add('is-open');
+    }
+  });
+
+  tl.to('#openInvitation',{scale:.97,duration:.12,ease:'power1.out'})
+    .to('.wedding-label,.guest-copy,.fine-rule',{opacity:0,y:-10,duration:.42,stagger:.035,ease:'power2.in'},.08)
+    .to('.couple-names',{opacity:0,y:-14,scale:.985,filter:'blur(3px)',duration:.58,ease:'power2.inOut'},.12)
+    .to('#openInvitation',{opacity:0,y:10,filter:'blur(2px)',duration:.42,ease:'power2.in'},.2)
+    .to('.lab-state',{opacity:0,duration:.25},.12)
+    .to('.artwork-stage',{scale:1.055,y:-8,duration:1.15,ease:'power2.inOut'},.12)
+    .to('.ambient-light',{opacity:.48,scale:1.04,duration:.9,ease:'power2.inOut'},.18)
+    .set(panel,{visibility:'visible'},.5)
+    .to(panel,{opacity:1,duration:.72,ease:'power2.out'},.5)
+    .fromTo('.opened-inner',{opacity:0,y:18,filter:'blur(4px)'},{opacity:1,y:0,filter:'blur(0px)',duration:.82,ease:'power3.out'},.68);
 }
 
 function resetScene(){
   if(!scene) return;
-  scene.classList.remove('is-open');
+  scene.classList.remove('is-open','is-opening');
   const panel = document.querySelector('#openedPanel');
   panel?.setAttribute('aria-hidden','true');
+
   if(!gsap){
     if(panel){panel.style.opacity='0';panel.style.visibility='hidden';}
     return;
   }
+
   gsap.set(panel,{opacity:0,visibility:'hidden'});
-  gsap.set('#coverCopy',{opacity:1,y:0,scale:1});
-  gsap.set('.artwork-stage',{clearProps:'scale'});
-  gsap.set('.ambient-light',{clearProps:'opacity'});
+  gsap.set('#coverCopy',{opacity:1,y:0,scale:1,filter:'none'});
+  gsap.set('.wedding-label,.guest-copy,.fine-rule,.couple-names,#openInvitation,.lab-state',{opacity:1,y:0,scale:1,filter:'none'});
+  gsap.set('.artwork-stage',{clearProps:'scale,y'});
+  gsap.set('.ambient-light',{clearProps:'opacity,scale,x,y'});
+  scene.style.setProperty('--parallax-x','0px');
+  scene.style.setProperty('--parallax-y','0px');
+  tiltX = 0;
+  tiltY = 0;
   intro();
 }
 
