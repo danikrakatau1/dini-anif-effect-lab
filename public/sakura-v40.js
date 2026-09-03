@@ -1,44 +1,26 @@
-/* Sakura V4.0.1 — True Layered Opening asset rescue */
+/* Sakura V4.0.2 — No-Blank Seamless Reveal behavior */
 const gsap=window.gsap;
 const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse=matchMedia('(pointer: coarse)').matches;
 const saveData=Boolean(navigator.connection?.saveData);
 const lowMemory=Number(navigator.deviceMemory||8)<=4;
 const opening=document.querySelector('.scene-opening');
+const artworkSrc='/assets/sakura-v2-landscape.png';
 let timeline=null;
-let readyPromise=Promise.resolve();
-
-/*
- * The first V4 binary WebP plate upload was truncated in-repo and Safari showed
- * broken-image placeholders. V4.0.1 keeps the same layered choreography but
- * sources every plate from the already-proven Sakura master PNG. CSS soft masks
- * isolate the visual zones so there are no hard boxed crop edges.
- */
-const masterArtwork='/assets/sakura-v2-landscape.png';
-const assets={far:masterArtwork,mid:masterArtwork,branches:masterArtwork,floral:masterArtwork};
-
-function imageReady(img){
-  if(!img)return Promise.resolve();
-  if(typeof img.decode==='function')return img.decode().catch(()=>{});
-  if(img.complete)return Promise.resolve();
-  return new Promise(resolve=>{
-    img.addEventListener('load',resolve,{once:true});
-    img.addEventListener('error',resolve,{once:true});
-  });
-}
+let started=false;
 
 function buildStage(){
   if(!opening||opening.querySelector(':scope > .v40-stage'))return;
   opening.querySelectorAll(':scope > .v394-opening-cinema,:scope > .v395-stage,:scope > .v396-stage').forEach(node=>node.remove());
-  const petalCount=(coarse||saveData||lowMemory)?6:8;
+  const petalCount=(coarse||saveData||lowMemory)?5:8;
   const stage=document.createElement('div');
-  stage.className='v40-stage v401-master-fallback';
+  stage.className='v40-stage';
   stage.setAttribute('aria-hidden','true');
   stage.innerHTML=`
-    <div class="v40-plate v40-far"><img src="${assets.far}" alt="" decoding="async" fetchpriority="high"></div>
-    <div class="v40-plate v40-mid"><img src="${assets.mid}" alt="" decoding="async"></div>
-    <div class="v40-plate v40-branches"><img src="${assets.branches}" alt="" decoding="async"></div>
-    <div class="v40-plate v40-floral"><img src="${assets.floral}" alt="" decoding="async"></div>
+    <div class="v40-plate v40-far"><img src="${artworkSrc}" alt="" decoding="async" fetchpriority="high"></div>
+    <div class="v40-plate v40-mid"></div>
+    <div class="v40-plate v40-branches"></div>
+    <div class="v40-plate v40-floral"></div>
     <div class="v40-atmosphere"></div>
     <div class="v40-light"></div>
     <div class="v40-veil"></div>
@@ -46,24 +28,25 @@ function buildStage(){
     <div class="v40-shimmer"><i></i></div>
     <div class="v40-burst">${Array.from({length:petalCount},()=>'<i class="v40-petal"></i>').join('')}</div>`;
   opening.insertBefore(stage,opening.firstChild);
-  readyPromise=Promise.allSettled([...stage.querySelectorAll('img')].map(imageReady));
 }
 
 function setStatic(){
   if(!opening)return;
   opening.classList.add('v40-complete');
   opening.dataset.v393Panel='ready';
-  opening.querySelectorAll('.v40-far,.v40-mid,.v40-branches,.v40-floral').forEach(el=>el.style.opacity='1');
-  const frame=opening.querySelector('.v40-frame');if(frame){frame.style.opacity='1';frame.style.transform='none'}
+  const frame=opening.querySelector('.v40-frame');
+  const panel=opening.querySelector(':scope > .inv-shell');
+  if(frame){frame.style.opacity='1';frame.style.transform='none'}
+  if(panel){panel.style.opacity='1';panel.style.transform='none'}
 }
 
 function prepare(){
   if(!opening||!gsap)return null;
   timeline?.kill();
   const far=opening.querySelector('.v40-far'),farImg=far?.querySelector('img');
-  const mid=opening.querySelector('.v40-mid'),midImg=mid?.querySelector('img');
-  const branches=opening.querySelector('.v40-branches'),branchesImg=branches?.querySelector('img');
-  const floral=opening.querySelector('.v40-floral'),floralImg=floral?.querySelector('img');
+  const mid=opening.querySelector('.v40-mid');
+  const branches=opening.querySelector('.v40-branches');
+  const floral=opening.querySelector('.v40-floral');
   const atmosphere=opening.querySelector('.v40-atmosphere');
   const light=opening.querySelector('.v40-light');
   const veil=opening.querySelector('.v40-veil');
@@ -72,56 +55,50 @@ function prepare(){
   const burst=opening.querySelector('.v40-burst'),petals=[...opening.querySelectorAll('.v40-petal')];
   const panel=opening.querySelector(':scope > .inv-shell');
   const eyebrow=opening.querySelector('.inv-eyebrow'),title=opening.querySelector('.inv-title'),rule=opening.querySelector('.inv-rule'),copy=opening.querySelector('.inv-copy');
-  const moving=[far,farImg,mid,midImg,branches,branchesImg,floral,floralImg,atmosphere,light,veil,frame,shimmer,shimmerBar,panel,eyebrow,title,rule,copy,...petals].filter(Boolean);
+  const moving=[far,farImg,mid,branches,floral,atmosphere,light,veil,frame,shimmer,shimmerBar,panel,eyebrow,title,rule,copy,...petals].filter(Boolean);
 
   opening.classList.remove('v40-complete');opening.classList.add('v40-playing');opening.dataset.v393Panel='waiting';
   document.documentElement.classList.add('v40-intro-active');
   window.dispatchEvent(new CustomEvent('sakura:petals-pause'));
   gsap.killTweensOf(moving);
 
-  [farImg,midImg,branchesImg,floralImg,frame,panel].forEach(el=>{if(el)el.style.willChange='transform,opacity'});
-  gsap.set(far,{opacity:.18});gsap.set(farImg,{scale:1.045,y:10});
-  gsap.set(mid,{opacity:0,y:24});gsap.set(midImg,{scale:1.065,y:15});
-  gsap.set(branches,{opacity:0,x:18,y:-28});gsap.set(branchesImg,{scale:1.055});
-  gsap.set(floral,{opacity:0,y:36});gsap.set(floralImg,{scale:1.04});
-  gsap.set(atmosphere,{opacity:0});gsap.set(light,{opacity:0,xPercent:-20});
-  gsap.set(veil,{clipPath:'inset(0 50% 0 50%)',opacity:.92});
-  gsap.set(frame,{opacity:0,y:10,scale:.92});
+  [farImg,mid,branches,floral,frame,panel].forEach(el=>{if(el)el.style.willChange='transform,opacity'});
+  gsap.set(far,{opacity:1});gsap.set(farImg,{scale:1.045,y:8});
+  gsap.set(mid,{opacity:0,y:18,scale:1.045});
+  gsap.set(branches,{opacity:0,x:14,y:-20,scale:1.035});
+  gsap.set(floral,{opacity:0,y:27,scale:1.025});
+  gsap.set(atmosphere,{opacity:0});gsap.set(light,{opacity:0,xPercent:-18});
+  gsap.set(veil,{clipPath:'inset(0 50% 0 50%)',opacity:.46});
+  gsap.set(frame,{opacity:0,y:8,scale:.94});
   gsap.set(shimmer,{opacity:0});gsap.set(shimmerBar,{xPercent:0});
-  gsap.set(panel,{opacity:0,y:20,scale:.97});
-  gsap.set([eyebrow,title,rule,copy],{opacity:0,y:12});
+  gsap.set(panel,{opacity:0,y:18,scale:.975});
+  gsap.set([eyebrow,title,rule,copy],{opacity:0,y:10});
 
   petals.forEach((petal,i)=>{
-    const angle=-150+i*(300/Math.max(1,petals.length-1));
-    const radius=66+(i%3)*22;
+    const angle=-145+i*(290/Math.max(1,petals.length-1));
+    const radius=60+(i%3)*20;
     petal.dataset.x=String(Math.cos(angle*Math.PI/180)*radius);
-    petal.dataset.y=String(Math.sin(angle*Math.PI/180)*radius-16);
-    gsap.set(petal,{x:0,y:6,rotation:-35+i*25,scale:.55+(i%2)*.14,opacity:0});
+    petal.dataset.y=String(Math.sin(angle*Math.PI/180)*radius-12);
+    gsap.set(petal,{x:0,y:4,rotation:-30+i*23,scale:.54+(i%2)*.13,opacity:0});
   });
-  return{far,farImg,mid,midImg,branches,branchesImg,floral,floralImg,atmosphere,light,veil,frame,shimmer,shimmerBar,burst,petals,panel,eyebrow,title,rule,copy};
+  return{far,farImg,mid,branches,floral,atmosphere,light,veil,frame,shimmer,shimmerBar,burst,petals,panel,eyebrow,title,rule,copy};
 }
 
 function burstPetals(petals){
   if(!gsap||reduceMotion)return;
   petals.forEach((petal,i)=>{
     const x=Number(petal.dataset.x||0),y=Number(petal.dataset.y||0);
-    gsap.fromTo(petal,{x:0,y:5,opacity:0,rotation:-30+i*20},{x,y,opacity:.82,rotation:130+i*30,duration:.7+(i%2)*.1,ease:'power2.out',delay:i*.024,onComplete:()=>{
-      gsap.to(petal,{x:x+(i%2?14:-12),y:y+44,opacity:0,duration:.5,ease:'power1.in'});
-    }});
+    gsap.fromTo(petal,{x:0,y:4,opacity:0,rotation:-25+i*18},{x,y,opacity:.78,rotation:120+i*28,duration:.58+(i%2)*.08,ease:'power2.out',delay:i*.02,onComplete:()=>gsap.to(petal,{x:x+(i%2?12:-10),y:y+36,opacity:0,duration:.4,ease:'power1.in'})});
   });
 }
 
 function settle(p){
   opening.classList.remove('v40-playing');opening.classList.add('v40-complete');opening.dataset.v393Panel='ready';
   document.documentElement.classList.remove('v40-intro-active');
-  [p.farImg,p.midImg,p.branchesImg,p.floralImg,p.frame,p.panel].forEach(el=>{if(el)el.style.willChange='auto'});
+  [p.farImg,p.mid,p.branches,p.floral,p.frame,p.panel].forEach(el=>{if(el)el.style.willChange='auto'});
   if(p.light)p.light.style.visibility='hidden';if(p.veil)p.veil.style.visibility='hidden';if(p.shimmer)p.shimmer.style.visibility='hidden';if(p.burst)p.burst.innerHTML='';
-
-  /* Mobile only needs the plates for the hero beat. Drop extra textures after settle. */
-  if(coarse||saveData||lowMemory){
-    [p.mid,p.branches,p.floral].forEach(el=>el?.remove());
-  }
-  window.dispatchEvent(new CustomEvent('sakura:petals-resume',{detail:{intensity:(coarse ? .24 : .36)}}));
+  if(coarse||saveData||lowMemory){p.mid?.remove();p.branches?.remove();p.floral?.remove()}
+  window.dispatchEvent(new CustomEvent('sakura:petals-resume',{detail:{intensity:(coarse?.24:.36)}}));
 }
 
 function play(){
@@ -129,43 +106,42 @@ function play(){
   if(reduceMotion||!gsap){setStatic();return}
   const p=prepare();if(!p)return;
   const fast=coarse||saveData||lowMemory;
-  const speed=(fast ? .9 : 1);
+  const speed=fast?.9:1;
   timeline=gsap.timeline({defaults:{overwrite:'auto'},onComplete:()=>settle(p)});
   timeline
-    .to(p.veil,{clipPath:'inset(0 0% 0 0%)',opacity:.13,duration:.5*speed,ease:'power3.inOut'},0)
-    .to(p.far,{opacity:1,duration:.56*speed,ease:'power2.out'},.02)
-    .to(p.farImg,{scale:1.01,y:0,duration:1.5*speed,ease:'power2.out'},.02)
-    .to(p.mid,{opacity:.74,y:0,duration:.7*speed,ease:'power3.out'},.32)
-    .to(p.midImg,{scale:1.012,y:0,duration:1.05*speed,ease:'power2.out'},.28)
-    .to(p.branches,{opacity:.92,x:0,y:0,duration:.76*speed,ease:'power3.out'},.68)
-    .to(p.branchesImg,{scale:1.008,duration:.88*speed,ease:'power2.out'},.64)
-    .to(p.floral,{opacity:.96,y:0,duration:.76*speed,ease:'power3.out'},.8)
-    .to(p.floralImg,{scale:1,duration:.88*speed,ease:'power2.out'},.76)
-    .to(p.atmosphere,{opacity:.34,duration:.46*speed,ease:'power1.out'},.76)
-    .to(p.light,{opacity:.43,xPercent:185,duration:.78*speed,ease:'power2.inOut'},.88)
-    .add(()=>burstPetals(p.petals),1.04)
-    .to(p.frame,{opacity:1,y:0,scale:1.018,duration:.54*speed,ease:'back.out(1.55)'},1.2)
-    .to(p.frame,{scale:1,duration:.2*speed,ease:'power2.out'},1.68)
-    .to(p.shimmer,{opacity:1,duration:.05},1.34)
-    .to(p.shimmerBar,{xPercent:650,duration:.48*speed,ease:'power2.inOut'},1.36)
-    .to(p.shimmer,{opacity:0,duration:.14},1.82)
-    .to(p.panel,{opacity:1,y:0,scale:1,duration:.6*speed,ease:'power3.out'},1.62)
-    .to(p.eyebrow,{opacity:1,y:0,duration:.31*speed,ease:'power2.out'},1.9)
-    .to(p.title,{opacity:1,y:0,duration:.42*speed,ease:'power3.out'},2.04)
-    .to(p.rule,{opacity:1,y:0,duration:.27*speed,ease:'power2.out'},2.24)
-    .to(p.copy,{opacity:1,y:0,duration:.38*speed,ease:'power2.out'},2.36)
-    .to(p.atmosphere,{opacity:.13,duration:.44*speed,ease:'power1.out'},2.56)
-    .to(p.veil,{opacity:0,duration:.26*speed,ease:'power1.out'},2.64);
+    .to(p.farImg,{scale:1.012,y:0,duration:1.25*speed,ease:'power2.out'},0)
+    .to(p.veil,{clipPath:'inset(0 0% 0 0%)',opacity:.1,duration:.38*speed,ease:'power3.inOut'},.02)
+    .to(p.mid,{opacity:.78,y:0,scale:1,duration:.58*speed,ease:'power3.out'},.16)
+    .to(p.branches,{opacity:.82,x:0,y:0,scale:1,duration:.62*speed,ease:'power3.out'},.42)
+    .to(p.floral,{opacity:.86,y:0,scale:1,duration:.62*speed,ease:'power3.out'},.52)
+    .to(p.atmosphere,{opacity:.32,duration:.38*speed,ease:'power1.out'},.48)
+    .to(p.light,{opacity:.4,xPercent:175,duration:.68*speed,ease:'power2.inOut'},.62)
+    .add(()=>burstPetals(p.petals),.78)
+    .to(p.frame,{opacity:1,y:0,scale:1.014,duration:.46*speed,ease:'back.out(1.45)'},.94)
+    .to(p.frame,{scale:1,duration:.16*speed,ease:'power2.out'},1.34)
+    .to(p.shimmer,{opacity:1,duration:.04},1.08)
+    .to(p.shimmerBar,{xPercent:620,duration:.42*speed,ease:'power2.inOut'},1.1)
+    .to(p.shimmer,{opacity:0,duration:.12},1.5)
+    .to(p.panel,{opacity:1,y:0,scale:1,duration:.52*speed,ease:'power3.out'},1.38)
+    .to(p.eyebrow,{opacity:1,y:0,duration:.26*speed,ease:'power2.out'},1.62)
+    .to(p.title,{opacity:1,y:0,duration:.36*speed,ease:'power3.out'},1.74)
+    .to(p.rule,{opacity:1,y:0,duration:.24*speed,ease:'power2.out'},1.92)
+    .to(p.copy,{opacity:1,y:0,duration:.34*speed,ease:'power2.out'},2.02)
+    .to(p.atmosphere,{opacity:.12,duration:.4*speed,ease:'power1.out'},2.22)
+    .to(p.veil,{opacity:0,duration:.24*speed,ease:'power1.out'},2.26);
 }
 
-function onOpened(event){event.stopImmediatePropagation();readyPromise.finally(play)}
+function start(){if(started)return;started=true;play()}
+function onOpeningStart(){start()}
+function onOpened(){if(!started)start()}
 function onVisibility(){if(!timeline)return;document.hidden?timeline.pause():timeline.resume()}
 
 buildStage();
-window.__SAKURA_TARGET_VERSION='v4.0.1';
-document.body.dataset.sakuraFinalCandidate='v4.0.1';
-document.title='Sakura Vintage V4.0.1 Asset Rescue · Dini Anif Effect Lab';
+window.__SAKURA_TARGET_VERSION='v4.0.2';
+document.body.dataset.sakuraFinalCandidate='v4.0.2';
+document.title='Sakura Vintage V4.0.2 No-Blank Seamless Reveal · Dini Anif Effect Lab';
 if(reduceMotion)setStatic();
+window.addEventListener('sakura:opening-start',onOpeningStart,{capture:true});
 window.addEventListener('sakura:opened',onOpened,{capture:true});
 document.addEventListener('visibilitychange',onVisibility);
-window.addEventListener('pagehide',()=>{window.removeEventListener('sakura:opened',onOpened,{capture:true});document.removeEventListener('visibilitychange',onVisibility);timeline?.kill()},{once:true});
+window.addEventListener('pagehide',()=>{window.removeEventListener('sakura:opening-start',onOpeningStart,{capture:true});window.removeEventListener('sakura:opened',onOpened,{capture:true});document.removeEventListener('visibilitychange',onVisibility);timeline?.kill()},{once:true});
