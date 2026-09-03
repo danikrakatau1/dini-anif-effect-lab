@@ -1,4 +1,11 @@
 /* Sakura V3.9.3 — Living Scene & Cinematic Motion behavior layer */
+const v394Href='/sakura-v394.css';
+if(!document.querySelector(`link[href="${v394Href}"]`)){
+  const link=document.createElement('link');link.rel='stylesheet';link.href=v394Href;document.head.appendChild(link);
+}
+await import('./sakura-v394.js');
+document.body.dataset.sakuraFinalCandidate='v3.9.4';
+
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse = matchMedia('(pointer: coarse)').matches;
 const lowPower = navigator.connection?.saveData || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
@@ -29,38 +36,15 @@ function setupDelayedPanels(){
   return ()=>{observer.disconnect();timers.forEach(clearTimeout);timers.clear()};
 }
 
-function setupOpeningCinematic(){
-  const opening=document.querySelector('.scene-opening');
-  if(!opening) return ()=>{};
-  opening.dataset.v393Panel=reduceMotion?'ready':'waiting';
-  if(reduceMotion) return ()=>{};
-  let t1=0,t2=0,t3=0;
-  const start=()=>{
-    opening.dataset.v393Panel='waiting';
-    opening.classList.remove('panel-focused','v393-camera-focus');
-    opening.classList.add('v393-camera-enter');
-    clearTimeout(t1);clearTimeout(t2);clearTimeout(t3);
-    t1=setTimeout(()=>opening.classList.add('v393-camera-focus'),1100);
-    t2=setTimeout(()=>{
-      opening.dataset.v393Panel='ready';
-      opening.classList.add('panel-focused');
-    },1850);
-    t3=setTimeout(()=>opening.classList.remove('v393-camera-enter'),3200);
-  };
-  window.addEventListener('sakura:opened',start);
-  return ()=>{window.removeEventListener('sakura:opened',start);clearTimeout(t1);clearTimeout(t2);clearTimeout(t3)};
-}
-
 function setupFakeCameraDepth(){
   if(reduceMotion || lowPower || !sections.length) return ()=>{};
-  const artSections = sections.filter(s=>s.classList.contains('sakura-art-section'));
+  const artSections = sections.filter(s=>s.classList.contains('sakura-art-section') && s.dataset.sakuraScene!=='opening');
   if(!artSections.length) return ()=>{};
   let raf=0;
   const render=()=>{
     raf=0;
     const vh=innerHeight||1;
     artSections.forEach(section=>{
-      if(section.classList.contains('v393-camera-enter')) return;
       const r=section.getBoundingClientRect();
       const progress=Math.max(-1,Math.min(1,(r.top+r.height/2-vh/2)/(vh*.9)));
       const proximity=1-Math.abs(progress);
@@ -122,5 +106,5 @@ function setupVisibilityGuard(){
   return ()=>document.removeEventListener('visibilitychange',onVisibility);
 }
 
-const cleanup=[setupDelayedPanels(),setupOpeningCinematic(),setupFakeCameraDepth(),setupButterflies(),setupSceneFocus(),setupCopyFeedback(),setupVisibilityGuard()];
+const cleanup=[setupDelayedPanels(),setupFakeCameraDepth(),setupButterflies(),setupSceneFocus(),setupCopyFeedback(),setupVisibilityGuard()];
 addEventListener('pagehide',()=>cleanup.forEach(fn=>fn?.()),{once:true});
