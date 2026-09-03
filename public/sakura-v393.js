@@ -3,14 +3,12 @@ const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse = matchMedia('(pointer: coarse)').matches;
 const lowPower = navigator.connection?.saveData || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
 const sections = [...document.querySelectorAll('[data-sakura-scene]')];
-const disposers = [];
 
 function setupDelayedPanels(){
   if(!sections.length) return ()=>{};
   const delayed = sections.filter(section => section.querySelector('.paper-card,.story-carousel,.form-card,.gift-card,.message-list'));
   delayed.forEach(section=>section.dataset.v393Panel = reduceMotion ? 'ready' : 'waiting');
   if(reduceMotion) return ()=>{};
-
   const timers = new Map();
   const observer = new IntersectionObserver(entries=>{
     entries.forEach(entry=>{
@@ -42,8 +40,9 @@ function setupFakeCameraDepth(){
     artSections.forEach(section=>{
       const r=section.getBoundingClientRect();
       const progress=Math.max(-1,Math.min(1,(r.top+r.height/2-vh/2)/(vh*.9)));
+      const proximity=1-Math.abs(progress);
       section.style.setProperty('--cam-y',`${progress*7}px`);
-      section.style.setProperty('--cam-scale',String(1.035 + (1-Math.abs(progress))*.018));
+      section.style.setProperty('--cam-size',`${111 + proximity*3}%`);
     });
   };
   const onScroll=()=>{if(!raf)raf=requestAnimationFrame(render)};
@@ -66,7 +65,7 @@ function setupButterflies(){
       const flight=10+((i+sceneIndex)%4)*1.8;
       const delay=-(i*2.4+sceneIndex*.8);
       const scale=.72+((i+1)%3)*.12;
-      return `<span class="v393-butterfly" style="left:${left}%;top:${top}%;--flight:${flight}s;--delay:${delay}s;scale:${scale}"><i></i></span>`;
+      return `<span class="v393-butterfly" style="left:${left}%;top:${top}%;--flight:${flight}s;--delay:${delay}s;transform:scale(${scale})"><i></i></span>`;
     }).join('');
     section.appendChild(layer);
   });
@@ -107,13 +106,5 @@ function setupVisibilityGuard(){
   return ()=>document.removeEventListener('visibilitychange',onVisibility);
 }
 
-const cleanup=[
-  setupDelayedPanels(),
-  setupFakeCameraDepth(),
-  setupButterflies(),
-  setupSceneFocus(),
-  setupCopyFeedback(),
-  setupVisibilityGuard()
-];
-
+const cleanup=[setupDelayedPanels(),setupFakeCameraDepth(),setupButterflies(),setupSceneFocus(),setupCopyFeedback(),setupVisibilityGuard()];
 addEventListener('pagehide',()=>cleanup.forEach(fn=>fn?.()),{once:true});
