@@ -1,4 +1,4 @@
-/* Sakura V4.2 — LOCKED: World Build → Name Frame → Final Name */
+/* Sakura V4.2.1 — LOCKED: Readable World Build → Name Frame → Final Name */
 let gsap=window.gsap;
 const systemReducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const params=new URLSearchParams(location.search);
@@ -18,11 +18,10 @@ let coverObserver=null;
 
 function mark(state){
   if(document.body)document.body.dataset.v42State=state;
-  document.documentElement.dataset.sakuraOpeningEngine='v4.2';
+  document.documentElement.dataset.sakuraOpeningEngine='v4.2.1';
   document.documentElement.dataset.systemReducedMotion=systemReducedMotion?'1':'0';
 }
 
-/* V4.2 exclusively owns the opening scene. Other sections keep the global reveal system. */
 function suppressGlobalOpeningReveal(){
   if(!opening)return;
   const panel=opening.querySelector(':scope > .inv-shell');
@@ -42,7 +41,8 @@ function buildStage(){
     <div class="v42-paper-base"></div>
     <div class="v42-piece v42-top"></div>
     <div class="v42-piece v42-center"></div>
-    <div class="v42-piece v42-sides"></div>
+    <div class="v42-piece v42-left"></div>
+    <div class="v42-piece v42-right"></div>
     <div class="v42-piece v42-bottom"></div>
     <div class="v42-composite"><img src="${artworkSrc}" alt="" decoding="async" fetchpriority="high"></div>
     <div class="v42-atmosphere"></div>`;
@@ -102,7 +102,8 @@ function prepare(){
   const stage=opening.querySelector('.v42-world-stage');
   const top=stage?.querySelector('.v42-top');
   const center=stage?.querySelector('.v42-center');
-  const sides=stage?.querySelector('.v42-sides');
+  const left=stage?.querySelector('.v42-left');
+  const right=stage?.querySelector('.v42-right');
   const bottom=stage?.querySelector('.v42-bottom');
   const composite=stage?.querySelector('.v42-composite');
   const compositeImg=composite?.querySelector('img');
@@ -113,7 +114,7 @@ function prepare(){
   const inner=opening.querySelector('.v42-frame-inner');
   const accent=opening.querySelector('.v42-frame-accent');
   const title=opening.querySelector('.inv-title');
-  const moving=[top,center,sides,bottom,composite,compositeImg,atmosphere,panel,frame,outer,inner,accent,title].filter(Boolean);
+  const moving=[top,center,left,right,bottom,composite,compositeImg,atmosphere,panel,frame,outer,inner,accent,title].filter(Boolean);
 
   opening.classList.remove('v40-playing','v40-complete','v41-playing','v41-complete','v42-complete');
   opening.classList.add('v42-playing');
@@ -122,21 +123,22 @@ function prepare(){
   window.dispatchEvent(new CustomEvent('sakura:petals-pause'));
   gsap.killTweensOf(moving);
 
-  [top,center,sides,bottom,compositeImg,panel,frame,title].forEach(el=>{if(el)el.style.willChange='transform,opacity'});
-  gsap.set(top,{opacity:0,y:-22,scale:1.045});
-  gsap.set(center,{opacity:0,y:18,scale:1.085});
-  gsap.set(sides,{opacity:0,scale:1.055});
-  gsap.set(bottom,{opacity:0,y:32,scale:1.05});
+  [top,center,left,right,bottom,compositeImg,panel,frame,title].forEach(el=>{if(el)el.style.willChange='transform,opacity,filter'});
+  gsap.set(top,{opacity:0,y:-90,scale:1.11,filter:'blur(3px)'});
+  gsap.set(center,{opacity:0,y:110,scale:1.18,filter:'blur(4px)'});
+  gsap.set(left,{opacity:0,x:-100,scale:1.08,filter:'blur(3px)'});
+  gsap.set(right,{opacity:0,x:100,scale:1.08,filter:'blur(3px)'});
+  gsap.set(bottom,{opacity:0,y:130,scale:1.14,filter:'blur(4px)'});
   gsap.set(composite,{opacity:0});
-  gsap.set(compositeImg,{scale:1.015,y:3});
+  gsap.set(compositeImg,{scale:1.025,y:5});
   gsap.set(atmosphere,{opacity:0});
-  gsap.set(panel,{opacity:0,y:12,scale:.965});
+  gsap.set(panel,{opacity:0,y:30,scale:.91});
   gsap.set(frame,{opacity:0});
   primeStroke(outer);primeStroke(inner);primeStroke(accent);
-  gsap.set(title,{opacity:0,y:13,scale:.965,filter:'blur(5px)'});
+  gsap.set(title,{opacity:0,y:24,scale:.9,filter:'blur(8px)'});
   mark('prepared');
 
-  return{stage,top,center,sides,bottom,composite,compositeImg,atmosphere,panel,frame,outer,inner,accent,title};
+  return{stage,top,center,left,right,bottom,composite,compositeImg,atmosphere,panel,frame,outer,inner,accent,title};
 }
 
 function settle(p){
@@ -144,8 +146,8 @@ function settle(p){
   opening.classList.add('v42-complete');
   opening.dataset.v393Panel='ready';
   document.documentElement.classList.remove('v42-intro-active');
-  [p.top,p.center,p.sides,p.bottom,p.compositeImg,p.panel,p.frame,p.title].forEach(el=>{if(el)el.style.willChange='auto'});
-  if(coarse||saveData||lowMemory){[p.top,p.center,p.sides,p.bottom].forEach(el=>el?.remove())}
+  [p.top,p.center,p.left,p.right,p.bottom,p.compositeImg,p.panel,p.frame,p.title].forEach(el=>{if(el)el.style.willChange='auto'});
+  if(coarse||saveData||lowMemory){[p.top,p.center,p.left,p.right,p.bottom].forEach(el=>el?.remove())}
   window.dispatchEvent(new CustomEvent('sakura:petals-resume',{detail:{intensity:(coarse ? .18 : .28)}}));
   mark('complete');
 }
@@ -163,38 +165,39 @@ function play(){
 
   const p=prepare();if(!p){started=false;return}
   const fast=coarse||saveData||lowMemory;
-  const speed=fast ? .94 : 1;
+  const speed=fast ? .96 : 1;
   mark('playing-world');
 
   timeline=gsap.timeline({defaults:{overwrite:'auto'},onComplete:()=>settle(p)});
   timeline
-    /* WORLD BUILD — original artwork reveals by visual zone, one beat at a time. */
-    .to(p.top,{opacity:.98,y:0,scale:1,duration:.72*speed,ease:'power2.out',onStart:()=>mark('world-top')},.08)
-    .to(p.center,{opacity:.98,y:0,scale:1,duration:.82*speed,ease:'power3.out',onStart:()=>mark('world-fuji')},.92)
-    .to(p.sides,{opacity:.96,scale:1,duration:.78*speed,ease:'power2.out',onStart:()=>mark('world-sides')},1.88)
-    .to(p.bottom,{opacity:1,y:0,scale:1,duration:.82*speed,ease:'power3.out',onStart:()=>mark('world-floral')},2.82)
-    .to(p.atmosphere,{opacity:.13,duration:.5*speed,ease:'sine.out'},3.32)
+    /* WORLD BUILD — each visual zone travels visibly into its exact final position. */
+    .to(p.top,{opacity:1,y:0,scale:1,filter:'blur(0px)',duration:.76*speed,ease:'power3.out',onStart:()=>mark('world-top')},.06)
+    .to(p.center,{opacity:1,y:0,scale:1,filter:'blur(0px)',duration:.88*speed,ease:'power3.out',onStart:()=>mark('world-fuji')},.96)
+    .to(p.left,{opacity:1,x:0,scale:1,filter:'blur(0px)',duration:.7*speed,ease:'power3.out',onStart:()=>mark('world-left')},1.96)
+    .to(p.right,{opacity:1,x:0,scale:1,filter:'blur(0px)',duration:.7*speed,ease:'power3.out',onStart:()=>mark('world-right')},2.76)
+    .to(p.bottom,{opacity:1,y:0,scale:1,filter:'blur(0px)',duration:.88*speed,ease:'power3.out',onStart:()=>mark('world-floral')},3.56)
+    .to(p.atmosphere,{opacity:.12,duration:.4*speed,ease:'sine.out'},4.0)
 
-    /* Merge the feathered zones invisibly into the exact full master artwork. */
-    .to(p.composite,{opacity:1,duration:.5*speed,ease:'sine.inOut',onStart:()=>mark('world-merge')},3.56)
-    .to([p.top,p.center,p.sides,p.bottom],{opacity:0,duration:.42*speed,ease:'sine.inOut'},3.68)
-    .to(p.compositeImg,{scale:1,y:0,duration:.8*speed,ease:'power2.out'},3.58)
-    .call(()=>mark('world-complete'),null,4.12)
+    /* Seamless merge into the exact full original artwork only after all pieces are in place. */
+    .to(p.composite,{opacity:1,duration:.48*speed,ease:'sine.inOut',onStart:()=>mark('world-merge')},4.48)
+    .to([p.top,p.center,p.left,p.right,p.bottom],{opacity:0,duration:.4*speed,ease:'sine.inOut'},4.58)
+    .to(p.compositeImg,{scale:1,y:0,duration:.62*speed,ease:'power2.out'},4.48)
+    .call(()=>mark('world-complete'),null,5.0)
 
-    /* HOLD — user gets to see the completed Sakura/Fuji world before any name frame exists. */
-    .call(()=>mark('world-hold'),null,4.55)
+    /* HOLD — completed background gets its own beat. */
+    .call(()=>mark('world-hold'),null,5.34)
 
-    /* NAME FRAME — paper arrives first, then every frame stroke completes. */
-    .to(p.panel,{opacity:1,y:0,scale:1,duration:.58*speed,ease:'power3.out',onStart:()=>mark('frame-paper')},4.82)
-    .to(p.frame,{opacity:1,duration:.08,onStart:()=>mark('frame-outer')},5.34)
-    .to(p.outer,{strokeDashoffset:0,duration:.78*speed,ease:'power1.inOut'},5.38)
-    .to(p.inner,{strokeDashoffset:0,duration:.62*speed,ease:'power1.inOut',onStart:()=>mark('frame-inner')},6.18)
-    .to(p.accent,{strokeDashoffset:0,duration:.36*speed,ease:'power1.inOut',onStart:()=>mark('frame-accent')},6.82)
-    .call(()=>mark('frame-complete'),null,7.2)
+    /* NAME FRAME — no text exists yet. */
+    .to(p.panel,{opacity:1,y:0,scale:1,duration:.64*speed,ease:'power3.out',onStart:()=>mark('frame-paper')},5.58)
+    .to(p.frame,{opacity:1,duration:.08,onStart:()=>mark('frame-outer')},6.1)
+    .to(p.outer,{strokeDashoffset:0,duration:.78*speed,ease:'power1.inOut'},6.14)
+    .to(p.inner,{strokeDashoffset:0,duration:.62*speed,ease:'power1.inOut',onStart:()=>mark('frame-inner')},6.94)
+    .to(p.accent,{strokeDashoffset:0,duration:.36*speed,ease:'power1.inOut',onStart:()=>mark('frame-accent')},7.6)
+    .call(()=>mark('frame-complete'),null,7.98)
 
-    /* FINAL REVEAL — locked name is deliberately the last new visual element. */
-    .to(p.title,{opacity:1,y:0,scale:1,filter:'blur(0px)',duration:.82*speed,ease:'power3.out',onStart:()=>mark('final-name')},7.58)
-    .to(p.atmosphere,{opacity:.08,duration:.42*speed,ease:'sine.out'},8.32);
+    /* FINAL REVEAL — locked name is the last new visual element. */
+    .to(p.title,{opacity:1,y:0,scale:1,filter:'blur(0px)',duration:.9*speed,ease:'power3.out',onStart:()=>mark('final-name')},8.34)
+    .to(p.atmosphere,{opacity:.07,duration:.38*speed,ease:'sine.out'},9.08);
 }
 
 function start(){if(started)return;started=true;mark('starting');play()}
@@ -202,16 +205,14 @@ function onOpeningReveal(){start()}
 function onOpened(){if(!started)start()}
 function onOpenClick(){clearTimeout(armTimer);armTimer=setTimeout(start,420);mark('armed')}
 function onVisibility(){if(!timeline)return;document.hidden?timeline.pause():timeline.resume()}
-
-/* Slow-load fallback only after the cover is actually gone; do not start merely on is-opening. */
 function coverHasPassedReveal(){return Boolean(cover?.classList.contains('is-open')||document.body.classList.contains('cover-open'))}
 
 suppressGlobalOpeningReveal();
 buildStage();
-window.__SAKURA_TARGET_VERSION='v4.2';
-document.body.dataset.sakuraFinalCandidate='v4.2';
-document.title='Sakura Vintage V4.2 World Build · Dini Anif Effect Lab';
-const labState=document.querySelector('.lab-state');if(labState)labState.textContent='Sakura Vintage · V4.2 World Build';
+window.__SAKURA_TARGET_VERSION='v4.2.1';
+document.body.dataset.sakuraFinalCandidate='v4.2.1';
+document.title='Sakura Vintage V4.2.1 Motion Readability · Dini Anif Effect Lab';
+const labState=document.querySelector('.lab-state');if(labState)labState.textContent='Sakura Vintage · V4.2.1 Motion Readability';
 if(reduceMotion)setStatic();
 
 openButton?.addEventListener('click',onOpenClick,{capture:true});
