@@ -105,9 +105,9 @@ function settle(parts){
   opening.dataset.v393Panel='ready';
   document.documentElement.classList.remove('v396-intro-active');
   [parts.farImg,parts.nearImg,parts.far,parts.near,parts.portal,parts.panel].forEach(el=>{if(el)el.style.willChange='auto'});
-  if(parts.beam){parts.beam.style.visibility='hidden'}
-  if(parts.veil){parts.veil.style.visibility='hidden'}
-  if(parts.shimmer){parts.shimmer.style.visibility='hidden'}
+  if(parts.beam)parts.beam.style.visibility='hidden';
+  if(parts.veil)parts.veil.style.visibility='hidden';
+  if(parts.shimmer)parts.shimmer.style.visibility='hidden';
   if(parts.burst)parts.burst.innerHTML='';
   window.dispatchEvent(new CustomEvent('sakura:petals-resume',{detail:{intensity:coarse?.28:.4}}));
 }
