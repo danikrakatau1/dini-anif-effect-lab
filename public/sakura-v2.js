@@ -83,8 +83,9 @@ function resetScene(){
 
   gsap.set(panel,{opacity:0,visibility:'hidden'});
   gsap.set(scene,{yPercent:0,scale:1});
-  gsap.set('#coverCopy',{opacity:1,y:0,scale:1,filter:'none'});
-  gsap.set('.wedding-label,.guest-copy,.fine-rule,.couple-names,#openInvitation,.lab-state',{opacity:1,y:0,scale:1,filter:'none'});
+  gsap.set('#coverCopy',{clearProps:'opacity,transform,filter'});
+  gsap.set('.wedding-label,.guest-copy,.fine-rule,.couple-names,#openInvitation',{clearProps:'opacity,transform,filter'});
+  gsap.set('.lab-state',{clearProps:'opacity'});
   gsap.set('.artwork-stage',{clearProps:'scale,y'});
   gsap.set('.ambient-light',{clearProps:'opacity,scale,x,y'});
   gsap.set('.vintage-vignette',{clearProps:'opacity'});
