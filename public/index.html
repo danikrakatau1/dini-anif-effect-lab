@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b0d12" />
+  <title>Dini Anif Effect Lab</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <canvas id="sparkle-canvas" aria-hidden="true"></canvas>
+
+  <main class="shell">
+    <section class="hero" data-effect="reveal">
+      <p class="eyebrow">DINI ANIF · EFFECT LAB</p>
+      <h1>Sandbox efek web yang terpisah dari production.</h1>
+      <p class="lead">Tempat aman untuk eksperimen GSAP, CSS, Canvas, particles, motion, dan efek premium tanpa menyentuh V2.26 production.</p>
+      <div class="actions">
+        <button id="replay" type="button">Replay reveal</button>
+        <button id="toggle-sparkle" type="button" class="ghost">Toggle sparkle</button>
+      </div>
+    </section>
+
+    <section class="grid" aria-label="Effect Lab starter modules">
+      <article class="card" data-effect="reveal">
+        <span>01</span>
+        <h2>Reveal</h2>
+        <p>Entrance animation berbasis GSAP untuk section dan elemen.</p>
+      </article>
+
+      <article class="card floating-card" data-effect="float">
+        <span>02</span>
+        <h2>Floating</h2>
+        <p>Idle motion halus untuk ornamen, badge, atau decorative layer.</p>
+      </article>
+
+      <article class="card" data-effect="reveal">
+        <span>03</span>
+        <h2>Sparkle Canvas</h2>
+        <p>Canvas overlay ringan untuk partikel ambient dan eksperimen berikutnya.</p>
+      </article>
+    </section>
+
+    <footer>
+      <strong>LAB ONLY</strong>
+      <span>Repo: danikrakatau1/dini-anif-effect-lab</span>
+    </footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
