@@ -15,6 +15,16 @@ const assets={
   floral:'/assets/sakura-v40/fg-floral.webp'
 };
 
+function imageReady(img){
+  if(!img)return Promise.resolve();
+  if(typeof img.decode==='function')return img.decode().catch(()=>{});
+  if(img.complete)return Promise.resolve();
+  return new Promise(resolve=>{
+    img.addEventListener('load',resolve,{once:true});
+    img.addEventListener('error',resolve,{once:true});
+  });
+}
+
 function buildStage(){
   if(!opening||opening.querySelector(':scope > .v40-stage'))return;
   opening.querySelectorAll(':scope > .v394-opening-cinema,:scope > .v395-stage,:scope > .v396-stage').forEach(node=>node.remove());
@@ -34,8 +44,7 @@ function buildStage(){
     <div class="v40-shimmer"><i></i></div>
     <div class="v40-burst">${Array.from({length:petalCount},()=>'<i class="v40-petal"></i>').join('')}</div>`;
   opening.insertBefore(stage,opening.firstChild);
-  const images=[...stage.querySelectorAll('img')];
-  readyPromise=Promise.allSettled(images.map(img=>img.decode?.().catch(()=>{})||Promise.resolve()));
+  readyPromise=Promise.allSettled([...stage.querySelectorAll('img')].map(imageReady));
 }
 
 function setStatic(){
