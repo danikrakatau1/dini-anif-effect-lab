@@ -109,7 +109,7 @@ function settle(parts){
   if(parts.veil)parts.veil.style.visibility='hidden';
   if(parts.shimmer)parts.shimmer.style.visibility='hidden';
   if(parts.burst)parts.burst.innerHTML='';
-  window.dispatchEvent(new CustomEvent('sakura:petals-resume',{detail:{intensity:coarse?.28:.4}}));
+  window.dispatchEvent(new CustomEvent('sakura:petals-resume',{detail:{intensity:(coarse ? .28 : .4)}}));
 }
 
 function play(){
@@ -117,7 +117,7 @@ function play(){
   if(reduceMotion||!gsap){setStatic();return}
   const p=prepare();if(!p)return;
   const fast=coarse||saveData||lowMemory;
-  const speed=fast?.88:1;
+  const speed=(fast ? .88 : 1);
 
   timeline=gsap.timeline({defaults:{overwrite:'auto'},onComplete:()=>settle(p)});
   timeline
