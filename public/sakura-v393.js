@@ -23,9 +23,9 @@ if(!document.querySelector(`link[href="${v396Href}"]`)){
 /* V4.1.2 is the only opening engine. Move its stylesheet after every legacy stylesheet so it wins the cascade. */
 window.__SAKURA_TARGET_VERSION='v4.1.2';
 let v41Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v41.css'));
-if(!v41Link){v41Link=document.createElement('link');v41Link.rel='stylesheet';v41Link.href='/sakura-v41.css?v=412'}
+if(!v41Link){v41Link=document.createElement('link');v41Link.rel='stylesheet';v41Link.href='/sakura-v41.css'}
 document.head.appendChild(v41Link);
-await import('./sakura-v41.js?v=412');
+await import('./sakura-v41.js');
 document.body.dataset.sakuraFinalCandidate='v4.1.2';
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
