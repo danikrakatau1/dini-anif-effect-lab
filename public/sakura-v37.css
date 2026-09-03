@@ -1,0 +1,14 @@
+/* Sakura V3.7 — Performance & Stability Hardening */
+.sakura-page-hidden *, .sakura-fx-paused *{animation-play-state:paused!important}
+.sakura-low-power .living-wash,.sakura-low-power .gallery-ambient,.sakura-low-power .section-ambient{animation-duration:28s!important}
+.sakura-low-power .continuity-petal:nth-child(n+8){display:none}
+.sakura-low-power .sakura-art-section{animation:none!important;background-size:cover!important}
+.sakura-low-power .paper-card,.sakura-low-power .music-seal,.sakura-low-power .gallery-lightbox-card{backdrop-filter:none!important}
+.sakura-low-power .invitation-main::after{opacity:.012}
+.sakura-save-data .continuity-petal:nth-child(n+6){display:none}
+.sakura-save-data .living-wash{display:none}
+.sakura-coarse-device .sakura-art-section{background-attachment:scroll!important}
+.sakura-coarse-device .gallery-tile:hover,.sakura-coarse-device .paper-card:hover{transform:none!important}
+[data-sakura-orientation-guard]{min-height:calc(var(--app-vh,1vh)*100)}
+@media(max-height:520px) and (orientation:landscape){.cover-copy{transform:none!important;padding-top:max(20px,env(safe-area-inset-top));padding-bottom:max(20px,env(safe-area-inset-bottom))}.couple-names span{font-size:clamp(40px,10vw,62px)}.fine-rule{margin:8px 0}.guest-copy{margin-bottom:10px}.open-invitation{height:44px}.lab-state{display:none}}
+@media(prefers-reduced-motion:reduce){.living-wash,.section-ambient,.gallery-ambient,.continuity-petal,.section-petal,.couple-amp{animation:none!important}.sakura-art-section{animation:none!important}.inv-shell{transform:none!important;opacity:1!important}}
