@@ -1,0 +1,62 @@
+/* Sakura V3.9.5 — Opening WOW Cinematic Pass */
+:root{--v395-maroon:#742f3a;--v395-gold:#c29a61;--v395-paper:rgba(249,239,219,.88);--v395-warm:#f7dfad}
+
+/* V3.9.5 owns the opening visual stage. */
+.scene-opening{min-height:100svh;overflow:hidden;background:#ead8bb!important}
+.scene-opening>.v394-opening-cinema{display:none!important}
+.scene-opening>.inv-shell{z-index:20;opacity:0;transform:translateY(30px) scale(.945);filter:blur(10px);background:linear-gradient(180deg,rgba(252,244,228,.88),rgba(244,226,199,.84));border:1px solid rgba(116,47,58,.46);box-shadow:0 30px 74px rgba(65,39,34,.18),inset 0 0 0 7px rgba(255,250,239,.3)}
+.scene-opening.v395-complete>.inv-shell{opacity:1;transform:none;filter:none}
+
+.v395-stage{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none;background:#e9d7ba;perspective:1200px}
+.v395-far,.v395-mid,.v395-near-top,.v395-near-bottom,.v395-haze,.v395-beam,.v395-veil,.v395-portal,.v395-shimmer,.v395-burst{position:absolute;inset:0;pointer-events:none}
+.v395-far img,.v395-mid img,.v395-near-top img,.v395-near-bottom img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;will-change:transform,filter,opacity,clip-path}
+
+/* Far: Fuji/sky/lake world */
+.v395-far{z-index:1;clip-path:inset(0 13% 0 13% round 36px)}
+.v395-far img{transform:scale(1.13) translate3d(0,18px,0);filter:sepia(.06) saturate(.84) contrast(.98) brightness(1.035)}
+
+/* Mid: lower landscape receives independent camera speed. */
+.v395-mid{z-index:2;clip-path:inset(38% 0 0 0);opacity:.72;mix-blend-mode:multiply}
+.v395-mid img{transform:scale(1.11) translate3d(0,28px,0);filter:sepia(.03) saturate(.82) contrast(.95) brightness(1.08)}
+
+/* Near plates: same original artwork, cropped only to fake depth. */
+.v395-near-top{z-index:5;clip-path:polygon(0 0,100% 0,100% 44%,72% 38%,56% 31%,36% 42%,0 38%);opacity:0}
+.v395-near-top img{transform:scale(1.22) translate3d(0,-34px,0);transform-origin:50% 15%;filter:saturate(.96) contrast(1.02) drop-shadow(0 12px 16px rgba(66,42,35,.08))}
+.v395-near-bottom{z-index:6;clip-path:inset(69% 0 0 0);opacity:0}
+.v395-near-bottom img{transform:scale(1.19) translate3d(0,42px,0);transform-origin:50% 100%;filter:saturate(1.02) contrast(1.02) drop-shadow(0 -12px 18px rgba(67,43,36,.08))}
+
+/* Cinematic atmosphere. */
+.v395-haze{z-index:7;background:radial-gradient(circle at 52% 28%,rgba(255,234,190,.54),transparent 25%),radial-gradient(circle at 24% 58%,rgba(255,214,183,.16),transparent 31%),linear-gradient(180deg,rgba(255,251,239,.14),transparent 48%,rgba(96,55,47,.07));opacity:0;mix-blend-mode:screen}
+.v395-beam{z-index:8;left:-28%;right:auto;width:72%;background:linear-gradient(112deg,transparent 15%,rgba(255,232,179,.02) 34%,rgba(255,236,188,.36) 50%,rgba(255,248,219,.08) 66%,transparent 81%);filter:blur(9px);opacity:0;transform:skewX(-9deg) translateX(-34%);mix-blend-mode:screen}
+.v395-veil{z-index:10;background:linear-gradient(90deg,rgba(239,217,181,.96),rgba(251,240,218,.42) 38%,rgba(251,240,218,.42) 62%,rgba(239,217,181,.96));clip-path:inset(0 50% 0 50%);opacity:.96}
+
+/* Portal/frame enters as the hero beat. */
+.v395-portal{z-index:12;inset:28px 19px;opacity:0;transform:scale(.86) translateY(12px);border:1.5px solid rgba(116,47,58,.76);border-radius:45% 45% 34px 34px/13% 13% 34px 34px;box-shadow:inset 0 0 0 8px rgba(255,250,238,.34),inset 0 0 0 9px rgba(194,154,97,.28),0 34px 72px rgba(68,42,36,.13)}
+.v395-portal::before{content:"";position:absolute;inset:13px;border:1px solid rgba(194,154,97,.58);border-radius:43% 43% 25px 25px/11% 11% 25px 25px}
+.v395-portal::after{content:"";position:absolute;left:50%;top:20px;width:54px;height:1px;background:linear-gradient(90deg,transparent,var(--v395-gold),transparent);transform:translateX(-50%);box-shadow:0 calc(100svh - 82px) 0 rgba(194,154,97,.48)}
+.v395-shimmer{z-index:13;inset:28px 19px;border-radius:45% 45% 34px 34px/13% 13% 34px 34px;overflow:hidden;opacity:0}
+.v395-shimmer::before{content:"";position:absolute;top:-18%;bottom:-18%;left:-32%;width:24%;background:linear-gradient(90deg,transparent,rgba(255,245,204,.74),transparent);transform:skewX(-18deg);filter:blur(2px)}
+
+/* One-time petal burst close to the camera. */
+.v395-burst{z-index:18;overflow:hidden}
+.v395-petal{position:absolute;left:50%;top:52%;width:10px;height:16px;border-radius:75% 15% 75% 25%;background:linear-gradient(145deg,#f4d7d4,#b96f78);box-shadow:0 3px 8px rgba(93,50,53,.12);opacity:0;transform-origin:55% 70%;will-change:transform,opacity}
+.v395-petal:nth-child(3n){width:8px;height:13px;background:linear-gradient(145deg,#f6e4dc,#c58388)}
+.v395-petal:nth-child(4n){filter:blur(.5px)}
+
+/* Panel and text are deliberately delayed until the hero beat lands. */
+.scene-opening .inv-eyebrow,.scene-opening .inv-title,.scene-opening .inv-rule,.scene-opening .inv-copy{opacity:0;transform:translateY(18px);filter:blur(6px);will-change:opacity,transform,filter}
+.scene-opening.v395-complete .inv-eyebrow,.scene-opening.v395-complete .inv-title,.scene-opening.v395-complete .inv-rule,.scene-opening.v395-complete .inv-copy{filter:none}
+
+/* Settle state keeps depth alive after the intro. */
+.scene-opening.v395-complete .v395-far img{animation:v395FarIdle 18s ease-in-out infinite alternate}
+.scene-opening.v395-complete .v395-near-top img{animation:v395NearTopIdle 13s ease-in-out infinite alternate}
+.scene-opening.v395-complete .v395-near-bottom img{animation:v395NearBottomIdle 15s ease-in-out infinite alternate}
+.scene-opening.v395-complete .v395-haze{opacity:.18}
+
+@keyframes v395FarIdle{from{transform:scale(1.035) translate3d(0,-4px,0)}to{transform:scale(1.052) translate3d(-3px,-8px,0)}}
+@keyframes v395NearTopIdle{from{transform:scale(1.12) translate3d(-2px,-12px,0)}to{transform:scale(1.125) translate3d(5px,-17px,0)}}
+@keyframes v395NearBottomIdle{from{transform:scale(1.11) translate3d(0,2px,0)}to{transform:scale(1.118) translate3d(-4px,-3px,0)}}
+
+@media(max-width:430px){.v395-portal,.v395-shimmer{inset:24px 16px}.scene-opening>.inv-shell{width:calc(100% - 40px);padding:46px 24px}.v395-petal{width:9px;height:14px}}
+@media(max-width:350px){.v395-portal,.v395-shimmer{inset:18px 12px}.scene-opening>.inv-shell{width:calc(100% - 30px);padding:42px 20px}}
+@media(prefers-reduced-motion:reduce){.v395-veil,.v395-beam,.v395-burst,.v395-shimmer{display:none!important}.v395-far{clip-path:none!important}.v395-far img,.v395-mid img,.v395-near-top img,.v395-near-bottom img{transform:none!important;animation:none!important}.v395-near-top,.v395-near-bottom{opacity:.3!important}.v395-haze{opacity:.18!important}.v395-portal{opacity:1!important;transform:none!important}.scene-opening>.inv-shell,.scene-opening .inv-eyebrow,.scene-opening .inv-title,.scene-opening .inv-rule,.scene-opening .inv-copy{opacity:1!important;transform:none!important;filter:none!important}}
