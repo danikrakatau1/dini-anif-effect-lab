@@ -1,4 +1,5 @@
 /* Sakura V3.9.3 — Living Scene & Cinematic Motion behavior layer */
+/* Keep legacy V3.9.4/V3.9.5 opening builders disabled while their section decoration remains available. */
 window.__SAKURA_TARGET_VERSION='v3.9.6';
 
 const v394Href='/sakura-v394.css';
@@ -13,12 +14,20 @@ if(!document.querySelector(`link[href="${v395Href}"]`)){
 }
 await import('./sakura-v395.js');
 
+/* V3.9.6 CSS remains the mobile performance baseline; its old opening JS is intentionally not imported. */
 const v396Href='/sakura-v396.css';
 if(!document.querySelector(`link[href="${v396Href}"]`)){
   const link=document.createElement('link');link.rel='stylesheet';link.href=v396Href;document.head.appendChild(link);
 }
-await import('./sakura-v396.js');
-document.body.dataset.sakuraFinalCandidate='v3.9.6';
+
+/* V4.0 is now the only post-cover opening engine. */
+window.__SAKURA_TARGET_VERSION='v4.0';
+const v40Href='/sakura-v40.css';
+if(!document.querySelector(`link[href="${v40Href}"]`)){
+  const link=document.createElement('link');link.rel='stylesheet';link.href=v40Href;document.head.appendChild(link);
+}
+await import('./sakura-v40.js');
+document.body.dataset.sakuraFinalCandidate='v4.0';
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse = matchMedia('(pointer: coarse)').matches;
@@ -76,7 +85,8 @@ function setupFakeCameraDepth(){
 
 function setupButterflies(){
   if(reduceMotion) return ()=>{};
-  const targets = sections.filter(s=>['opening','couple','event','wishes','closing'].includes(s.dataset.sakuraScene));
+  /* Opening is deliberately excluded in V4.0 so its hero timeline has no competing motion. */
+  const targets = sections.filter(s=>['couple','event','wishes','closing'].includes(s.dataset.sakuraScene));
   targets.forEach((section,sceneIndex)=>{
     const layer=document.createElement('div');
     layer.className='v393-butterfly-layer';
