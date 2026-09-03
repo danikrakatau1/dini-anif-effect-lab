@@ -31,8 +31,7 @@ function setupDelayedPanels(){
 
 function setupOpeningCinematic(){
   const opening=document.querySelector('.scene-opening');
-  const trigger=document.querySelector('#openInvitation');
-  if(!opening||!trigger) return ()=>{};
+  if(!opening) return ()=>{};
   opening.dataset.v393Panel=reduceMotion?'ready':'waiting';
   if(reduceMotion) return ()=>{};
   let t1=0,t2=0,t3=0;
@@ -41,15 +40,15 @@ function setupOpeningCinematic(){
     opening.classList.remove('panel-focused','v393-camera-focus');
     opening.classList.add('v393-camera-enter');
     clearTimeout(t1);clearTimeout(t2);clearTimeout(t3);
-    t1=setTimeout(()=>opening.classList.add('v393-camera-focus'),1450);
+    t1=setTimeout(()=>opening.classList.add('v393-camera-focus'),1100);
     t2=setTimeout(()=>{
       opening.dataset.v393Panel='ready';
       opening.classList.add('panel-focused');
-    },2150);
-    t3=setTimeout(()=>opening.classList.remove('v393-camera-enter'),3300);
+    },1850);
+    t3=setTimeout(()=>opening.classList.remove('v393-camera-enter'),3200);
   };
-  trigger.addEventListener('click',start,{passive:true});
-  return ()=>{trigger.removeEventListener('click',start);clearTimeout(t1);clearTimeout(t2);clearTimeout(t3)};
+  window.addEventListener('sakura:opened',start);
+  return ()=>{window.removeEventListener('sakura:opened',start);clearTimeout(t1);clearTimeout(t2);clearTimeout(t3)};
 }
 
 function setupFakeCameraDepth(){
