@@ -3,86 +3,62 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#ead8c0" />
-  <title>Sakura Vintage 2.5D · Dini Anif Effect Lab</title>
+  <meta name="theme-color" content="#efe0c8" />
+  <title>Sakura Vintage 2.5D V2 · Dini Anif Effect Lab</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/sakura-v2.css" />
 </head>
 <body>
-  <main class="scene" id="scene" aria-label="Sakura Vintage 2.5D wedding cover">
-    <div class="layer paper" data-depth="0.02"></div>
-    <div class="layer sun-glow" data-depth="0.04"></div>
-
-    <div class="layer landscape" data-depth="0.08" aria-hidden="true">
-      <svg viewBox="0 0 900 1600" preserveAspectRatio="xMidYMid slice">
-        <defs>
-          <linearGradient id="mount" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c5aa93"/><stop offset="1" stop-color="#8d7465"/></linearGradient>
-          <linearGradient id="water" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d9c9b5"/><stop offset="1" stop-color="#b59a86"/></linearGradient>
-        </defs>
-        <path d="M78 882 C170 802 256 790 342 816 C410 836 462 858 520 842 C610 818 682 754 812 770 L900 992 L0 1000 Z" fill="#9d8877" opacity=".48"/>
-        <path d="M270 820 L458 470 L650 820 Z" fill="url(#mount)" opacity=".92"/>
-        <path d="M381 613 L458 470 L535 612 C496 594 471 603 455 620 C432 595 414 591 381 613 Z" fill="#eee4d6" opacity=".9"/>
-        <rect y="900" width="900" height="700" fill="url(#water)" opacity=".56"/>
-        <path d="M0 1030 C130 980 230 1010 348 982 C504 946 646 1005 900 954" fill="none" stroke="#8e7565" stroke-width="7" opacity=".2"/>
-        <g fill="none" stroke="#60483e" stroke-linecap="round" opacity=".75">
-          <path d="M82 1085 C220 986 364 993 502 1087" stroke-width="17"/>
-          <path d="M92 1086 C226 1028 356 1032 490 1087" stroke-width="7"/>
-          <path d="M110 1088 L110 1136 M163 1065 L163 1121 M221 1047 L221 1105 M281 1042 L281 1102 M342 1050 L342 1108 M404 1066 L404 1122 M465 1087 L465 1138" stroke-width="8"/>
-        </g>
-        <g opacity=".46" fill="#655148"><path d="M58 910 l32 -90 34 90z"/><path d="M98 910 l26 -72 28 72z"/><path d="M724 900 l34 -92 36 92z"/><path d="M766 900 l29 -74 29 74z"/></g>
-      </svg>
+  <main class="sakura-v2" id="sakuraV2" aria-label="Sakura Vintage 2.5D V2 cover">
+    <div class="artwork-stage" data-depth="0.055" aria-hidden="true">
+      <img
+        id="sakuraArtwork"
+        class="artwork-image"
+        src="/assets/sakura-v2-landscape.png"
+        alt=""
+        decoding="async"
+        fetchpriority="high"
+      />
     </div>
 
-    <div class="layer sakura-top" data-depth="0.16" aria-hidden="true">
-      <svg viewBox="0 0 900 700" preserveAspectRatio="xMidYMin meet">
-        <g fill="none" stroke="#5b3a34" stroke-linecap="round">
-          <path d="M-30 175 C120 95 225 132 322 54 C392 0 465 20 532 -42" stroke-width="18"/>
-          <path d="M930 120 C790 82 746 180 646 190 C580 197 548 157 486 170" stroke-width="14"/>
-        </g>
-        <g class="blossoms" fill="#efd1cf" stroke="#c48d91" stroke-width="2">
-          <circle cx="89" cy="124" r="29"/><circle cx="147" cy="113" r="20"/><circle cx="223" cy="109" r="30"/><circle cx="292" cy="63" r="21"/><circle cx="382" cy="22" r="27"/><circle cx="798" cy="103" r="31"/><circle cx="724" cy="150" r="22"/><circle cx="654" cy="183" r="27"/><circle cx="570" cy="173" r="20"/>
-        </g>
-      </svg>
-    </div>
+    <div class="ambient-light" data-depth="0.02" aria-hidden="true"></div>
+    <canvas id="petalCanvas" class="petal-canvas" aria-hidden="true"></canvas>
+    <div class="vintage-grain" aria-hidden="true"></div>
+    <div class="vintage-vignette" aria-hidden="true"></div>
 
-    <div class="layer florals" data-depth="0.22" aria-hidden="true">
-      <svg viewBox="0 0 900 620" preserveAspectRatio="xMidYMax meet">
-        <g opacity=".92">
-          <g fill="#f2dfd2"><circle cx="90" cy="475" r="78"/><circle cx="208" cy="515" r="67"/><circle cx="720" cy="520" r="85"/><circle cx="842" cy="455" r="74"/></g>
-          <g fill="#bf777f"><circle cx="150" cy="408" r="54"/><circle cx="332" cy="550" r="62"/><circle cx="620" cy="558" r="58"/><circle cx="780" cy="392" r="55"/></g>
-          <g fill="#7d3c4a"><circle cx="40" cy="545" r="42"/><circle cx="276" cy="590" r="48"/><circle cx="540" cy="605" r="46"/><circle cx="895" cy="555" r="48"/></g>
-          <g fill="#8f7763" opacity=".75"><ellipse cx="245" cy="454" rx="24" ry="70" transform="rotate(-38 245 454)"/><ellipse cx="660" cy="445" rx="24" ry="70" transform="rotate(40 660 445)"/><ellipse cx="748" cy="580" rx="21" ry="62" transform="rotate(-28 748 580)"/></g>
-        </g>
-      </svg>
-    </div>
-
-    <canvas id="petal-canvas" class="petals" aria-hidden="true"></canvas>
-    <div class="grain" aria-hidden="true"></div>
-    <div class="vignette" aria-hidden="true"></div>
-
-    <section class="content" id="coverContent">
-      <div class="ornament reveal-item">❦</div>
-      <p class="eyebrow reveal-item">The Wedding Of</p>
-      <h1 class="names reveal-item"><span>Faqih</span><i>&amp;</i><span>Dini</span></h1>
-      <div class="divider reveal-item"><span></span><b>✦</b><span></span></div>
-      <p class="guest reveal-item">Kepada Bapak/Ibu/Saudara/i<br><strong>Di Tempat</strong></p>
-      <button id="openInvitation" class="open-button reveal-item" type="button"><span>Buka Undangan</span></button>
-      <p class="lab-badge">Sakura Vintage · 2.5D Lab V1</p>
+    <section class="cover-copy" id="coverCopy">
+      <p class="wedding-label reveal-item">The Wedding Of</p>
+      <h1 class="couple-names reveal-item">
+        <span>Faqih</span>
+        <i>&amp;</i>
+        <span>Dini</span>
+      </h1>
+      <div class="fine-rule reveal-item" aria-hidden="true"><span></span><b>◆</b><span></span></div>
+      <p class="guest-copy reveal-item">Kepada Bapak/Ibu/Saudara/i<br><strong>Di Tempat</strong></p>
+      <button class="open-invitation reveal-item" id="openInvitation" type="button">
+        <span>Buka Undangan</span>
+      </button>
+      <p class="lab-state">Sakura Vintage · 2.5D V2</p>
     </section>
 
-    <section class="opened" id="openedPanel" aria-hidden="true">
-      <div>
+    <section class="opened-panel" id="openedPanel" aria-hidden="true">
+      <div class="opened-inner">
         <small>DINI ANIF EFFECT LAB</small>
-        <h2>Scene terbuka 🌸</h2>
-        <p>Ken Burns, parallax, ambient glow, petals, grain, reveal, dan cinematic opening aktif.</p>
+        <h2>Sakura Vintage</h2>
+        <p>V2 artwork-first scene.</p>
         <button id="resetScene" type="button">Ulangi Cover</button>
       </div>
     </section>
+
+    <div class="asset-guard" id="assetGuard" hidden>
+      <strong>V2 artwork asset belum tersedia di repo.</strong>
+      <span>Expected: /public/assets/sakura-v2-landscape.png</span>
+    </div>
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
-  <script type="module" src="/app.js"></script>
+  <script type="module" src="/sakura-v2.js"></script>
 </body>
 </html>
