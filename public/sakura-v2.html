@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#efe0c8" />
+  <title>Sakura Vintage 2.5D V2 · Dini Anif Effect Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&family=Cormorant+Garamond:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/sakura-v2.css" />
+</head>
+<body>
+  <main class="sakura-v2" id="sakuraV2" aria-label="Sakura Vintage 2.5D V2 cover">
+    <!-- V2 RULE: this is the original artwork source. No CSS/vector recreation of Fuji, bridge, branches, or flowers. -->
+    <div class="artwork-stage" data-depth="0.055" aria-hidden="true">
+      <img
+        id="sakuraArtwork"
+        class="artwork-image"
+        src="/assets/sakura-v2-landscape.webp"
+        alt=""
+        decoding="async"
+        fetchpriority="high"
+      />
+    </div>
+
+    <div class="ambient-light" data-depth="0.02" aria-hidden="true"></div>
+    <canvas id="petalCanvas" class="petal-canvas" aria-hidden="true"></canvas>
+    <div class="vintage-grain" aria-hidden="true"></div>
+    <div class="vintage-vignette" aria-hidden="true"></div>
+
+    <section class="cover-copy" id="coverCopy">
+      <p class="wedding-label reveal-item">The Wedding Of</p>
+      <h1 class="couple-names reveal-item">
+        <span>Faqih</span>
+        <i>&amp;</i>
+        <span>Dini</span>
+      </h1>
+      <div class="fine-rule reveal-item" aria-hidden="true"><span></span><b>◆</b><span></span></div>
+      <p class="guest-copy reveal-item">Kepada Bapak/Ibu/Saudara/i<br><strong>Di Tempat</strong></p>
+      <button class="open-invitation reveal-item" id="openInvitation" type="button">
+        <span>Buka Undangan</span>
+      </button>
+      <p class="lab-state">Sakura Vintage · 2.5D V2 Staging</p>
+    </section>
+
+    <section class="opened-panel" id="openedPanel" aria-hidden="true">
+      <div class="opened-inner">
+        <small>DINI ANIF EFFECT LAB</small>
+        <h2>Sakura Vintage</h2>
+        <p>V2 artwork-first scene.</p>
+        <button id="resetScene" type="button">Ulangi Cover</button>
+      </div>
+    </section>
+
+    <div class="asset-guard" id="assetGuard" hidden>
+      <strong>V2 artwork asset belum tersedia di repo.</strong>
+      <span>Expected: /public/assets/sakura-v2-landscape.webp</span>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+  <script type="module" src="/sakura-v2.js"></script>
+</body>
+</html>
