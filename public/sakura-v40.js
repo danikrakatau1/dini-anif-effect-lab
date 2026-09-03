@@ -5,6 +5,7 @@ const coarse=matchMedia('(pointer: coarse)').matches;
 const saveData=Boolean(navigator.connection?.saveData);
 const lowMemory=Number(navigator.deviceMemory||8)<=4;
 const opening=document.querySelector('.scene-opening');
+const openButton=document.querySelector('#openInvitation');
 const artworkSrc='/assets/sakura-v2-landscape.png';
 let timeline=null;
 let started=false;
@@ -98,7 +99,7 @@ function settle(p){
   [p.farImg,p.mid,p.branches,p.floral,p.frame,p.panel].forEach(el=>{if(el)el.style.willChange='auto'});
   if(p.light)p.light.style.visibility='hidden';if(p.veil)p.veil.style.visibility='hidden';if(p.shimmer)p.shimmer.style.visibility='hidden';if(p.burst)p.burst.innerHTML='';
   if(coarse||saveData||lowMemory){p.mid?.remove();p.branches?.remove();p.floral?.remove()}
-  window.dispatchEvent(new CustomEvent('sakura:petals-resume',{detail:{intensity:(coarse?.24:.36)}}));
+  window.dispatchEvent(new CustomEvent('sakura:petals-resume',{detail:{intensity:(coarse ? .24 : .36)}}));
 }
 
 function play(){
@@ -106,7 +107,7 @@ function play(){
   if(reduceMotion||!gsap){setStatic();return}
   const p=prepare();if(!p)return;
   const fast=coarse||saveData||lowMemory;
-  const speed=fast?.9:1;
+  const speed=(fast ? .9 : 1);
   timeline=gsap.timeline({defaults:{overwrite:'auto'},onComplete:()=>settle(p)});
   timeline
     .to(p.farImg,{scale:1.012,y:0,duration:1.25*speed,ease:'power2.out'},0)
@@ -141,7 +142,9 @@ window.__SAKURA_TARGET_VERSION='v4.0.2';
 document.body.dataset.sakuraFinalCandidate='v4.0.2';
 document.title='Sakura Vintage V4.0.2 No-Blank Seamless Reveal · Dini Anif Effect Lab';
 if(reduceMotion)setStatic();
+/* Capture click starts V4 under the still-visible fixed cover. */
+openButton?.addEventListener('click',onOpeningStart,{capture:true});
 window.addEventListener('sakura:opening-start',onOpeningStart,{capture:true});
 window.addEventListener('sakura:opened',onOpened,{capture:true});
 document.addEventListener('visibilitychange',onVisibility);
-window.addEventListener('pagehide',()=>{window.removeEventListener('sakura:opening-start',onOpeningStart,{capture:true});window.removeEventListener('sakura:opened',onOpened,{capture:true});document.removeEventListener('visibilitychange',onVisibility);timeline?.kill()},{once:true});
+window.addEventListener('pagehide',()=>{openButton?.removeEventListener('click',onOpeningStart,{capture:true});window.removeEventListener('sakura:opening-start',onOpeningStart,{capture:true});window.removeEventListener('sakura:opened',onOpened,{capture:true});document.removeEventListener('visibilitychange',onVisibility);timeline?.kill()},{once:true});
