@@ -1,0 +1,57 @@
+/* Sakura V4.0 — True Layered Opening */
+:root{--v40-maroon:#742f3a;--v40-gold:#bd955d;--v40-paper:rgba(249,239,219,.88);--v40-ink:#68483e}
+
+/* V4 owns only the post-cover opening scene. */
+.scene-opening{min-height:100svh;overflow:hidden;background:#ead9bf!important;isolation:isolate;contain:paint}
+.scene-opening>.v394-opening-cinema,.scene-opening>.v395-stage,.scene-opening>.v396-stage{display:none!important}
+
+.v40-stage{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;background:#ead9bf}
+.v40-plate,.v40-atmosphere,.v40-light,.v40-veil,.v40-frame,.v40-shimmer,.v40-burst{position:absolute;inset:0;pointer-events:none}
+.v40-plate img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;transform:translate3d(0,0,0);backface-visibility:hidden}
+.v40-far{z-index:1}.v40-mid{z-index:2}.v40-branches{z-index:4}.v40-floral{z-index:5}
+
+/* Physical raster plates: no duplicate-image masks or boxed crop illusion. */
+.v40-far,.v40-mid,.v40-branches,.v40-floral{opacity:0}
+.v40-atmosphere{z-index:6;opacity:0;background:radial-gradient(circle at 55% 28%,rgba(255,231,181,.34),transparent 31%),linear-gradient(180deg,rgba(255,249,232,.08),transparent 55%,rgba(119,72,57,.04))}
+.v40-light{z-index:7;left:-45%;right:auto;width:62%;opacity:0;background:linear-gradient(112deg,transparent 18%,rgba(255,239,198,.08) 38%,rgba(255,235,181,.38) 52%,rgba(255,245,215,.08) 68%,transparent 84%);transform:translate3d(0,0,0) skewX(-9deg)}
+.v40-veil{z-index:8;background:linear-gradient(90deg,rgba(239,218,184,.92),rgba(250,239,216,.32) 40%,rgba(250,239,216,.32) 60%,rgba(239,218,184,.92));clip-path:inset(0 50% 0 50%);opacity:.92}
+
+/* Ceremonial frame arrives before the paper panel. */
+.v40-frame{z-index:10;inset:24px 17px;opacity:0;transform:translate3d(0,10px,0) scale(.92);border:1.5px solid rgba(116,47,58,.74);border-radius:46% 46% 34px 34px/13% 13% 34px 34px;box-shadow:inset 0 0 0 7px rgba(255,250,237,.28),inset 0 0 0 8px rgba(189,149,93,.22)}
+.v40-frame::before{content:"";position:absolute;inset:12px;border:1px solid rgba(189,149,93,.48);border-radius:44% 44% 25px 25px/11% 11% 25px 25px}
+.v40-frame::after{content:"◆";position:absolute;left:50%;top:18px;transform:translateX(-50%);font-size:10px;color:rgba(189,149,93,.72);letter-spacing:0}
+.v40-shimmer{z-index:11;inset:24px 17px;overflow:hidden;border-radius:46% 46% 34px 34px/13% 13% 34px 34px;opacity:0}
+.v40-shimmer i{position:absolute;top:-12%;bottom:-12%;left:-30%;width:18%;background:linear-gradient(90deg,transparent,rgba(255,247,213,.72),transparent);transform:skewX(-16deg)}
+
+/* One-shot near-camera petals; removed after intro. */
+.v40-burst{z-index:16;overflow:hidden}
+.v40-petal{position:absolute;left:50%;top:54%;width:8px;height:13px;border-radius:78% 16% 72% 24%;background:linear-gradient(145deg,#f1d6d2,#b96f78);opacity:0;transform-origin:55% 70%}
+.v40-petal:nth-child(even){width:7px;height:11px;background:linear-gradient(145deg,#f6e5dc,#c7868b)}
+
+/* Existing opening content becomes the actual paper panel. */
+.scene-opening>.inv-shell{position:relative;z-index:20;width:calc(100% - 40px);max-width:356px;padding:46px 25px;opacity:0;transform:translate3d(0,20px,0) scale(.97);filter:none!important;color:var(--v40-ink);background:linear-gradient(180deg,rgba(252,245,231,.89),rgba(244,227,202,.85));border:1px solid rgba(116,47,58,.42);border-radius:42px;box-shadow:0 24px 58px rgba(69,43,36,.13),inset 0 0 0 6px rgba(255,250,238,.27)}
+.scene-opening>.inv-shell::before{content:"";position:absolute;inset:11px;border:1px solid rgba(189,149,93,.28);border-radius:32px;pointer-events:none}
+.scene-opening .inv-eyebrow,.scene-opening .inv-title,.scene-opening .inv-rule,.scene-opening .inv-copy{opacity:0;transform:translate3d(0,12px,0);filter:none!important}
+.scene-opening .inv-title{color:var(--v40-maroon)!important}
+
+/* Settled state: visually alive, computationally quiet on mobile. */
+.scene-opening.v40-complete .v40-far,.scene-opening.v40-complete .v40-mid,.scene-opening.v40-complete .v40-branches,.scene-opening.v40-complete .v40-floral{opacity:1}
+.scene-opening.v40-complete>.inv-shell,.scene-opening.v40-complete .inv-eyebrow,.scene-opening.v40-complete .inv-title,.scene-opening.v40-complete .inv-rule,.scene-opening.v40-complete .inv-copy{opacity:1;transform:none}
+.scene-opening.v40-complete .v40-atmosphere{opacity:.14}
+
+@media(pointer:coarse){
+  .v40-light{background:linear-gradient(112deg,transparent 20%,rgba(255,236,190,.28) 52%,transparent 82%)}
+  .v40-stage,.v40-plate,.v40-plate img{will-change:auto!important}
+  .scene-opening.v40-complete .v40-far img,.scene-opening.v40-complete .v40-mid img,.scene-opening.v40-complete .v40-branches img,.scene-opening.v40-complete .v40-floral img{animation:none!important;will-change:auto!important}
+}
+@media(pointer:fine) and (prefers-reduced-motion:no-preference){.scene-opening.v40-complete .v40-far img{animation:v40FarIdle 22s ease-in-out infinite alternate}}
+@keyframes v40FarIdle{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-2px,-4px,0) scale(1.012)}}
+
+@media(max-width:350px){.v40-frame,.v40-shimmer{inset:18px 12px}.scene-opening>.inv-shell{width:calc(100% - 30px);padding:41px 20px}}
+@media(prefers-reduced-motion:reduce){
+  .v40-light,.v40-veil,.v40-shimmer,.v40-burst{display:none!important}
+  .v40-far,.v40-mid,.v40-branches,.v40-floral{opacity:1!important;transform:none!important}
+  .v40-plate img{transform:none!important;animation:none!important}
+  .v40-atmosphere{opacity:.12!important}.v40-frame{opacity:1!important;transform:none!important}
+  .scene-opening>.inv-shell,.scene-opening .inv-eyebrow,.scene-opening .inv-title,.scene-opening .inv-rule,.scene-opening .inv-copy{opacity:1!important;transform:none!important}
+}
