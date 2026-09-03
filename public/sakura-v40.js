@@ -1,4 +1,4 @@
-/* Sakura V4.0 — True Layered Opening behavior */
+/* Sakura V4.0.1 — True Layered Opening asset rescue */
 const gsap=window.gsap;
 const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse=matchMedia('(pointer: coarse)').matches;
@@ -8,12 +8,14 @@ const opening=document.querySelector('.scene-opening');
 let timeline=null;
 let readyPromise=Promise.resolve();
 
-const assets={
-  far:'/assets/sakura-v40/far-sky.webp',
-  mid:'/assets/sakura-v40/mid-landscape.webp',
-  branches:'/assets/sakura-v40/fg-branches.webp',
-  floral:'/assets/sakura-v40/fg-floral.webp'
-};
+/*
+ * The first V4 binary WebP plate upload was truncated in-repo and Safari showed
+ * broken-image placeholders. V4.0.1 keeps the same layered choreography but
+ * sources every plate from the already-proven Sakura master PNG. CSS soft masks
+ * isolate the visual zones so there are no hard boxed crop edges.
+ */
+const masterArtwork='/assets/sakura-v2-landscape.png';
+const assets={far:masterArtwork,mid:masterArtwork,branches:masterArtwork,floral:masterArtwork};
 
 function imageReady(img){
   if(!img)return Promise.resolve();
@@ -30,11 +32,11 @@ function buildStage(){
   opening.querySelectorAll(':scope > .v394-opening-cinema,:scope > .v395-stage,:scope > .v396-stage').forEach(node=>node.remove());
   const petalCount=(coarse||saveData||lowMemory)?6:8;
   const stage=document.createElement('div');
-  stage.className='v40-stage';
+  stage.className='v40-stage v401-master-fallback';
   stage.setAttribute('aria-hidden','true');
   stage.innerHTML=`
     <div class="v40-plate v40-far"><img src="${assets.far}" alt="" decoding="async" fetchpriority="high"></div>
-    <div class="v40-plate v40-mid"><img src="${assets.mid}" alt="" decoding="async" fetchpriority="high"></div>
+    <div class="v40-plate v40-mid"><img src="${assets.mid}" alt="" decoding="async"></div>
     <div class="v40-plate v40-branches"><img src="${assets.branches}" alt="" decoding="async"></div>
     <div class="v40-plate v40-floral"><img src="${assets.floral}" alt="" decoding="async"></div>
     <div class="v40-atmosphere"></div>
@@ -78,10 +80,10 @@ function prepare(){
   gsap.killTweensOf(moving);
 
   [farImg,midImg,branchesImg,floralImg,frame,panel].forEach(el=>{if(el)el.style.willChange='transform,opacity'});
-  gsap.set(far,{opacity:.2});gsap.set(farImg,{scale:1.035,y:8});
-  gsap.set(mid,{opacity:0,y:24});gsap.set(midImg,{scale:1.055,y:14});
-  gsap.set(branches,{opacity:0,x:16,y:-24});gsap.set(branchesImg,{scale:1.035});
-  gsap.set(floral,{opacity:0,y:34});gsap.set(floralImg,{scale:1.03});
+  gsap.set(far,{opacity:.18});gsap.set(farImg,{scale:1.045,y:10});
+  gsap.set(mid,{opacity:0,y:24});gsap.set(midImg,{scale:1.065,y:15});
+  gsap.set(branches,{opacity:0,x:18,y:-28});gsap.set(branchesImg,{scale:1.055});
+  gsap.set(floral,{opacity:0,y:36});gsap.set(floralImg,{scale:1.04});
   gsap.set(atmosphere,{opacity:0});gsap.set(light,{opacity:0,xPercent:-20});
   gsap.set(veil,{clipPath:'inset(0 50% 0 50%)',opacity:.92});
   gsap.set(frame,{opacity:0,y:10,scale:.92});
@@ -114,7 +116,12 @@ function settle(p){
   document.documentElement.classList.remove('v40-intro-active');
   [p.farImg,p.midImg,p.branchesImg,p.floralImg,p.frame,p.panel].forEach(el=>{if(el)el.style.willChange='auto'});
   if(p.light)p.light.style.visibility='hidden';if(p.veil)p.veil.style.visibility='hidden';if(p.shimmer)p.shimmer.style.visibility='hidden';if(p.burst)p.burst.innerHTML='';
-  window.dispatchEvent(new CustomEvent('sakura:petals-resume',{detail:{intensity:(coarse ? .26 : .38)}}));
+
+  /* Mobile only needs the plates for the hero beat. Drop extra textures after settle. */
+  if(coarse||saveData||lowMemory){
+    [p.mid,p.branches,p.floral].forEach(el=>el?.remove());
+  }
+  window.dispatchEvent(new CustomEvent('sakura:petals-resume',{detail:{intensity:(coarse ? .24 : .36)}}));
 }
 
 function play(){
@@ -122,41 +129,42 @@ function play(){
   if(reduceMotion||!gsap){setStatic();return}
   const p=prepare();if(!p)return;
   const fast=coarse||saveData||lowMemory;
-  const speed=(fast ? .92 : 1);
+  const speed=(fast ? .9 : 1);
   timeline=gsap.timeline({defaults:{overwrite:'auto'},onComplete:()=>settle(p)});
   timeline
-    .to(p.veil,{clipPath:'inset(0 0% 0 0%)',opacity:.14,duration:.52*speed,ease:'power3.inOut'},0)
-    .to(p.far,{opacity:1,duration:.58*speed,ease:'power2.out'},.02)
-    .to(p.farImg,{scale:1.012,y:0,duration:1.5*speed,ease:'power2.out'},.02)
-    .to(p.mid,{opacity:1,y:0,duration:.72*speed,ease:'power3.out'},.34)
-    .to(p.midImg,{scale:1,y:0,duration:1.08*speed,ease:'power2.out'},.3)
-    .to(p.branches,{opacity:1,x:0,y:0,duration:.78*speed,ease:'power3.out'},.7)
-    .to(p.branchesImg,{scale:1,duration:.9*speed,ease:'power2.out'},.66)
-    .to(p.floral,{opacity:1,y:0,duration:.78*speed,ease:'power3.out'},.82)
-    .to(p.floralImg,{scale:1,duration:.9*speed,ease:'power2.out'},.78)
-    .to(p.atmosphere,{opacity:.36,duration:.48*speed,ease:'power1.out'},.78)
-    .to(p.light,{opacity:.46,xPercent:185,duration:.82*speed,ease:'power2.inOut'},.9)
-    .add(()=>burstPetals(p.petals),1.08)
-    .to(p.frame,{opacity:1,y:0,scale:1.018,duration:.56*speed,ease:'back.out(1.55)'},1.24)
-    .to(p.frame,{scale:1,duration:.2*speed,ease:'power2.out'},1.72)
-    .to(p.shimmer,{opacity:1,duration:.05},1.38)
-    .to(p.shimmerBar,{xPercent:650,duration:.5*speed,ease:'power2.inOut'},1.4)
-    .to(p.shimmer,{opacity:0,duration:.15},1.86)
-    .to(p.panel,{opacity:1,y:0,scale:1,duration:.62*speed,ease:'power3.out'},1.66)
-    .to(p.eyebrow,{opacity:1,y:0,duration:.32*speed,ease:'power2.out'},1.94)
-    .to(p.title,{opacity:1,y:0,duration:.44*speed,ease:'power3.out'},2.08)
-    .to(p.rule,{opacity:1,y:0,duration:.28*speed,ease:'power2.out'},2.28)
-    .to(p.copy,{opacity:1,y:0,duration:.4*speed,ease:'power2.out'},2.4)
-    .to(p.atmosphere,{opacity:.14,duration:.48*speed,ease:'power1.out'},2.62)
-    .to(p.veil,{opacity:0,duration:.28*speed,ease:'power1.out'},2.7);
+    .to(p.veil,{clipPath:'inset(0 0% 0 0%)',opacity:.13,duration:.5*speed,ease:'power3.inOut'},0)
+    .to(p.far,{opacity:1,duration:.56*speed,ease:'power2.out'},.02)
+    .to(p.farImg,{scale:1.01,y:0,duration:1.5*speed,ease:'power2.out'},.02)
+    .to(p.mid,{opacity:.74,y:0,duration:.7*speed,ease:'power3.out'},.32)
+    .to(p.midImg,{scale:1.012,y:0,duration:1.05*speed,ease:'power2.out'},.28)
+    .to(p.branches,{opacity:.92,x:0,y:0,duration:.76*speed,ease:'power3.out'},.68)
+    .to(p.branchesImg,{scale:1.008,duration:.88*speed,ease:'power2.out'},.64)
+    .to(p.floral,{opacity:.96,y:0,duration:.76*speed,ease:'power3.out'},.8)
+    .to(p.floralImg,{scale:1,duration:.88*speed,ease:'power2.out'},.76)
+    .to(p.atmosphere,{opacity:.34,duration:.46*speed,ease:'power1.out'},.76)
+    .to(p.light,{opacity:.43,xPercent:185,duration:.78*speed,ease:'power2.inOut'},.88)
+    .add(()=>burstPetals(p.petals),1.04)
+    .to(p.frame,{opacity:1,y:0,scale:1.018,duration:.54*speed,ease:'back.out(1.55)'},1.2)
+    .to(p.frame,{scale:1,duration:.2*speed,ease:'power2.out'},1.68)
+    .to(p.shimmer,{opacity:1,duration:.05},1.34)
+    .to(p.shimmerBar,{xPercent:650,duration:.48*speed,ease:'power2.inOut'},1.36)
+    .to(p.shimmer,{opacity:0,duration:.14},1.82)
+    .to(p.panel,{opacity:1,y:0,scale:1,duration:.6*speed,ease:'power3.out'},1.62)
+    .to(p.eyebrow,{opacity:1,y:0,duration:.31*speed,ease:'power2.out'},1.9)
+    .to(p.title,{opacity:1,y:0,duration:.42*speed,ease:'power3.out'},2.04)
+    .to(p.rule,{opacity:1,y:0,duration:.27*speed,ease:'power2.out'},2.24)
+    .to(p.copy,{opacity:1,y:0,duration:.38*speed,ease:'power2.out'},2.36)
+    .to(p.atmosphere,{opacity:.13,duration:.44*speed,ease:'power1.out'},2.56)
+    .to(p.veil,{opacity:0,duration:.26*speed,ease:'power1.out'},2.64);
 }
 
 function onOpened(event){event.stopImmediatePropagation();readyPromise.finally(play)}
 function onVisibility(){if(!timeline)return;document.hidden?timeline.pause():timeline.resume()}
 
 buildStage();
-document.body.dataset.sakuraFinalCandidate='v4.0';
-document.title='Sakura Vintage V4.0 True Layered Opening · Dini Anif Effect Lab';
+window.__SAKURA_TARGET_VERSION='v4.0.1';
+document.body.dataset.sakuraFinalCandidate='v4.0.1';
+document.title='Sakura Vintage V4.0.1 Asset Rescue · Dini Anif Effect Lab';
 if(reduceMotion)setStatic();
 window.addEventListener('sakura:opened',onOpened,{capture:true});
 document.addEventListener('visibilitychange',onVisibility);
