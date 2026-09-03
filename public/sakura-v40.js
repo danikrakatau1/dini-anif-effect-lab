@@ -105,7 +105,7 @@ function settle(p){
   document.documentElement.classList.remove('v40-intro-active');
   [p.farImg,p.midImg,p.branchesImg,p.floralImg,p.frame,p.panel].forEach(el=>{if(el)el.style.willChange='auto'});
   if(p.light)p.light.style.visibility='hidden';if(p.veil)p.veil.style.visibility='hidden';if(p.shimmer)p.shimmer.style.visibility='hidden';if(p.burst)p.burst.innerHTML='';
-  window.dispatchEvent(new CustomEvent('sakura:petals-resume',{detail:{intensity:(coarse?.26:.38)}}));
+  window.dispatchEvent(new CustomEvent('sakura:petals-resume',{detail:{intensity:(coarse ? .26 : .38)}}));
 }
 
 function play(){
@@ -113,38 +113,31 @@ function play(){
   if(reduceMotion||!gsap){setStatic();return}
   const p=prepare();if(!p)return;
   const fast=coarse||saveData||lowMemory;
-  const speed=fast?.92:1;
+  const speed=(fast ? .92 : 1);
   timeline=gsap.timeline({defaults:{overwrite:'auto'},onComplete:()=>settle(p)});
   timeline
-    /* 1. Empty vintage world establishes first. */
     .to(p.veil,{clipPath:'inset(0 0% 0 0%)',opacity:.14,duration:.52*speed,ease:'power3.inOut'},0)
     .to(p.far,{opacity:1,duration:.58*speed,ease:'power2.out'},.02)
     .to(p.farImg,{scale:1.012,y:0,duration:1.5*speed,ease:'power2.out'},.02)
-    /* 2. Fuji/lake plate physically arrives — no duplicate crop. */
     .to(p.mid,{opacity:1,y:0,duration:.72*speed,ease:'power3.out'},.34)
     .to(p.midImg,{scale:1,y:0,duration:1.08*speed,ease:'power2.out'},.3)
-    /* 3. Independent foreground plates create true depth. */
     .to(p.branches,{opacity:1,x:0,y:0,duration:.78*speed,ease:'power3.out'},.7)
     .to(p.branchesImg,{scale:1,duration:.9*speed,ease:'power2.out'},.66)
     .to(p.floral,{opacity:1,y:0,duration:.78*speed,ease:'power3.out'},.82)
     .to(p.floralImg,{scale:1,duration:.9*speed,ease:'power2.out'},.78)
-    /* 4. Hero light beat before the invitation arrives. */
     .to(p.atmosphere,{opacity:.36,duration:.48*speed,ease:'power1.out'},.78)
     .to(p.light,{opacity:.46,xPercent:185,duration:.82*speed,ease:'power2.inOut'},.9)
     .add(()=>burstPetals(p.petals),1.08)
-    /* 5. Ceremonial frame, then paper panel. */
     .to(p.frame,{opacity:1,y:0,scale:1.018,duration:.56*speed,ease:'back.out(1.55)'},1.24)
     .to(p.frame,{scale:1,duration:.2*speed,ease:'power2.out'},1.72)
     .to(p.shimmer,{opacity:1,duration:.05},1.38)
     .to(p.shimmerBar,{xPercent:650,duration:.5*speed,ease:'power2.inOut'},1.4)
     .to(p.shimmer,{opacity:0,duration:.15},1.86)
     .to(p.panel,{opacity:1,y:0,scale:1,duration:.62*speed,ease:'power3.out'},1.66)
-    /* 6. Text choreography. */
     .to(p.eyebrow,{opacity:1,y:0,duration:.32*speed,ease:'power2.out'},1.94)
     .to(p.title,{opacity:1,y:0,duration:.44*speed,ease:'power3.out'},2.08)
     .to(p.rule,{opacity:1,y:0,duration:.28*speed,ease:'power2.out'},2.28)
     .to(p.copy,{opacity:1,y:0,duration:.4*speed,ease:'power2.out'},2.4)
-    /* 7. Settle into a quiet, readable scene. */
     .to(p.atmosphere,{opacity:.14,duration:.48*speed,ease:'power1.out'},2.62)
     .to(p.veil,{opacity:0,duration:.28*speed,ease:'power1.out'},2.7);
 }
