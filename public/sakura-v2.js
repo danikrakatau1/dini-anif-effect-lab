@@ -8,6 +8,7 @@ const guard = document.querySelector('#assetGuard');
 const invitation = document.querySelector('#invitationMain');
 const stability = initSakuraStability();
 const effects = initSakuraEffects(document);
+const coarsePointer = matchMedia('(pointer: coarse)').matches;
 
 function lockScroll(){document.body.classList.add('cover-locked');document.body.classList.remove('cover-open')}
 function unlockScroll(){document.body.classList.remove('cover-locked');document.body.classList.add('cover-open')}
@@ -17,12 +18,12 @@ artwork?.addEventListener('load',()=>{if(guard)guard.hidden=true;scene?.classLis
 
 function finishOpen(){
   scene?.classList.remove('is-opening');scene?.classList.add('is-open','is-dismissed');
-  invitation?.setAttribute('aria-hidden','false');effects.setPetalIntensity(stability.lowPower ? .46 : .58);unlockScroll();window.scrollTo(0,0);
-  requestAnimationFrame(()=>window.dispatchEvent(new CustomEvent('sakura:opened',{detail:{version:'v3.9.3'}})));
+  invitation?.setAttribute('aria-hidden','false');effects.setPetalIntensity(stability.lowPower||coarsePointer ? .38 : .58);unlockScroll();window.scrollTo(0,0);
+  requestAnimationFrame(()=>window.dispatchEvent(new CustomEvent('sakura:opened',{detail:{version:'v3.9.6'}})));
 }
 function openScene(){
   if(!scene||scene.classList.contains('is-open')||scene.classList.contains('is-opening'))return;
-  scene.classList.add('is-opening');effects.setPetalIntensity(stability.lowPower ? .55 : .72);
+  scene.classList.add('is-opening');effects.setPetalIntensity(stability.lowPower||coarsePointer ? .42 : .72);
   if(effects.reduced||!gsap){scene.style.display='none';finishOpen();return}
   const tl=gsap.timeline({defaults:{overwrite:'auto'},onComplete:finishOpen});
   tl.to('#openInvitation',{scale:.96,duration:.12,ease:'power1.out'})
@@ -63,7 +64,7 @@ function setupStoryCarousel(){
   let index=0,timer=0,startX=null,startY=null;
   dots.innerHTML=slides.map((_,i)=>`<i class="${i===0?'is-active':''}"></i>`).join('');const dotNodes=[...dots.children];
   const go=value=>{index=(value+slides.length)%slides.length;track.style.transform=`translate3d(${-index*100}%,0,0)`;slides.forEach((slide,i)=>slide.classList.toggle('is-current',i===index));dotNodes.forEach((dot,i)=>dot.classList.toggle('is-active',i===index))};
-  const restart=()=>{clearInterval(timer);if(!effects.reduced&&!document.hidden)timer=setInterval(()=>go(index+1),stability.lowPower?6800:5200)};
+  const restart=()=>{clearInterval(timer);if(!effects.reduced&&!document.hidden)timer=setInterval(()=>go(index+1),stability.lowPower||coarsePointer?6800:5200)};
   const onPrev=()=>{go(index-1);restart()},onNext=()=>{go(index+1);restart()};
   const viewport=track.parentElement;
   const down=e=>{startX=e.clientX;startY=e.clientY;clearInterval(timer)};
@@ -74,18 +75,18 @@ function setupStoryCarousel(){
 
 function setupSceneChoreography(){
   const sections=[...document.querySelectorAll('[data-sakura-scene]')];if(!sections.length)return()=>{};
-  const observer=new IntersectionObserver(entries=>{const visible=entries.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];if(!visible)return;const section=visible.target;const raw=Number(section.dataset.petalIntensity||.5);effects.setPetalIntensity(stability.lowPower?Math.min(raw,.55):raw);sections.forEach(s=>s.classList.toggle('is-scene-active',s===section));document.documentElement.dataset.sakuraScene=section.dataset.sakuraScene||''},{threshold:[.22,.45,.7],rootMargin:'-12% 0px -12% 0px'});
+  const observer=new IntersectionObserver(entries=>{const visible=entries.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];if(!visible)return;const section=visible.target;const raw=Number(section.dataset.petalIntensity||.5);effects.setPetalIntensity(stability.lowPower||coarsePointer?Math.min(raw,.42):raw);sections.forEach(s=>s.classList.toggle('is-scene-active',s===section));document.documentElement.dataset.sakuraScene=section.dataset.sakuraScene||''},{threshold:[.22,.45,.7],rootMargin:'-12% 0px -12% 0px'});
   sections.forEach(section=>observer.observe(section));return()=>observer.disconnect();
 }
 
 function setupContinuityPetals(){
   const layer=document.querySelector('#continuityPetals');if(!layer||effects.reduced)return()=>{};
-  const count=stability.lowPower?5:(effects.coarse?7:12);layer.innerHTML=Array.from({length:count},(_,i)=>{const left=(i*83+17)%100,size=5+(i%5)*1.4,dur=10+(i%6)*1.7,delay=-(i*1.9),drift=-34+(i%7)*13,alpha=.22+(i%4)*.09,blur=i%5===0?1.1:0;return `<i class="continuity-petal" style="left:${left}%;--size:${size}px;--dur:${dur}s;--delay:${delay}s;--drift:${drift}px;--alpha:${alpha};--blur:${blur}px;--rot:${i*19}deg"></i>`}).join('');
+  const count=stability.lowPower?4:(effects.coarse?5:10);layer.innerHTML=Array.from({length:count},(_,i)=>{const left=(i*83+17)%100,size=5+(i%5)*1.4,dur=10+(i%6)*1.7,delay=-(i*1.9),drift=-34+(i%7)*13,alpha=.22+(i%4)*.09,blur=0;return `<i class="continuity-petal" style="left:${left}%;--size:${size}px;--dur:${dur}s;--delay:${delay}s;--drift:${drift}px;--alpha:${alpha};--blur:${blur}px;--rot:${i*19}deg"></i>`}).join('');
   return()=>{layer.innerHTML=''};
 }
 
 function setupScrollContinuity(){
-  const sections=[...document.querySelectorAll('[data-sakura-scene]')];if(!sections.length||effects.reduced||stability.lowPower)return()=>{};let raf=0;
+  const sections=[...document.querySelectorAll('[data-sakura-scene]')];if(!sections.length||effects.reduced||stability.lowPower||coarsePointer)return()=>{};let raf=0;
   const render=()=>{raf=0;const vh=innerHeight||1;let best=null,bestDistance=Infinity;sections.forEach(section=>{const r=section.getBoundingClientRect(),center=r.top+r.height/2,distance=Math.abs(center-vh/2);if(distance<bestDistance){bestDistance=distance;best=section}const progress=Math.max(-1,Math.min(1,(center-vh/2)/(vh*.9)));section.style.setProperty('--local-shift',`${progress*-12}px`);section.style.setProperty('--local-scale',String(1-Math.abs(progress)*.012));section.style.setProperty('--local-opacity',String(1-Math.min(.12,Math.abs(progress)*.08)));section.style.setProperty('--handoff-opacity',String(.36+Math.max(0,1-Math.abs(progress))*.28))});if(best){const idx=sections.indexOf(best);document.documentElement.style.setProperty('--continuity-x',`${((idx%3)-1)*8}px`);document.documentElement.style.setProperty('--continuity-y',`${((idx%2)?1:-1)*6}px`)}};
   const onScroll=()=>{if(!raf)raf=requestAnimationFrame(render)};addEventListener('scroll',onScroll,{passive:true});addEventListener('sakura:stable-resize',onScroll);render();return()=>{removeEventListener('scroll',onScroll);removeEventListener('sakura:stable-resize',onScroll);cancelAnimationFrame(raf)};
 }
