@@ -53,6 +53,13 @@
 .scene-opening.v395-complete .v395-near-bottom img{animation:v395NearBottomIdle 15s ease-in-out infinite alternate}
 .scene-opening.v395-complete .v395-haze{opacity:.18}
 
+/* V3.9.5 duplicate-frame rescue: keep scene artwork/edge decoration, but never stack a full-section V3.9.4 frame behind a section that already owns its panel frame. */
+.scene-couple>.v394-ornament-layer>.v394-frame,
+.scene-date>.v394-ornament-layer>.v394-frame,
+.scene-event>.v394-ornament-layer>.v394-frame,
+.scene-gift>.v394-ornament-layer>.v394-frame,
+.scene-closing>.v394-ornament-layer>.v394-frame{display:none!important}
+
 @keyframes v395FarIdle{from{transform:scale(1.035) translate3d(0,-4px,0)}to{transform:scale(1.052) translate3d(-3px,-8px,0)}}
 @keyframes v395NearTopIdle{from{transform:scale(1.12) translate3d(-2px,-12px,0)}to{transform:scale(1.125) translate3d(5px,-17px,0)}}
 @keyframes v395NearBottomIdle{from{transform:scale(1.11) translate3d(0,2px,0)}to{transform:scale(1.118) translate3d(-4px,-3px,0)}}
