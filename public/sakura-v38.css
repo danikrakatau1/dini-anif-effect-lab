@@ -24,3 +24,57 @@ body.lightbox-open{overflow:hidden!important;touch-action:none}
 @media(min-width:431px){body{min-height:100vh}.invitation-main{border-left:1px solid rgba(255,255,255,.15);border-right:1px solid rgba(255,255,255,.15)}.sakura-cover{border-left:1px solid rgba(255,255,255,.15);border-right:1px solid rgba(255,255,255,.15)}.gallery-lightbox{max-width:430px}}
 @media(orientation:landscape) and (max-height:560px){.music-seal{bottom:8px}.gallery-lightbox-art{min-height:62vh}.inv-section{min-height:100vh}.cover-copy{padding-top:12px;padding-bottom:12px}}
 @media(prefers-contrast:more){.paper-card,.field input,.field select,.field textarea{border-color:rgba(91,53,44,.48)}.inv-copy,.event-card p,.story-card p{color:#4f3731}.vintage-btn,.open-invitation{border-color:#a67a44}}
+
+/* =========================================================
+   Sakura V3.9.1 — Mobile Layout Rescue
+   fixes text fragmentation + decorative event composition
+========================================================= */
+.inv-title,.closing-name,.couple-card h3,.event-card h3,.event-card p,.couple-card p,.bank-name,.bank-number,.story-card h3,.story-card p{overflow-wrap:normal!important;word-break:normal!important;hyphens:none!important}
+.scene-opening .inv-title{white-space:normal;text-wrap:balance;line-height:.94;max-width:100%;margin-inline:auto}
+.scene-opening .inv-copy{max-width:31ch}
+
+/* Couple becomes full-width stacked portrait cards on mobile stage */
+.couple-grid{grid-template-columns:1fr!important;gap:18px!important;width:100%;max-width:360px;margin-inline:auto}
+.couple-card{width:100%;min-width:0;text-align:center}
+.couple-card h3{white-space:nowrap;font-size:clamp(42px,14vw,62px)!important;line-height:.95!important}
+.couple-card p{max-width:27ch;margin-inline:auto;font-size:15px;line-height:1.65}
+.couple-amp{order:2;display:grid;place-items:center;width:58px;height:58px;margin:-2px auto;border:1px solid rgba(170,130,75,.28);border-radius:50%;background:rgba(249,238,218,.82);box-shadow:0 12px 28px rgba(85,51,42,.08);font-size:34px}
+.couple-card:first-child{order:1}.couple-card:last-child{order:3}
+
+/* Event section becomes two full decorative portrait panels */
+.scene-event{padding-inline:16px!important;background:linear-gradient(rgba(237,219,191,.78),rgba(230,203,169,.86)),url('/assets/sakura-v2-landscape.png') 50% 52%/cover no-repeat!important}
+.scene-event .inv-shell{max-width:390px!important;width:100%}
+.scene-event .inv-title{margin-bottom:24px}
+.event-grid{grid-template-columns:1fr!important;gap:28px!important;width:100%;max-width:360px;margin:26px auto 0!important}
+.event-card{position:relative;width:100%;min-width:0;min-height:560px;padding:72px 26px 42px!important;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:1.5px solid rgba(116,52,59,.62)!important;border-radius:46% 46% 34px 34px/16% 16% 34px 34px!important;background:linear-gradient(rgba(250,241,222,.9),rgba(245,231,207,.91)),url('/assets/sakura-v2-landscape.png') 50% 55%/cover no-repeat!important;box-shadow:0 24px 60px rgba(79,49,38,.14),inset 0 0 0 8px rgba(255,249,236,.44)!important;overflow:hidden}
+.event-card::before{content:""!important;position:absolute!important;inset:12px!important;border:1px solid rgba(166,126,72,.32)!important;border-radius:44% 44% 26px 26px/14% 14% 26px 26px!important;pointer-events:none!important}
+.event-card::after{content:""!important;position:absolute!important;inset:auto 0 0;height:32%;background:linear-gradient(180deg,transparent,rgba(91,52,45,.06));pointer-events:none!important}
+.event-card small{position:relative;z-index:2;margin-bottom:10px;color:var(--sakura-gold);font-size:12px;letter-spacing:.22em;text-transform:uppercase}
+.event-card h3{position:relative;z-index:2;margin:0 0 18px!important;font-size:clamp(46px,14vw,66px)!important;line-height:.94!important;white-space:nowrap;color:var(--sakura-maroon)}
+.event-card p{position:relative;z-index:2;margin:4px auto!important;max-width:28ch;font-size:15px!important;line-height:1.55!important}
+.event-card p:nth-of-type(1){margin-top:6px!important;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.event-card .vintage-btn{position:relative;z-index:2;margin-top:24px!important;min-width:172px}
+
+/* decorative accent inspired by reference, no artwork recreation */
+.event-card:first-child{background-position:46% 54%!important}
+.event-card:last-child{background-position:58% 50%!important}
+.event-card:first-child::after{background:radial-gradient(circle at 18% 90%,rgba(144,72,77,.09),transparent 25%),linear-gradient(180deg,transparent,rgba(91,52,45,.05))}
+.event-card:last-child::after{background:radial-gradient(circle at 82% 88%,rgba(144,72,77,.09),transparent 25%),linear-gradient(180deg,transparent,rgba(91,52,45,.05))}
+
+/* mobile typography guard */
+@media(max-width:430px){
+  .scene-opening .inv-title{font-size:clamp(46px,14vw,62px)!important;max-width:8.5ch}
+  .scene-couple .inv-shell,.scene-event .inv-shell{width:100%;max-width:390px}
+  .scene-couple{padding-inline:18px!important}
+  .couple-card{padding:38px 24px!important}
+  .event-card{min-height:520px;padding:64px 22px 38px!important}
+  .event-card h3{font-size:clamp(44px,13vw,58px)!important}
+  .event-card p{font-size:14px!important;max-width:26ch}
+}
+@media(max-width:350px){
+  .scene-opening .inv-title{font-size:44px!important;max-width:8ch}
+  .couple-card h3{font-size:46px!important}
+  .event-card{min-height:500px;padding-left:18px!important;padding-right:18px!important}
+  .event-card h3{font-size:45px!important}
+  .event-card p{font-size:13.5px!important;max-width:24ch}
+}
