@@ -20,14 +20,14 @@ if(!document.querySelector(`link[href="${v396Href}"]`)){
   const link=document.createElement('link');link.rel='stylesheet';link.href=v396Href;document.head.appendChild(link);
 }
 
-/* V4.0 is now the only post-cover opening engine. */
-window.__SAKURA_TARGET_VERSION='v4.0';
+/* V4.0.2 is now the only post-cover opening engine. */
+window.__SAKURA_TARGET_VERSION='v4.0.2';
 const v40Href='/sakura-v40.css';
 if(!document.querySelector(`link[href="${v40Href}"]`)){
   const link=document.createElement('link');link.rel='stylesheet';link.href=v40Href;document.head.appendChild(link);
 }
 await import('./sakura-v40.js');
-document.body.dataset.sakuraFinalCandidate='v4.0';
+document.body.dataset.sakuraFinalCandidate='v4.0.2';
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse = matchMedia('(pointer: coarse)').matches;
@@ -85,7 +85,7 @@ function setupFakeCameraDepth(){
 
 function setupButterflies(){
   if(reduceMotion) return ()=>{};
-  /* Opening is deliberately excluded in V4.0 so its hero timeline has no competing motion. */
+  /* Opening is deliberately excluded in V4.0.2 so its hero timeline has no competing motion. */
   const targets = sections.filter(s=>['couple','event','wishes','closing'].includes(s.dataset.sakuraScene));
   targets.forEach((section,sceneIndex)=>{
     const layer=document.createElement('div');
