@@ -1,4 +1,4 @@
-/* Sakura V4.1 — Reference-Accurate Step-by-Step Reveal */
+/* Sakura V4.1.1 — Reference-Accurate Step-by-Step Reveal */
 :root{--v41-maroon:#742f3a;--v41-gold:#bd955d;--v41-paper:#f8ecd8;--v41-paper-soft:rgba(249,239,219,.90)}
 
 /* V4.1 reuses the lightweight V4 stage but changes the reveal grammar completely. */
@@ -40,8 +40,6 @@
   .v41-stage,.v41-stage .v40-far img,.v41-stage .v40-mid,.v41-stage .v40-branches,.v41-stage .v40-floral{will-change:auto!important}
 }
 @media(max-width:350px){.v41-border{inset:18px 12px}.v41-crest{top:42px}.scene-opening>.inv-shell{width:calc(100% - 30px)!important;padding:43px 20px!important}}
-@media(prefers-reduced-motion:reduce){
-  .v41-stage .v40-far img{transform:none!important}.v41-stage .v40-mid,.v41-stage .v40-branches,.v41-stage .v40-floral{opacity:.4!important;transform:none!important}
-  .v41-slit{display:none!important}.v41-border{opacity:1!important;clip-path:none!important}.v41-crest{opacity:1!important;transform:translateX(-50%) rotate(45deg)!important}
-  .scene-opening>.inv-shell{opacity:1!important;clip-path:none!important}.scene-opening .inv-eyebrow,.scene-opening .inv-title,.scene-opening .inv-rule,.scene-opening .inv-copy{opacity:1!important;transform:none!important}
-}
+
+/* Effect Lab deliberately keeps motion ON even when the OS requests reduced motion.
+   Append ?motion=reduced when we explicitly want to test the static accessibility path. */
