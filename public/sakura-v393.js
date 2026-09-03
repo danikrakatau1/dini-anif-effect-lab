@@ -1,5 +1,5 @@
 /* Sakura V3.9.3 — Living Scene & Cinematic Motion behavior layer */
-/* Legacy V3.9.x/V4.0.x opening builders stay disabled; section decoration remains available. */
+/* Legacy opening builders stay disabled; their non-opening decoration remains available. */
 window.__SAKURA_TARGET_VERSION='v3.9.6';
 
 const v394Href='/sakura-v394.css';
@@ -14,26 +14,19 @@ if(!document.querySelector(`link[href="${v395Href}"]`)){
 }
 await import('./sakura-v395.js');
 
-/* V3.9.6 CSS remains the mobile performance baseline; its opening JS is not imported. */
+/* V3.9.6 CSS stays as mobile baseline; its opening JS is intentionally not imported. */
 const v396Href='/sakura-v396.css';
 if(!document.querySelector(`link[href="${v396Href}"]`)){
   const link=document.createElement('link');link.rel='stylesheet';link.href=v396Href;document.head.appendChild(link);
 }
 
-/* V4.0 CSS remains available as the rollback/base layer, but V4.0 JS is NOT imported. */
-const v40Href='/sakura-v40.css';
-if(!document.querySelector(`link[href="${v40Href}"]`)){
-  const link=document.createElement('link');link.rel='stylesheet';link.href=v40Href;document.head.appendChild(link);
-}
-
-/* V4.1 is the only post-cover opening engine. */
-window.__SAKURA_TARGET_VERSION='v4.1';
-const v41Href='/sakura-v41.css';
-if(!document.querySelector(`link[href="${v41Href}"]`)){
-  const link=document.createElement('link');link.rel='stylesheet';link.href=v41Href;document.head.appendChild(link);
-}
-await import('./sakura-v41.js');
-document.body.dataset.sakuraFinalCandidate='v4.1';
+/* V4.1.2 is the only opening engine. Move its stylesheet after every legacy stylesheet so it wins the cascade. */
+window.__SAKURA_TARGET_VERSION='v4.1.2';
+let v41Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v41.css'));
+if(!v41Link){v41Link=document.createElement('link');v41Link.rel='stylesheet';v41Link.href='/sakura-v41.css?v=412'}
+document.head.appendChild(v41Link);
+await import('./sakura-v41.js?v=412');
+document.body.dataset.sakuraFinalCandidate='v4.1.2';
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse = matchMedia('(pointer: coarse)').matches;
@@ -91,7 +84,6 @@ function setupFakeCameraDepth(){
 
 function setupButterflies(){
   if(reduceMotion) return ()=>{};
-  /* Opening is deliberately excluded so V4.1 owns the hero choreography alone. */
   const targets = sections.filter(s=>['couple','event','wishes','closing'].includes(s.dataset.sakuraScene));
   targets.forEach((section,sceneIndex)=>{
     const layer=document.createElement('div');
