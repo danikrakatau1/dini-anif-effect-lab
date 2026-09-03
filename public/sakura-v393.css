@@ -1,0 +1,104 @@
+/* Sakura V3.9.3 — Living Scene & Cinematic Motion Batch */
+:root{
+  --v393-maroon:#6f2f38;
+  --v393-gold:#b38a52;
+  --v393-ivory:#f4e7cf;
+  --v393-ink:#6b4a3c;
+  --v393-rose:#b66a70;
+  --v393-olive:#46503a;
+  --v393-amber:rgba(255,210,150,.18);
+  --v393-panel-delay:420ms;
+}
+
+/* 1 — section palette */
+.scene-opening{--scene-a:#f6ead4;--scene-b:#ead2ae;--scene-accent:#7a323b}
+.scene-couple{--scene-a:#f1dfcf;--scene-b:#e4c4b3;--scene-accent:#8b4a53}
+.scene-date{--scene-a:#f2e3c7;--scene-b:#dfc49a;--scene-accent:#79503a}
+.scene-event{--scene-a:#ead8bc;--scene-b:#d9b992;--scene-accent:#6f2f38}
+.scene-story{--scene-a:#ead9c3;--scene-b:#d8bca0;--scene-accent:#77464a}
+.scene-gallery{--scene-a:#d7b99f;--scene-b:#a87b68;--scene-accent:#f3dfba}
+.scene-gift{--scene-a:#f7ead6;--scene-b:#e5c9a6;--scene-accent:#80533d}
+.scene-rsvp{--scene-a:#f2e6d5;--scene-b:#dec7aa;--scene-accent:#6f473f}
+.scene-wishes{--scene-a:#eddac2;--scene-b:#d6b39f;--scene-accent:#84464e}
+.scene-closing{--scene-a:#9a725f;--scene-b:#4c312d;--scene-accent:#f0d9b3}
+.inv-section{background-color:var(--scene-a,var(--sakura-cream));transition:background-color 1.25s ease,color 1.25s ease}
+.inv-section:not(.sakura-art-section){background-image:linear-gradient(180deg,var(--scene-a),var(--scene-b))}
+
+/* 2 — living light */
+.inv-section::before{content:"";position:absolute;inset:-18%;z-index:1;pointer-events:none;background:radial-gradient(circle at 20% 24%,rgba(255,230,181,.22),transparent 26%),radial-gradient(circle at 80% 72%,rgba(182,106,112,.08),transparent 27%);mix-blend-mode:screen;opacity:.58;transform:translate3d(-2%,0,0) scale(1.02);animation:v393LightSweep 16s ease-in-out infinite alternate}
+.inv-section.is-scene-active::before{opacity:.78}
+
+/* 3 + 8 + 9 — fake camera depth + delayed panel focus */
+.sakura-art-section{--cam-y:0px;--cam-scale:1.02;--cam-dim:1;background-position:center calc(50% + var(--cam-y));background-size:calc(108% * var(--cam-scale)) auto;filter:brightness(var(--cam-dim));transition:filter 1.1s ease,background-size 1.4s cubic-bezier(.2,.75,.2,1),background-position 1.4s cubic-bezier(.2,.75,.2,1)}
+.inv-section.is-scene-active.sakura-art-section{--cam-scale:1.045;--cam-y:-5px}
+.inv-section.panel-focused.sakura-art-section{--cam-dim:.94;--cam-scale:1.055}
+.inv-section .paper-card,.inv-section .story-carousel,.inv-section .form-card,.inv-section .gift-card,.inv-section .message-list,.scene-date .inv-shell,.scene-opening .inv-shell{transition:opacity .9s ease,transform 1.05s cubic-bezier(.2,.78,.2,1),filter .9s ease,box-shadow .9s ease}
+.inv-section[data-v393-panel="waiting"] .paper-card,.inv-section[data-v393-panel="waiting"] .story-carousel,.inv-section[data-v393-panel="waiting"] .form-card,.inv-section[data-v393-panel="waiting"] .gift-card,.inv-section[data-v393-panel="waiting"] .message-list{opacity:0;transform:translateY(16px) scale(.975);filter:blur(5px)}
+.inv-section[data-v393-panel="ready"] .paper-card,.inv-section[data-v393-panel="ready"] .story-carousel,.inv-section[data-v393-panel="ready"] .form-card,.inv-section[data-v393-panel="ready"] .gift-card,.inv-section[data-v393-panel="ready"] .message-list{opacity:1;transform:none;filter:none}
+
+/* 4 — moving vintage grain */
+.invitation-main::before{content:"";position:fixed;inset:-12%;z-index:59;pointer-events:none;opacity:.018;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.34'/%3E%3C/svg%3E");animation:v393Grain 1.7s steps(2,end) infinite}
+
+/* 5 — ambient petals become scene-aware */
+.continuity-petal{filter:saturate(.9) drop-shadow(0 2px 3px rgba(87,48,46,.08));transition:opacity .8s ease,filter .8s ease}
+html[data-sakura-scene="gallery"] .continuity-petal{opacity:.22!important}
+html[data-sakura-scene="closing"] .continuity-petal{opacity:.7!important;filter:saturate(1.08) drop-shadow(0 3px 5px rgba(87,48,46,.12))}
+
+/* 6 — butterfly accent */
+.v393-butterfly-layer{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden}
+.v393-butterfly{position:absolute;width:34px;height:24px;opacity:.72;filter:drop-shadow(0 4px 5px rgba(70,40,39,.12));transform-origin:center;animation:v393ButterflyFlight var(--flight,12s) ease-in-out infinite var(--delay,0s)}
+.v393-butterfly::before,.v393-butterfly::after{content:"";position:absolute;top:3px;width:16px;height:18px;border:1px solid rgba(111,47,56,.42);background:linear-gradient(145deg,rgba(244,218,205,.78),rgba(182,106,112,.38));border-radius:75% 20% 70% 25%;transform-origin:100% 60%;animation:v393Wing .48s ease-in-out infinite alternate}
+.v393-butterfly::before{left:1px;transform:rotate(22deg)}
+.v393-butterfly::after{right:1px;transform-origin:0 60%;transform:scaleX(-1) rotate(22deg)}
+.v393-butterfly i{position:absolute;left:50%;top:7px;width:2px;height:11px;margin-left:-1px;border-radius:999px;background:rgba(97,57,48,.55)}
+
+/* 7 — decorative panel reveal */
+.event-card,.gift-card,.form-card,.message-card,.story-card,.count-item{box-shadow:0 18px 48px rgba(79,49,38,.11),inset 0 1px rgba(255,255,255,.3)}
+.panel-focused .event-card,.panel-focused .gift-card,.panel-focused .form-card,.panel-focused .story-card.is-current{box-shadow:0 26px 64px rgba(79,49,38,.16),0 0 0 1px rgba(179,138,82,.08),inset 0 1px rgba(255,255,255,.4)}
+
+/* 10 — foreground Sakura drift illusion */
+.inv-section .section-petal,.inv-section .living-wash,.inv-section .section-ambient,.inv-section .gallery-ambient{will-change:transform}
+.inv-section.is-scene-active .section-petal.p1{animation-duration:6.8s}
+.inv-section.is-scene-active .section-petal.p2{animation-duration:8.2s}
+.inv-section.is-scene-active .section-petal.p3{animation-duration:7.4s}
+
+/* 11 — section-specific signatures */
+.scene-opening.is-scene-active .inv-title{animation:v393Ceremonial 5.8s ease-in-out infinite alternate}
+.scene-couple.is-scene-active .couple-card:first-child{transform:translateY(-2px) rotate(-.25deg)}
+.scene-couple.is-scene-active .couple-card:last-child{transform:translateY(2px) rotate(.25deg)}
+.scene-date.is-scene-active .countdown-grid{filter:drop-shadow(0 12px 24px rgba(89,52,42,.08))}
+.scene-event.is-scene-active .event-card{border-color:rgba(111,47,56,.72)!important}
+.scene-story.is-scene-active .story-card.is-current{transform:scale(1.008)}
+.scene-gift.is-scene-active .gift-card{background:linear-gradient(145deg,rgba(255,249,235,.95),rgba(235,211,179,.9))}
+.scene-rsvp.is-scene-active .form-card{background:linear-gradient(145deg,rgba(255,250,239,.94),rgba(237,220,196,.9))}
+
+/* 12 — interaction details */
+.event-card .vintage-btn::before{content:"⌖";margin-right:7px;font-size:14px;opacity:.8;animation:v393PinPulse 2.8s ease-in-out infinite}
+.copy-demo.is-copied{box-shadow:0 0 0 5px rgba(179,138,82,.11),0 14px 28px rgba(85,44,42,.18)!important}
+.count-item.tick{animation:v393CountPulse .42s cubic-bezier(.2,.8,.2,1)}
+
+/* 13 — cinematic closing */
+.scene-closing{color:#f2ddbb;background:linear-gradient(180deg,#7a554a,#432b28)!important}
+.scene-closing::before{background:radial-gradient(circle at 50% 35%,rgba(255,218,159,.22),transparent 28%),radial-gradient(circle at 20% 80%,rgba(182,106,112,.12),transparent 32%);mix-blend-mode:screen}
+.scene-closing .inv-eyebrow,.scene-closing .closing-name{color:#f0d9b3}
+.scene-closing .inv-copy,.scene-closing .closing-note{color:rgba(255,239,213,.82)}
+.scene-closing.is-scene-active .closing-name{animation:v393ClosingBloom 5.5s ease-in-out infinite alternate;text-shadow:0 0 30px rgba(255,214,154,.14)}
+
+@media(max-width:430px){
+  .v393-butterfly{width:28px;height:20px}.v393-butterfly::before,.v393-butterfly::after{width:13px;height:15px}
+  .inv-section::before{opacity:.48}
+}
+@media(pointer:coarse){.v393-butterfly{opacity:.58}.inv-section::before{animation-duration:20s}}
+@media(prefers-reduced-motion:reduce){
+  .inv-section::before,.invitation-main::before,.v393-butterfly,.v393-butterfly::before,.v393-butterfly::after,.scene-opening .inv-title,.scene-closing .closing-name,.event-card .vintage-btn::before{animation:none!important}
+  .inv-section[data-v393-panel="waiting"] .paper-card,.inv-section[data-v393-panel="waiting"] .story-carousel,.inv-section[data-v393-panel="waiting"] .form-card,.inv-section[data-v393-panel="waiting"] .gift-card,.inv-section[data-v393-panel="waiting"] .message-list{opacity:1!important;transform:none!important;filter:none!important}
+}
+
+@keyframes v393LightSweep{0%{transform:translate3d(-3%,-1%,0) scale(1.02);opacity:.45}100%{transform:translate3d(4%,2%,0) scale(1.08);opacity:.8}}
+@keyframes v393Grain{0%{transform:translate3d(-2%,-1%,0)}25%{transform:translate3d(2%,1%,0)}50%{transform:translate3d(-1%,2%,0)}75%{transform:translate3d(1%,-2%,0)}100%{transform:translate3d(-2%,-1%,0)}}
+@keyframes v393ButterflyFlight{0%,100%{transform:translate3d(-6px,5px,0) rotate(-5deg) scale(.9)}35%{transform:translate3d(12px,-12px,0) rotate(6deg) scale(1)}65%{transform:translate3d(-5px,-22px,0) rotate(-2deg) scale(.96)}}
+@keyframes v393Wing{from{rotate:y 0deg}to{rotate:y 58deg}}
+@keyframes v393Ceremonial{from{text-shadow:0 5px 24px rgba(255,230,185,.15)}to{text-shadow:0 8px 34px rgba(255,220,160,.28)}}
+@keyframes v393PinPulse{0%,100%{transform:scale(1);opacity:.65}50%{transform:scale(1.13);opacity:1}}
+@keyframes v393CountPulse{0%{transform:scale(1)}45%{transform:scale(1.018)}100%{transform:scale(1)}}
+@keyframes v393ClosingBloom{from{transform:scale(.995);filter:brightness(.98)}to{transform:scale(1.018);filter:brightness(1.06)}}
