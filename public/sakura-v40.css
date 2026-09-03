@@ -1,43 +1,28 @@
-/* Sakura V4.0.1 — True Layered Opening asset rescue */
+/* Sakura V4.0.2 — No-Blank Seamless Reveal */
 :root{--v40-maroon:#742f3a;--v40-gold:#bd955d;--v40-paper:rgba(249,239,219,.88);--v40-ink:#68483e}
 
-.scene-opening{min-height:100svh;overflow:hidden;background:#ead9bf!important;isolation:isolate;contain:paint}
+/* Original Sakura artwork is always present as fallback: never show cream dead-air. */
+.scene-opening{min-height:100svh;overflow:hidden;background:linear-gradient(rgba(239,224,199,.1),rgba(239,224,199,.1)),url('/assets/sakura-v2-landscape.png') center/cover no-repeat!important;isolation:isolate;contain:paint}
 .scene-opening>.v394-opening-cinema,.scene-opening>.v395-stage,.scene-opening>.v396-stage{display:none!important}
 
-.v40-stage{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;background:#ead9bf}
+.v40-stage{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;background:linear-gradient(rgba(239,224,199,.06),rgba(239,224,199,.06)),url('/assets/sakura-v2-landscape.png') center/cover no-repeat}
 .v40-plate,.v40-atmosphere,.v40-light,.v40-veil,.v40-frame,.v40-shimmer,.v40-burst{position:absolute;inset:0;pointer-events:none}
-.v40-plate img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;transform:translate3d(0,0,0);backface-visibility:hidden}
-.v40-far{z-index:1}.v40-mid{z-index:2}.v40-branches{z-index:4}.v40-floral{z-index:5}
-.v40-far,.v40-mid,.v40-branches,.v40-floral{opacity:0}
+.v40-far img{display:block;width:100%;height:100%;object-fit:cover;object-position:center;transform:translate3d(0,0,0);backface-visibility:hidden}
+.v40-far{z-index:1;opacity:1}.v40-mid{z-index:2}.v40-branches{z-index:4}.v40-floral{z-index:5}
 
-/*
- * V4.0.1 fallback plates use the proven master PNG with feathered masks.
- * There are no hard rectangular clip edges, so the motion reads as soft depth
- * while the corrupted first-pass WebP assets are bypassed completely.
- */
-.v401-master-fallback .v40-mid{
-  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,transparent 38%,rgba(0,0,0,.25) 46%,#000 56%,#000 82%,transparent 96%);
-  mask-image:linear-gradient(to bottom,transparent 0%,transparent 38%,rgba(0,0,0,.25) 46%,#000 56%,#000 82%,transparent 96%);
-}
-.v401-master-fallback .v40-branches{
-  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 34%,rgba(0,0,0,.92) 47%,rgba(0,0,0,.34) 60%,transparent 73%);
-  mask-image:linear-gradient(to bottom,#000 0%,#000 34%,rgba(0,0,0,.92) 47%,rgba(0,0,0,.34) 60%,transparent 73%);
-}
-.v401-master-fallback .v40-floral{
-  -webkit-mask-image:linear-gradient(to top,#000 0%,#000 20%,rgba(0,0,0,.9) 29%,rgba(0,0,0,.25) 40%,transparent 52%);
-  mask-image:linear-gradient(to top,#000 0%,#000 20%,rgba(0,0,0,.9) 29%,rgba(0,0,0,.25) 40%,transparent 52%);
-}
-.v401-master-fallback .v40-mid img{filter:saturate(.94) brightness(.995)}
-.v401-master-fallback .v40-branches img{filter:saturate(.98) contrast(1.015)}
-.v401-master-fallback .v40-floral img{filter:saturate(1.02) contrast(1.02)}
+/* One real img + three soft cached background plates: less Safari decode work, no broken icons. */
+.v40-mid,.v40-branches,.v40-floral{opacity:0;background-image:url('/assets/sakura-v2-landscape.png');background-repeat:no-repeat;background-size:cover;background-position:center;transform:translate3d(0,0,0);backface-visibility:hidden}
+.v40-mid{-webkit-mask-image:linear-gradient(to bottom,transparent 0%,transparent 34%,rgba(0,0,0,.3) 44%,#000 55%,#000 82%,transparent 97%);mask-image:linear-gradient(to bottom,transparent 0%,transparent 34%,rgba(0,0,0,.3) 44%,#000 55%,#000 82%,transparent 97%)}
+.v40-branches{-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 34%,rgba(0,0,0,.78) 48%,transparent 69%);mask-image:linear-gradient(to bottom,#000 0%,#000 34%,rgba(0,0,0,.78) 48%,transparent 69%);transform-origin:72% 18%}
+.v40-floral{-webkit-mask-image:linear-gradient(to bottom,transparent 0%,transparent 67%,rgba(0,0,0,.68) 79%,#000 100%);mask-image:linear-gradient(to bottom,transparent 0%,transparent 67%,rgba(0,0,0,.68) 79%,#000 100%);transform-origin:50% 100%}
 
 .v40-atmosphere{z-index:6;opacity:0;background:radial-gradient(circle at 55% 28%,rgba(255,231,181,.34),transparent 31%),linear-gradient(180deg,rgba(255,249,232,.08),transparent 55%,rgba(119,72,57,.04))}
 .v40-light{z-index:7;left:-45%;right:auto;width:62%;opacity:0;background:linear-gradient(112deg,transparent 18%,rgba(255,239,198,.08) 38%,rgba(255,235,181,.38) 52%,rgba(255,245,215,.08) 68%,transparent 84%);transform:translate3d(0,0,0) skewX(-9deg)}
-.v40-veil{z-index:8;background:linear-gradient(90deg,rgba(239,218,184,.92),rgba(250,239,216,.32) 40%,rgba(250,239,216,.32) 60%,rgba(239,218,184,.92));clip-path:inset(0 50% 0 50%);opacity:.92}
+.v40-veil{z-index:8;background:linear-gradient(90deg,rgba(239,218,184,.54),rgba(250,239,216,.13) 40%,rgba(250,239,216,.13) 60%,rgba(239,218,184,.54));clip-path:inset(0 50% 0 50%);opacity:.48}
 
 .v40-frame{z-index:10;inset:24px 17px;opacity:0;transform:translate3d(0,10px,0) scale(.92);border:1.5px solid rgba(116,47,58,.74);border-radius:46% 46% 34px 34px/13% 13% 34px 34px;box-shadow:inset 0 0 0 7px rgba(255,250,237,.28),inset 0 0 0 8px rgba(189,149,93,.22)}
 .v40-frame::before{content:"";position:absolute;inset:12px;border:1px solid rgba(189,149,93,.48);border-radius:44% 44% 25px 25px/11% 11% 25px 25px}
-.v40-frame::after{content:"◆";position:absolute;left:50%;top:18px;transform:translateX(-50%);font-size:10px;color:rgba(189,149,93,.72);letter-spacing:0}
+.v40-frame::after{content:"◆";position:absolute;left:50%;top:18px;transform:translateX(-50%);font-size:10px;color:rgba(189,149,93,.72)}
 .v40-shimmer{z-index:11;inset:24px 17px;overflow:hidden;border-radius:46% 46% 34px 34px/13% 13% 34px 34px;opacity:0}
 .v40-shimmer i{position:absolute;top:-12%;bottom:-12%;left:-30%;width:18%;background:linear-gradient(90deg,transparent,rgba(255,247,213,.72),transparent);transform:skewX(-16deg)}
 
@@ -50,23 +35,12 @@
 .scene-opening .inv-eyebrow,.scene-opening .inv-title,.scene-opening .inv-rule,.scene-opening .inv-copy{opacity:0;transform:translate3d(0,12px,0);filter:none!important}
 .scene-opening .inv-title{color:var(--v40-maroon)!important}
 
-.scene-opening.v40-complete .v40-far,.scene-opening.v40-complete .v40-mid,.scene-opening.v40-complete .v40-branches,.scene-opening.v40-complete .v40-floral{opacity:1}
+.scene-opening.v40-complete .v40-far{opacity:1}
 .scene-opening.v40-complete>.inv-shell,.scene-opening.v40-complete .inv-eyebrow,.scene-opening.v40-complete .inv-title,.scene-opening.v40-complete .inv-rule,.scene-opening.v40-complete .inv-copy{opacity:1;transform:none}
-.scene-opening.v40-complete .v40-atmosphere{opacity:.13}
+.scene-opening.v40-complete .v40-atmosphere{opacity:.12}
 
-@media(pointer:coarse){
-  .v40-light{background:linear-gradient(112deg,transparent 20%,rgba(255,236,190,.28) 52%,transparent 82%)}
-  .v40-stage,.v40-plate,.v40-plate img{will-change:auto!important}
-  .scene-opening.v40-complete .v40-far img{animation:none!important;will-change:auto!important}
-}
+@media(pointer:coarse){.v40-light{background:linear-gradient(112deg,transparent 20%,rgba(255,236,190,.25) 52%,transparent 82%)}.v40-stage,.v40-plate,.v40-far img{will-change:auto!important}}
 @media(pointer:fine) and (prefers-reduced-motion:no-preference){.scene-opening.v40-complete .v40-far img{animation:v40FarIdle 22s ease-in-out infinite alternate}}
 @keyframes v40FarIdle{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(-2px,-4px,0) scale(1.012)}}
-
 @media(max-width:350px){.v40-frame,.v40-shimmer{inset:18px 12px}.scene-opening>.inv-shell{width:calc(100% - 30px);padding:41px 20px}}
-@media(prefers-reduced-motion:reduce){
-  .v40-light,.v40-veil,.v40-shimmer,.v40-burst{display:none!important}
-  .v40-far,.v40-mid,.v40-branches,.v40-floral{opacity:1!important;transform:none!important}
-  .v40-plate img{transform:none!important;animation:none!important}
-  .v40-atmosphere{opacity:.12!important}.v40-frame{opacity:1!important;transform:none!important}
-  .scene-opening>.inv-shell,.scene-opening .inv-eyebrow,.scene-opening .inv-title,.scene-opening .inv-rule,.scene-opening .inv-copy{opacity:1!important;transform:none!important}
-}
+@media(prefers-reduced-motion:reduce){.v40-light,.v40-veil,.v40-shimmer,.v40-burst{display:none!important}.v40-far{opacity:1!important;transform:none!important}.v40-mid,.v40-branches,.v40-floral{display:none!important}.v40-far img{transform:none!important;animation:none!important}.v40-atmosphere{opacity:.1!important}.v40-frame{opacity:1!important;transform:none!important}.scene-opening>.inv-shell,.scene-opening .inv-eyebrow,.scene-opening .inv-title,.scene-opening .inv-rule,.scene-opening .inv-copy{opacity:1!important;transform:none!important}}
