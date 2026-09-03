@@ -1,4 +1,6 @@
 /* Sakura V3.9.3 — Living Scene & Cinematic Motion behavior layer */
+window.__SAKURA_TARGET_VERSION='v3.9.6';
+
 const v394Href='/sakura-v394.css';
 if(!document.querySelector(`link[href="${v394Href}"]`)){
   const link=document.createElement('link');link.rel='stylesheet';link.href=v394Href;document.head.appendChild(link);
@@ -10,7 +12,13 @@ if(!document.querySelector(`link[href="${v395Href}"]`)){
   const link=document.createElement('link');link.rel='stylesheet';link.href=v395Href;document.head.appendChild(link);
 }
 await import('./sakura-v395.js');
-document.body.dataset.sakuraFinalCandidate='v3.9.5';
+
+const v396Href='/sakura-v396.css';
+if(!document.querySelector(`link[href="${v396Href}"]`)){
+  const link=document.createElement('link');link.rel='stylesheet';link.href=v396Href;document.head.appendChild(link);
+}
+await import('./sakura-v396.js');
+document.body.dataset.sakuraFinalCandidate='v3.9.6';
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse = matchMedia('(pointer: coarse)').matches;
@@ -27,12 +35,13 @@ function setupDelayedPanels(){
     entries.forEach(entry=>{
       const section = entry.target;
       if(entry.isIntersecting && entry.intersectionRatio >= .28 && section.dataset.v393Panel !== 'ready'){
-        const delay = lowPower ? 260 : (coarse ? 360 : 480);
+        const delay = lowPower ? 220 : (coarse ? 280 : 420);
         clearTimeout(timers.get(section));
         const timer = setTimeout(()=>{
           section.dataset.v393Panel='ready';
           section.classList.add('panel-focused');
           timers.delete(section);
+          observer.unobserve(section);
         },delay);
         timers.set(section,timer);
       }
@@ -43,7 +52,7 @@ function setupDelayedPanels(){
 }
 
 function setupFakeCameraDepth(){
-  if(reduceMotion || lowPower || !sections.length) return ()=>{};
+  if(reduceMotion || lowPower || coarse || !sections.length) return ()=>{};
   const artSections = sections.filter(s=>s.classList.contains('sakura-art-section') && s.dataset.sakuraScene!=='opening');
   if(!artSections.length) return ()=>{};
   let raf=0;
@@ -71,11 +80,11 @@ function setupButterflies(){
   targets.forEach((section,sceneIndex)=>{
     const layer=document.createElement('div');
     layer.className='v393-butterfly-layer';
-    const amount = lowPower ? 1 : (coarse ? 2 : 3);
+    const amount = lowPower||coarse ? 1 : 3;
     layer.innerHTML=Array.from({length:amount},(_,i)=>{
       const left=12+((sceneIndex*23+i*31)%72);
       const top=12+((sceneIndex*17+i*27)%56);
-      const flight=10+((i+sceneIndex)%4)*1.8;
+      const flight=12+((i+sceneIndex)%4)*2;
       const delay=-(i*2.4+sceneIndex*.8);
       return `<span class="v393-butterfly" style="left:${left}%;top:${top}%;--flight:${flight}s;--delay:${delay}s"><i></i></span>`;
     }).join('');
