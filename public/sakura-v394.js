@@ -3,6 +3,7 @@ const gsap = window.gsap;
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const opening = document.querySelector('.scene-opening');
 const artworkSrc = '/assets/sakura-v2-landscape.png';
+const v396Mode = window.__SAKURA_TARGET_VERSION==='v3.9.6';
 
 function buildOrnaments(){
   const targets=[...document.querySelectorAll('.scene-couple,.scene-date,.scene-event,.scene-gift,.scene-closing')];
@@ -17,7 +18,7 @@ function buildOrnaments(){
 }
 
 function buildOpeningCinema(){
-  if(!opening || opening.querySelector(':scope > .v394-opening-cinema')) return;
+  if(v396Mode || !opening || opening.querySelector(':scope > .v394-opening-cinema')) return;
   const cinema=document.createElement('div');
   cinema.className='v394-opening-cinema';
   cinema.setAttribute('aria-hidden','true');
@@ -31,12 +32,12 @@ function buildOpeningCinema(){
 }
 
 function prepareOpeningText(){
-  if(!opening || !gsap || reduceMotion) return;
+  if(v396Mode || !opening || !gsap || reduceMotion) return;
   gsap.set(opening.querySelectorAll('.inv-eyebrow,.inv-title,.inv-rule,.inv-copy'),{opacity:0,y:16,filter:'blur(5px)'});
 }
 
 function playOpeningSequence(){
-  if(!opening) return;
+  if(v396Mode || !opening) return;
   opening.classList.remove('v394-intro-complete');
   opening.classList.add('v394-playing');
   opening.dataset.v393Panel='waiting';
@@ -100,10 +101,16 @@ function setupSceneOrnamentMotion(){
       const right=section.querySelector('.v394-edge.right');
       const bottom=section.querySelector('.v394-edge.bottom');
       const frame=section.querySelector('.v394-frame');
-      gsap.fromTo(left,{x:-14,opacity:.12},{x:0,opacity:.36,duration:1.05,ease:'power2.out'});
-      gsap.fromTo(right,{x:14,opacity:.12},{x:0,opacity:.36,duration:1.05,ease:'power2.out'});
-      gsap.fromTo(bottom,{y:18,opacity:.16},{y:0,opacity:.46,duration:1.2,ease:'power2.out'});
-      gsap.fromTo(frame,{scale:.97,opacity:.2},{scale:1,opacity:1,duration:.95,ease:'power2.out'});
+      if(matchMedia('(pointer: coarse)').matches){
+        gsap.set([left,right,bottom],{x:0,y:0,opacity:.34});
+        gsap.set(frame,{scale:1,opacity:1});
+      }else{
+        gsap.fromTo(left,{x:-14,opacity:.12},{x:0,opacity:.36,duration:1.05,ease:'power2.out'});
+        gsap.fromTo(right,{x:14,opacity:.12},{x:0,opacity:.36,duration:1.05,ease:'power2.out'});
+        gsap.fromTo(bottom,{y:18,opacity:.16},{y:0,opacity:.46,duration:1.2,ease:'power2.out'});
+        gsap.fromTo(frame,{scale:.97,opacity:.2},{scale:1,opacity:1,duration:.95,ease:'power2.out'});
+      }
+      observer.unobserve(section);
     });
   },{threshold:[.18,.28,.5],rootMargin:'-8% 0px -8% 0px'});
   sections.forEach(s=>observer.observe(s));
@@ -111,11 +118,13 @@ function setupSceneOrnamentMotion(){
 }
 
 buildOrnaments();
-buildOpeningCinema();
-prepareOpeningText();
+if(!v396Mode){
+  buildOpeningCinema();
+  prepareOpeningText();
+}
 const cleanupOrnaments=setupSceneOrnamentMotion();
-window.addEventListener('sakura:opened',playOpeningSequence);
+if(!v396Mode) window.addEventListener('sakura:opened',playOpeningSequence);
 window.addEventListener('pagehide',()=>{
-  window.removeEventListener('sakura:opened',playOpeningSequence);
+  if(!v396Mode) window.removeEventListener('sakura:opened',playOpeningSequence);
   cleanupOrnaments?.();
 },{once:true});
