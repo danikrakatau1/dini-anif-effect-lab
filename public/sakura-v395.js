@@ -3,10 +3,11 @@ const gsap = window.gsap;
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const opening = document.querySelector('.scene-opening');
 const artworkSrc = '/assets/sakura-v2-landscape.png';
+const v396Mode = window.__SAKURA_TARGET_VERSION==='v3.9.6';
 let activeTimeline = null;
 
 function buildStage(){
-  if(!opening || opening.querySelector(':scope > .v395-stage')) return;
+  if(v396Mode || !opening || opening.querySelector(':scope > .v395-stage')) return;
   const stage=document.createElement('div');
   stage.className='v395-stage';
   stage.setAttribute('aria-hidden','true');
@@ -91,7 +92,7 @@ function burstPetals(){
 }
 
 function playWowOpening(){
-  if(!opening) return;
+  if(v396Mode || !opening) return;
   if(reduceMotion || !gsap){setStaticState();return}
   resetOpening();
   opening.classList.add('v395-playing');
@@ -123,40 +124,29 @@ function playWowOpening(){
   }});
 
   activeTimeline
-    /* Beat 1 — portal world opens */
     .to(veil,{clipPath:'inset(0 0% 0 0%)',opacity:.2,duration:.72,ease:'power3.inOut'},0)
     .to(far,{clipPath:'inset(0 0% 0 0% round 0px)',duration:1.05,ease:'power4.out'},.03)
     .to(farImg,{scale:1.065,y:-5,duration:2.45,ease:'power2.inOut'},.02)
     .to(mid,{opacity:.7,duration:.65,ease:'power1.out'},.24)
     .to(midImg,{scale:1.075,y:4,duration:2.15,ease:'power2.out'},.18)
-
-    /* Beat 2 — near plates cross at different speed */
     .to(nearTop,{opacity:.9,y:0,x:0,duration:1.02,ease:'power3.out'},.56)
     .to(nearTopImg,{scale:1.125,y:-14,x:4,duration:1.65,ease:'power2.out'},.5)
     .to(nearBottom,{opacity:.92,y:0,x:0,duration:1.05,ease:'power3.out'},.66)
     .to(nearBottomImg,{scale:1.115,y:3,x:-3,duration:1.7,ease:'power2.out'},.6)
-
-    /* Beat 3 — hero light + petal burst */
     .to(haze,{opacity:.55,scale:1.05,duration:.8,ease:'power1.out'},.62)
     .to(beam,{opacity:.58,xPercent:145,duration:1.15,ease:'power2.inOut'},.9)
     .to(haze,{opacity:.22,duration:1.15,ease:'power1.inOut'},1.34)
     .add(burstPetals,1.18)
-
-    /* Beat 4 — frame lands and gold line sweeps */
     .to(portal,{opacity:1,scale:1.025,y:0,duration:.72,ease:'back.out(1.8)'},1.32)
     .to(portal,{scale:1,duration:.28,ease:'power2.out'},1.98)
     .to(shimmer,{opacity:1,duration:.08},1.56)
     .to(shimmerBar,{xPercent:650,duration:.72,ease:'power2.inOut'},1.58)
     .to(shimmer,{opacity:0,duration:.22,ease:'power1.out'},2.22)
     .to(panel,{opacity:1,y:0,scale:1,filter:'blur(0px)',duration:.92,ease:'power3.out'},1.92)
-
-    /* Beat 5 — readable text hierarchy */
     .to(eyebrow,{opacity:1,y:0,filter:'blur(0px)',duration:.48,ease:'power2.out'},2.28)
     .to(title,{opacity:1,y:0,filter:'blur(0px)',duration:.68,ease:'power3.out'},2.46)
     .to(rule,{opacity:1,y:0,filter:'blur(0px)',duration:.42,ease:'power2.out'},2.72)
     .to(copy,{opacity:1,y:0,filter:'blur(0px)',duration:.62,ease:'power2.out'},2.86)
-
-    /* Beat 6 — settle, keep subtle life */
     .to(farImg,{scale:1.035,y:-4,duration:1.05,ease:'power2.out'},3.02)
     .to(midImg,{scale:1.045,y:0,duration:1.05,ease:'power2.out'},3.02)
     .to(nearTop,{opacity:.7,duration:.7,ease:'power1.out'},3.18)
@@ -165,7 +155,7 @@ function playWowOpening(){
 }
 
 function onOpened(event){
-  /* Capture phase makes V3.9.5 the only opening timeline. */
+  if(v396Mode) return;
   event.stopImmediatePropagation();
   playWowOpening();
 }
@@ -176,14 +166,16 @@ function setupVisibilityGuard(){
   return ()=>document.removeEventListener('visibilitychange',onVisibility);
 }
 
-buildStage();
-document.body.dataset.sakuraFinalCandidate='v3.9.5';
-document.title='Sakura Vintage V3.9.5 WOW Cinematic · Dini Anif Effect Lab';
-if(reduceMotion) setStaticState();
+if(!v396Mode){
+  buildStage();
+  document.body.dataset.sakuraFinalCandidate='v3.9.5';
+  document.title='Sakura Vintage V3.9.5 WOW Cinematic · Dini Anif Effect Lab';
+  if(reduceMotion) setStaticState();
+}
 const cleanupVisibility=setupVisibilityGuard();
-window.addEventListener('sakura:opened',onOpened,{capture:true});
+if(!v396Mode) window.addEventListener('sakura:opened',onOpened,{capture:true});
 window.addEventListener('pagehide',()=>{
-  window.removeEventListener('sakura:opened',onOpened,{capture:true});
+  if(!v396Mode) window.removeEventListener('sakura:opened',onOpened,{capture:true});
   activeTimeline?.kill();
   cleanupVisibility?.();
 },{once:true});
