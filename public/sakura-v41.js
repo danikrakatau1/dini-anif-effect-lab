@@ -22,7 +22,6 @@ function mark(state){
   document.documentElement.dataset.systemReducedMotion=systemReducedMotion?'1':'0';
 }
 
-/* V4.1.2 owns opening content exclusively. Remove global reveal hooks before sakura-v2.js initializes them. */
 function suppressGlobalOpeningReveal(){
   if(!opening)return;
   const panel=opening.querySelector(':scope > .inv-shell');
@@ -128,7 +127,7 @@ function settle(p){
   if(p.outerPath)p.outerPath.style.strokeDashoffset='0';
   if(p.innerPath)p.innerPath.style.strokeDashoffset='0';
   if(coarse||saveData||lowMemory){p.mid?.remove();p.branches?.remove();p.floral?.remove()}
-  window.dispatchEvent(new CustomEvent('sakura:petals-resume',{detail:{intensity:(coarse?.22:.34)}}));
+  window.dispatchEvent(new CustomEvent('sakura:petals-resume',{detail:{intensity:(coarse ? .22 : .34)}}));
   mark('complete');
 }
 
@@ -144,12 +143,10 @@ function play(){
   }
   const p=prepare();if(!p){started=false;return}
   const fast=coarse||saveData||lowMemory;
-  const speed=fast?.94:1;
+  const speed=fast ? .94 : 1;
   mark('playing-world');
 
   timeline=gsap.timeline({defaults:{overwrite:'auto'},onComplete:()=>settle(p)});
-
-  /* 1 — WORLD. Close crop slowly pulls back; depth zones join one after another. */
   timeline
     .to(p.farImg,{scale:1,y:0,duration:2.3*speed,ease:'power2.inOut',onStart:()=>mark('world')},0)
     .to(p.mid,{opacity:.4,y:0,scale:1,duration:.62*speed,ease:'power2.out'},.42)
@@ -157,30 +154,18 @@ function play(){
     .to(p.floral,{opacity:.53,y:0,scale:1,duration:.7*speed,ease:'power2.out'},1.48)
     .to(p.atmosphere,{opacity:.15,duration:.58*speed,ease:'sine.out'},1.82)
     .call(()=>mark('world-hold'),null,2.3)
-
-  /* 2 — SEED. A visible pause, then the vertical line grows and is held briefly. */
     .to(p.slit,{opacity:1,height:'60%',duration:.6*speed,ease:'power2.out',onStart:()=>mark('slit')},2.58)
     .call(()=>mark('slit-hold'),null,3.2)
-
-  /* 3 — PAPER. Only after the slit is readable does the ivory body expand. */
     .to(p.panel,{opacity:1,clipPath:'inset(0 0% 0 0% round 42px)',duration:.82*speed,ease:'power3.inOut',onStart:()=>mark('panel')},3.4)
     .to(p.slit,{opacity:0,duration:.22*speed,ease:'power1.out'},4.08)
-
-  /* 4 — BORDER. Actual SVG stroke drawing: maroon outer path first, gold inner path second. */
     .to(p.border,{opacity:1,duration:.08,onStart:()=>mark('border-outer')},4.34)
     .to(p.outerPath,{strokeDashoffset:0,duration:.78*speed,ease:'power1.inOut'},4.38)
     .to(p.innerPath,{strokeDashoffset:0,duration:.6*speed,ease:'power1.inOut',onStart:()=>mark('border-inner')},5.24)
-
-  /* 5 — CREST. No text until both border paths are complete. */
     .to(p.crest,{opacity:1,scale:1,rotation:45,duration:.42*speed,ease:'back.out(1.6)',onStart:()=>mark('crest')},5.98)
-
-  /* 6 — CONTENT. Strictly sequential, with breathing room between every hierarchy level. */
     .to(p.eyebrow,{opacity:1,y:0,duration:.32*speed,ease:'power2.out',onStart:()=>mark('eyebrow')},6.5)
     .to(p.title,{opacity:1,y:0,duration:.48*speed,ease:'power3.out',onStart:()=>mark('title')},7.0)
     .to(p.rule,{opacity:1,y:0,duration:.3*speed,ease:'power2.out',onStart:()=>mark('divider')},7.68)
     .to(p.copy,{opacity:1,y:0,duration:.5*speed,ease:'power2.out',onStart:()=>mark('copy')},8.2)
-
-  /* 7 — SETTLE. */
     .to(p.atmosphere,{opacity:.09,duration:.36*speed,ease:'sine.out'},8.82);
 }
 
