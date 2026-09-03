@@ -19,12 +19,15 @@ artwork?.addEventListener('load',()=>{if(guard)guard.hidden=true;scene?.classLis
 function finishOpen(){
   scene?.classList.remove('is-opening');scene?.classList.add('is-open','is-dismissed');
   invitation?.setAttribute('aria-hidden','false');effects.setPetalIntensity(stability.lowPower||coarsePointer ? .38 : .58);unlockScroll();window.scrollTo(0,0);
-  requestAnimationFrame(()=>window.dispatchEvent(new CustomEvent('sakura:opened',{detail:{version:'v3.9.6'}})));
+  requestAnimationFrame(()=>window.dispatchEvent(new CustomEvent('sakura:opened',{detail:{version:'v4.0.3'}})));
 }
 function openScene(){
   if(!scene||scene.classList.contains('is-open')||scene.classList.contains('is-opening'))return;
   scene.classList.add('is-opening');effects.setPetalIntensity(stability.lowPower||coarsePointer ? .42 : .72);
-  if(effects.reduced||!gsap){scene.style.display='none';finishOpen();return}
+  if(effects.reduced||!gsap){
+    window.dispatchEvent(new CustomEvent('sakura:opening-reveal',{detail:{version:'v4.0.3'}}));
+    scene.style.display='none';finishOpen();return
+  }
   const tl=gsap.timeline({defaults:{overwrite:'auto'},onComplete:finishOpen});
   tl.to('#openInvitation',{scale:.96,duration:.12,ease:'power1.out'})
     .to('.wedding-label,.guest-copy,.fine-rule',{opacity:0,y:-13,filter:'blur(2px)',duration:.4,stagger:.035,ease:'power2.in'},.06)
@@ -34,6 +37,7 @@ function openScene(){
     .to('.artwork-image',{scale:1.055,y:-8,duration:1.08,ease:'power2.inOut'},.1)
     .to('.ambient-light',{opacity:.42,scale:1.05,duration:.88,ease:'power2.inOut'},.15)
     .to('.vintage-vignette',{opacity:.76,duration:.7,ease:'power1.inOut'},.2)
+    .add(()=>window.dispatchEvent(new CustomEvent('sakura:opening-reveal',{detail:{version:'v4.0.3'}})),.42)
     .to(scene,{yPercent:-100,opacity:.18,duration:1.25,ease:'power3.inOut'},.48);
 }
 
