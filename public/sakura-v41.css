@@ -3,6 +3,7 @@
 
 /* V4.2 owns only the post-cover opening scene. The artwork itself is never redrawn. */
 .scene-opening{min-height:100svh;overflow:hidden;background:#ead9bf!important;isolation:isolate;contain:paint}
+.scene-opening::after,.scene-opening>.living-wash,.scene-opening>.section-petal{display:none!important}
 .scene-opening>.v394-opening-cinema,.scene-opening>.v395-stage,.scene-opening>.v396-stage,.scene-opening>.v40-stage,.scene-opening>.v41-stage{display:none!important}
 
 /* ---------- WORLD BUILD ---------- */
