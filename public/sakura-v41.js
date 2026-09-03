@@ -1,14 +1,28 @@
-/* Sakura V4.1 — Reference-Accurate Step-by-Step Reveal engine */
-const gsap=window.gsap;
-const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* Sakura V4.1.1 — Reference-Accurate Step-by-Step Reveal reliability hardening */
+let gsap=window.gsap;
+const systemReducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const params=new URLSearchParams(location.search);
+/* Effect Lab defaults to motion ON. Use ?motion=reduced to explicitly test reduced motion. */
+const reduceMotion=params.get('motion')==='reduced';
 const coarse=matchMedia('(pointer: coarse)').matches;
 const saveData=Boolean(navigator.connection?.saveData);
 const lowMemory=Number(navigator.deviceMemory||8)<=4;
 const opening=document.querySelector('.scene-opening');
+const cover=document.querySelector('#sakuraV2');
+const openButton=document.querySelector('#openInvitation');
 const artworkSrc='/assets/sakura-v2-landscape.png';
 let timeline=null;
 let started=false;
 let innerBorderTimer=0;
+let armTimer=0;
+let gsapRetryTimer=0;
+let coverObserver=null;
+
+function mark(state){
+  if(document.body) document.body.dataset.v41State=state;
+  document.documentElement.dataset.sakuraOpeningEngine='v4.1.1';
+  document.documentElement.dataset.systemReducedMotion=systemReducedMotion?'1':'0';
+}
 
 function buildStage(){
   if(!opening||opening.querySelector(':scope > .v41-stage'))return;
@@ -26,15 +40,18 @@ function buildStage(){
     <div class="v41-border"></div>
     <div class="v41-crest"></div>`;
   opening.insertBefore(stage,opening.firstChild);
+  mark('ready');
 }
 
 function setStatic(){
   if(!opening)return;
   opening.classList.add('v41-complete');
   opening.dataset.v393Panel='ready';
+  mark('reduced-static');
 }
 
 function prepare(){
+  gsap=window.gsap||gsap;
   if(!opening||!gsap)return null;
   timeline?.kill();
   clearTimeout(innerBorderTimer);
@@ -72,6 +89,7 @@ function prepare(){
   gsap.set(border,{opacity:0,clipPath:'inset(100% 0 0 0)'});
   gsap.set(crest,{opacity:0,scale:.5,rotation:45,xPercent:-50,transformOrigin:'50% 50%'});
   gsap.set([eyebrow,title,rule,copy],{opacity:0,y:12});
+  mark('prepared');
 
   return{farImg,mid,branches,floral,atmosphere,slit,border,crest,panel,eyebrow,title,rule,copy};
 }
@@ -85,66 +103,103 @@ function settle(p){
   if(p.slit)p.slit.style.visibility='hidden';
   if(coarse||saveData||lowMemory){p.mid?.remove();p.branches?.remove();p.floral?.remove()}
   window.dispatchEvent(new CustomEvent('sakura:petals-resume',{detail:{intensity:(coarse ? .22 : .34)}}));
+  mark('complete');
 }
 
 function play(){
   if(!opening)return;
-  if(reduceMotion||!gsap){setStatic();return}
-  const p=prepare();if(!p)return;
+  gsap=window.gsap||gsap;
+  if(reduceMotion){setStatic();return}
+  if(!gsap){
+    mark('waiting-gsap');
+    clearTimeout(gsapRetryTimer);
+    gsapRetryTimer=setTimeout(()=>{started=false;start()},80);
+    return;
+  }
+  const p=prepare();if(!p){started=false;return}
   const fast=coarse||saveData||lowMemory;
   const speed=fast ? .92 : 1;
+  mark('playing-world');
 
   timeline=gsap.timeline({defaults:{overwrite:'auto'},onComplete:()=>settle(p)});
 
-  /* 1 — WORLD: reference-style pull-back, no panel yet. */
+  /* 1 — WORLD: close crop pulls back until the full landscape is visible. */
   timeline
-    .to(p.farImg,{scale:1,y:0,duration:1.72*speed,ease:'power2.inOut'},0)
+    .to(p.farImg,{scale:1,y:0,duration:1.72*speed,ease:'power2.inOut',onStart:()=>mark('world')},0)
     .to(p.mid,{opacity:.42,y:0,scale:1,duration:.9*speed,ease:'power2.out'},.24)
     .to(p.branches,{opacity:.48,x:0,y:0,scale:1,duration:.82*speed,ease:'power2.out'},.48)
     .to(p.floral,{opacity:.54,y:0,scale:1,duration:.82*speed,ease:'power2.out'},.7)
     .to(p.atmosphere,{opacity:.18,duration:.7*speed,ease:'sine.out'},.74)
 
-  /* 2 — SEED: one thin vertical slit appears after the landscape opens. */
-    .to(p.slit,{opacity:1,height:'58%',duration:.42*speed,ease:'power2.out'},1.56)
+  /* 2 — SEED: one thin vertical slit. */
+    .to(p.slit,{opacity:1,height:'58%',duration:.42*speed,ease:'power2.out',onStart:()=>mark('slit')},1.56)
 
-  /* 3 — PAPER BODY: slit expands into the ivory panel, border still absent. */
-    .to(p.panel,{opacity:1,clipPath:'inset(0 0% 0 0% round 42px)',duration:.66*speed,ease:'power3.inOut'},1.92)
+  /* 3 — PAPER BODY: slit expands into ivory paper. */
+    .to(p.panel,{opacity:1,clipPath:'inset(0 0% 0 0% round 42px)',duration:.66*speed,ease:'power3.inOut',onStart:()=>mark('panel')},1.92)
     .to(p.slit,{opacity:0,duration:.2*speed,ease:'power1.out'},2.38)
 
-  /* 4 — BORDER: outer maroon line draws bottom-to-top, inner gold line follows. */
+  /* 4 — BORDER: maroon outer line, then gold inner line. */
     .to(p.border,{opacity:1,clipPath:'inset(0% 0 0 0)',duration:.72*speed,ease:'power2.inOut',onStart:()=>{
+      mark('border');
       innerBorderTimer=setTimeout(()=>p.border?.classList.add('is-inner-drawn'),Math.round(360*speed));
     }},2.54)
 
-  /* 5 — CREST: only after the frame exists. */
-    .to(p.crest,{opacity:1,scale:1,rotation:45,duration:.44*speed,ease:'back.out(1.65)'},3.18)
+  /* 5 — CREST. */
+    .to(p.crest,{opacity:1,scale:1,rotation:45,duration:.44*speed,ease:'back.out(1.65)',onStart:()=>mark('crest')},3.18)
 
   /* 6 — CONTENT: deliberately one-by-one. */
-    .to(p.eyebrow,{opacity:1,y:0,duration:.34*speed,ease:'power2.out'},3.48)
-    .to(p.title,{opacity:1,y:0,duration:.5*speed,ease:'power3.out'},3.78)
-    .to(p.rule,{opacity:1,y:0,duration:.32*speed,ease:'power2.out'},4.16)
-    .to(p.copy,{opacity:1,y:0,duration:.5*speed,ease:'power2.out'},4.42)
+    .to(p.eyebrow,{opacity:1,y:0,duration:.34*speed,ease:'power2.out',onStart:()=>mark('eyebrow')},3.48)
+    .to(p.title,{opacity:1,y:0,duration:.5*speed,ease:'power3.out',onStart:()=>mark('title')},3.78)
+    .to(p.rule,{opacity:1,y:0,duration:.32*speed,ease:'power2.out',onStart:()=>mark('divider')},4.16)
+    .to(p.copy,{opacity:1,y:0,duration:.5*speed,ease:'power2.out',onStart:()=>mark('copy')},4.42)
 
-  /* 7 — SETTLE: background calms after the full invitation hierarchy is built. */
+  /* 7 — SETTLE. */
     .to(p.atmosphere,{opacity:.1,duration:.44*speed,ease:'sine.out'},4.7);
 }
 
-function start(){if(started)return;started=true;play()}
+function start(){
+  if(started)return;
+  started=true;
+  mark('starting');
+  play();
+}
 function onOpeningReveal(){start()}
 function onOpened(){if(!started)start()}
+function onOpenClick(){
+  /* Independent fallback: match the cover's .42s reveal trigger even if CustomEvent is missed. */
+  clearTimeout(armTimer);
+  armTimer=setTimeout(start,420);
+  mark('armed');
+}
 function onVisibility(){if(!timeline)return;document.hidden?timeline.pause():timeline.resume()}
+function coverHasPassedReveal(){
+  return Boolean(cover?.classList.contains('is-opening')||cover?.classList.contains('is-open')||document.body.classList.contains('cover-open'));
+}
 
 buildStage();
-window.__SAKURA_TARGET_VERSION='v4.1';
-document.body.dataset.sakuraFinalCandidate='v4.1';
-document.title='Sakura Vintage V4.1 Step-by-Step Reveal · Dini Anif Effect Lab';
+window.__SAKURA_TARGET_VERSION='v4.1.1';
+document.body.dataset.sakuraFinalCandidate='v4.1.1';
+document.title='Sakura Vintage V4.1.1 Reliable Step-by-Step Reveal · Dini Anif Effect Lab';
 if(reduceMotion)setStatic();
+
+openButton?.addEventListener('click',onOpenClick,{capture:true});
 window.addEventListener('sakura:opening-reveal',onOpeningReveal,{capture:true});
 window.addEventListener('sakura:opened',onOpened,{capture:true});
 document.addEventListener('visibilitychange',onVisibility);
+
+/* Fail-safe for slow module loading: observe cover state instead of relying only on past events. */
+if(cover){
+  coverObserver=new MutationObserver(()=>{if(!started&&coverHasPassedReveal())start()});
+  coverObserver.observe(cover,{attributes:true,attributeFilter:['class']});
+}
+if(coverHasPassedReveal()) requestAnimationFrame(start);
+
 window.addEventListener('pagehide',()=>{
+  openButton?.removeEventListener('click',onOpenClick,{capture:true});
   window.removeEventListener('sakura:opening-reveal',onOpeningReveal,{capture:true});
   window.removeEventListener('sakura:opened',onOpened,{capture:true});
   document.removeEventListener('visibilitychange',onVisibility);
-  timeline?.kill();clearTimeout(innerBorderTimer);
+  coverObserver?.disconnect();
+  timeline?.kill();
+  clearTimeout(innerBorderTimer);clearTimeout(armTimer);clearTimeout(gsapRetryTimer);
 },{once:true});
