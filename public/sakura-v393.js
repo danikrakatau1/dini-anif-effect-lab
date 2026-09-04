@@ -29,25 +29,25 @@ document.head.appendChild(v45Link);
 await import('./sakura-v45.js?v=452');
 document.body.dataset.sakuraFinalCandidate='v4.5.3';
 
-/* Keep Date visual styling only; old V4.7 independent slideshow JS remains disabled. */
+/* Keep Date baseline styling only; all older Date slideshow JS stays disabled. */
 let v47Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v47.css'));
 if(!v47Link){v47Link=document.createElement('link');v47Link.rel='stylesheet'}
 v47Link.href='/sakura-v47.css?v=473';
 document.head.appendChild(v47Link);
 
-/* Keep the seam styling only; no separate seam animation observer. */
+/* Keep smooth section seam CSS only; no separate seam observer. */
 let v483Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v483.css'));
 if(!v483Link){v483Link=document.createElement('link');v483Link.rel='stylesheet'}
 v483Link.href='/sakura-v483.css?v=483';
 document.head.appendChild(v483Link);
 
-/* V4.9.2 NATURAL: Date gets one local 2-image slideshow; lower sections use one artwork + slow drift. */
-let v492Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v492.css'));
-if(!v492Link){v492Link=document.createElement('link');v492Link.rel='stylesheet'}
-v492Link.href='/sakura-v492.css?v=492';
-document.head.appendChild(v492Link);
-await import('./sakura-v492.js?v=492');
-document.documentElement.dataset.sakuraInterior='v4.9.2-natural';
+/* V5.0 TOOLS ENGINE ADAPTER: single owner for interior artwork motion. */
+let v50Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v50.css'));
+if(!v50Link){v50Link=document.createElement('link');v50Link.rel='stylesheet'}
+v50Link.href='/sakura-v50.css?v=500';
+document.head.appendChild(v50Link);
+await import('./sakura-v50.js?v=500');
+document.documentElement.dataset.sakuraInterior='v5.0-tools-engine';
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse = matchMedia('(pointer: coarse)').matches;
@@ -80,31 +80,11 @@ function setupDelayedPanels(){
   return ()=>{observer.disconnect();timers.forEach(clearTimeout);timers.clear()};
 }
 
-function setupFakeCameraDepth(){
-  if(reduceMotion || lowPower || coarse || !sections.length) return ()=>{};
-  const artSections = sections.filter(s=>s.classList.contains('sakura-art-section') && s.dataset.sakuraScene!=='opening');
-  if(!artSections.length) return ()=>{};
-  let raf=0;
-  const render=()=>{
-    raf=0;
-    const vh=innerHeight||1;
-    artSections.forEach(section=>{
-      const r=section.getBoundingClientRect();
-      const progress=Math.max(-1,Math.min(1,(r.top+r.height/2-vh/2)/(vh*.9)));
-      const proximity=1-Math.abs(progress);
-      section.style.setProperty('--cam-y',`${progress*7}px`);
-      section.style.setProperty('--cam-size',`${111 + proximity*3}%`);
-    });
-  };
-  const onScroll=()=>{if(!raf)raf=requestAnimationFrame(render)};
-  addEventListener('scroll',onScroll,{passive:true});
-  addEventListener('sakura:stable-resize',onScroll);
-  render();
-  return ()=>{removeEventListener('scroll',onScroll);removeEventListener('sakura:stable-resize',onScroll);cancelAnimationFrame(raf)};
-}
+/* Legacy fake-camera function retained only for rollback reference; V5.0 owns artwork motion. */
+function setupFakeCameraDepth(){return ()=>{}}
 
 function setupButterflies(){
-  /* Decorative flight is desktop-only; iPhone/low-power stays light. */
+  /* Decorative flight stays desktop-only; mobile/low-power remains light. */
   if(reduceMotion || lowPower || coarse) return ()=>{};
   const targets = sections.filter(s=>['couple','event','wishes','closing'].includes(s.dataset.sakuraScene));
   targets.forEach((section,sceneIndex)=>{
@@ -123,17 +103,8 @@ function setupButterflies(){
   return ()=>document.querySelectorAll('.v393-butterfly-layer').forEach(n=>n.remove());
 }
 
-function setupSceneFocus(){
-  if(!sections.length) return ()=>{};
-  const observer=new IntersectionObserver(entries=>{
-    const visible=entries.filter(e=>e.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];
-    if(!visible) return;
-    sections.forEach(s=>s.classList.toggle('v393-active',s===visible.target));
-    document.documentElement.style.setProperty('--v393-scene-index',String(sections.indexOf(visible.target)));
-  },{threshold:[.25,.5,.72],rootMargin:'-14% 0px -14% 0px'});
-  sections.forEach(s=>observer.observe(s));
-  return ()=>observer.disconnect();
-}
+/* Legacy scene-focus observer retained only for rollback reference; V5.0 owns scene activation. */
+function setupSceneFocus(){return ()=>{}}
 
 function setupCopyFeedback(){
   const buttons=[...document.querySelectorAll('.copy-demo')];
@@ -151,5 +122,5 @@ function setupVisibilityGuard(){
   return ()=>document.removeEventListener('visibilitychange',onVisibility);
 }
 
-const cleanup=[setupDelayedPanels(),setupFakeCameraDepth(),setupButterflies(),setupSceneFocus(),setupCopyFeedback(),setupVisibilityGuard()];
+const cleanup=[setupDelayedPanels(),setupButterflies(),setupCopyFeedback(),setupVisibilityGuard()];
 addEventListener('pagehide',()=>cleanup.forEach(fn=>fn?.()),{once:true});
