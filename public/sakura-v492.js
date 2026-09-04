@@ -9,6 +9,8 @@ const date=document.querySelector('.scene-date');
 let dateTimer=0;
 let dateObserver=null;
 let dateVisible=false;
+let startDate=()=>{};
+let stopDate=()=>{};
 
 if(date){
   date.querySelector(':scope > .v492-date-stage')?.remove();
@@ -45,12 +47,16 @@ if(date){
     front=back;
   }
 
-  function stopDate(){clearInterval(dateTimer);dateTimer=0}
-  function startDate(){
+  stopDate=()=>{
+    clearInterval(dateTimer);
+    dateTimer=0;
+  };
+
+  startDate=()=>{
     stopDate();
     if(reduced || !dateVisible || document.hidden)return;
-    dateTimer=setInterval(swapDate,6200);
-  }
+    dateTimer=window.setInterval(swapDate,6200);
+  };
 
   dateObserver=new IntersectionObserver(entries=>{
     const entry=entries[0];
@@ -73,29 +79,15 @@ if(lower.length){
 }
 
 function onVisibility(){
-  if(document.hidden){
-    clearInterval(dateTimer);dateTimer=0;
-  }else if(dateVisible && !reduced){
-    clearInterval(dateTimer);
-    dateTimer=setInterval(()=>{
-      const active=date?.querySelectorAll('.v492-date-slide');
-      if(active?.length===2){
-        /* trigger through the same local closure behavior by restarting page-local timer naturally */
-        active[0].dispatchEvent(new Event('v492-noop'));
-      }
-    },6200);
-    /* Replace noop timer immediately with a fresh observer-driven cycle. */
-    clearInterval(dateTimer);dateTimer=0;
-    dateObserver?.unobserve(date);
-    dateObserver?.observe(date);
-  }
+  if(document.hidden)stopDate();
+  else if(dateVisible)startDate();
 }
 document.addEventListener('visibilitychange',onVisibility);
 
 document.documentElement.dataset.sakuraInterior='v4.9.2-natural';
 
 window.addEventListener('pagehide',()=>{
-  clearInterval(dateTimer);
+  stopDate();
   dateObserver?.disconnect();
   lowerObserver?.disconnect();
   document.removeEventListener('visibilitychange',onVisibility);
