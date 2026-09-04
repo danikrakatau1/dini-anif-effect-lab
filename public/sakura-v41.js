@@ -1,16 +1,11 @@
-/* Sakura V4.4.1 — LOCKED: HQ User Video Master → Final Name */
+/* Sakura V4.4.2 — LOCKED: Direct User MP4 Master → Transparent Final Name */
 const systemReducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const params=new URLSearchParams(location.search);
 const reduceMotion=params.get('motion')==='reduced';
 const opening=document.querySelector('.scene-opening');
 const cover=document.querySelector('#sakuraV2');
 const openButton=document.querySelector('#openInvitation');
-const partUrls=[
-  '/assets/sakura-video/v441h-01.part?v=441',
-  '/assets/sakura-video/v441h-01-tail.part?v=441',
-  ...Array.from({length:10},(_,i)=>`/assets/sakura-video/v441h-${String(i+2).padStart(2,'0')}.part?v=441`)
-];
-const expectedBase64Length=181548;
+const videoUrl='/assets/sakura-video/sakura-opening.mp4?v=442';
 const finalNameAt=8.65;
 let started=false;
 let nameShown=false;
@@ -18,7 +13,6 @@ let completed=false;
 let armTimer=0;
 let fallbackTimer=0;
 let coverObserver=null;
-let objectUrl='';
 let assetPromise=null;
 let video=null;
 let stage=null;
@@ -27,7 +21,7 @@ let wasPlayingBeforeHide=false;
 
 function mark(state){
   if(document.body)document.body.dataset.v44State=state;
-  document.documentElement.dataset.sakuraOpeningEngine='v4.4.1';
+  document.documentElement.dataset.sakuraOpeningEngine='v4.4.2';
   document.documentElement.dataset.systemReducedMotion=systemReducedMotion?'1':'0';
 }
 
@@ -42,12 +36,13 @@ function suppressGlobalOpeningReveal(){
 function buildStage(){
   if(!opening)return;
   opening.querySelectorAll(':scope > .v394-opening-cinema,:scope > .v395-stage,:scope > .v396-stage,:scope > .v40-stage,:scope > .v41-stage,:scope > .v42-world-stage,:scope > .v43-stage,:scope > .v44-stage').forEach(node=>node.remove());
+
   stage=document.createElement('div');
   stage.className='v44-stage';
   stage.setAttribute('aria-hidden','true');
   stage.innerHTML=`
     <div class="v44-poster"></div>
-    <video class="v44-video" muted playsinline preload="auto" disablepictureinpicture></video>
+    <video class="v44-video" muted playsinline preload="auto" disablepictureinpicture src="${videoUrl}"></video>
     <div class="v44-atmosphere"></div>`;
   opening.insertBefore(stage,opening.firstChild);
   video=stage.querySelector('.v44-video');
@@ -55,35 +50,14 @@ function buildStage(){
   mark('stage-ready');
 }
 
-function base64ToBlobUrl(base64){
-  const clean=base64.replace(/\s+/g,'');
-  const binary=atob(clean);
-  const bytes=new Uint8Array(binary.length);
-  for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
-  return URL.createObjectURL(new Blob([bytes],{type:'video/mp4'}));
-}
-
 function loadVideoAsset(){
   if(assetPromise)return assetPromise;
   assetPromise=(async()=>{
     if(!video)throw new Error('video-stage-missing');
     mark('asset-loading');
-
-    const responses=await Promise.all(partUrls.map(url=>fetch(url,{cache:'no-store'})));
-    responses.forEach((response,index)=>{
-      if(!response.ok)throw new Error(`video-part-${index+1}-${response.status}`);
-    });
-
-    const chunks=await Promise.all(responses.map(response=>response.text()));
-    const encoded=chunks.join('').replace(/\s+/g,'');
-    if(encoded.length!==expectedBase64Length){
-      throw new Error(`video-parts-incomplete-${encoded.length}`);
-    }
-
-    objectUrl=base64ToBlobUrl(encoded);
-    video.src=objectUrl;
     video.muted=true;
     video.playsInline=true;
+    video.preload='auto';
 
     await new Promise((resolve,reject)=>{
       if(video.readyState>=2){resolve();return}
@@ -103,7 +77,7 @@ function loadVideoAsset(){
     mark('asset-ready');
     return video;
   })().catch(error=>{
-    console.warn('[Sakura V4.4.1] HQ video fallback:',error);
+    console.warn('[Sakura V4.4.2] direct MP4 fallback:',error);
     mark('asset-fallback');
     return null;
   });
@@ -141,7 +115,7 @@ function finish(){
 
 function onVideoProgress(){
   if(!video)return;
-  const duration=Number.isFinite(video.duration)?video.duration:10;
+  const duration=Number.isFinite(video.duration)&&video.duration>0?video.duration:10;
   const trigger=Math.min(finalNameAt,Math.max(0,duration-.9));
   if(video.currentTime>=trigger)revealName();
 }
@@ -171,7 +145,7 @@ async function playVideo(){
   fallbackTimer=setTimeout(()=>{
     if(!nameShown)revealName();
     if(!video||video.error)finish();
-  },12000);
+  },14000);
 
   try{
     readyVideo.pause();
@@ -180,7 +154,7 @@ async function playVideo(){
     await readyVideo.play();
     mark('video-playing');
   }catch(error){
-    console.warn('[Sakura V4.4.1] play fallback:',error);
+    console.warn('[Sakura V4.4.2] direct play fallback:',error);
     mark('play-fallback');
   }
 }
@@ -209,13 +183,13 @@ function onVisibility(){
 
 suppressGlobalOpeningReveal();
 buildStage();
-window.__SAKURA_TARGET_VERSION='v4.4.1';
-document.body.dataset.sakuraFinalCandidate='v4.4.1';
-document.title='Sakura Vintage V4.4.1 HQ Video Rescue · Dini Anif Effect Lab';
+window.__SAKURA_TARGET_VERSION='v4.4.2';
+document.body.dataset.sakuraFinalCandidate='v4.4.2';
+document.title='Sakura Vintage V4.4.2 Direct Master Video · Dini Anif Effect Lab';
 const labState=document.querySelector('.lab-state');
-if(labState)labState.textContent='Sakura Vintage · V4.4.1 HQ Video Rescue';
+if(labState)labState.textContent='Sakura Vintage · V4.4.2 Direct Master Video';
 
-/* Preload all HQ chunks before the user opens the invitation. */
+/* Start direct browser preload while cover is still visible. */
 if(!reduceMotion)loadVideoAsset();
 
 video?.addEventListener('timeupdate',onVideoProgress);
@@ -232,8 +206,7 @@ if(cover){
 if(coverHasPassedReveal())requestAnimationFrame(start);
 
 window.addEventListener('pagehide',()=>{
-  clearTimeout(armTimer);
-  clearTimeout(fallbackTimer);
+  clearTimeout(armTimer);clearTimeout(fallbackTimer);
   coverObserver?.disconnect();
   video?.pause();
   video?.removeEventListener('timeupdate',onVideoProgress);
@@ -242,5 +215,4 @@ window.addEventListener('pagehide',()=>{
   window.removeEventListener('sakura:opening-reveal',onOpeningReveal,{capture:true});
   window.removeEventListener('sakura:opened',onOpened,{capture:true});
   document.removeEventListener('visibilitychange',onVisibility);
-  if(objectUrl)URL.revokeObjectURL(objectUrl);
 },{once:true});
