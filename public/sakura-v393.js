@@ -20,14 +20,14 @@ if(!document.querySelector(`link[href="${v396Href}"]`)){
   const link=document.createElement('link');link.rel='stylesheet';link.href=v396Href;document.head.appendChild(link);
 }
 
-/* V4.4.2 is the only opening engine. Version JS/CSS together and keep the CSS last. */
-window.__SAKURA_TARGET_VERSION='v4.4.2';
+/* V4.4.3 is the only opening engine. Version JS/CSS together and keep the CSS last. */
+window.__SAKURA_TARGET_VERSION='v4.4.3';
 let v44Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v41.css'));
 if(!v44Link){v44Link=document.createElement('link');v44Link.rel='stylesheet'}
-v44Link.href='/sakura-v41.css?v=442';
+v44Link.href='/sakura-v41.css?v=443';
 document.head.appendChild(v44Link);
-await import('./sakura-v41.js?v=442');
-document.body.dataset.sakuraFinalCandidate='v4.4.2';
+await import('./sakura-v41.js?v=443');
+document.body.dataset.sakuraFinalCandidate='v4.4.3';
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse = matchMedia('(pointer: coarse)').matches;
