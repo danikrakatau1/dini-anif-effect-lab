@@ -200,10 +200,10 @@ function playFinalSequence(){
   finalTimeline
     /* A short breath after the video, then the color still becomes calmer and richer. */
     .call(()=>mark('final-world'),null,.28)
-    .to(nameBg,{opacity:1,scale:1,duration:.88,ease:'sine.inOut',onStart:()=>opening.classList.add('v45-final-bg')},.34)
+    .to(nameBg,{opacity:1,scale:1,duration:.88,ease:'sine.inOut',onComplete:()=>opening.classList.add('v45-final-bg')},.34)
     .to(edgeShade,{opacity:1,duration:.82,ease:'sine.out'},.48)
     .to(centerBloom,{opacity:1,scale:1,duration:.90,ease:'sine.out'},.56)
-    .to(grain,{opacity:.10,duration:.58,ease:'sine.out',onStart:()=>opening.classList.add('v451-luxury-settle')},.78)
+    .to(grain,{opacity:.10,duration:.58,ease:'sine.out',onComplete:()=>opening.classList.add('v451-luxury-settle')},.78)
 
     /* Ink first: slower, deeper maroon line. */
     .to(border,{opacity:1,duration:.10,onStart:()=>mark('frame-maroon')},1.18)
@@ -233,7 +233,8 @@ function playFinalSequence(){
       letterSpacing:'-.025em',
       duration:.96,
       ease:'power3.out',
-      onStart:()=>{opening.classList.add('v45-name-visible');mark('final-name')}
+      onStart:()=>mark('final-name'),
+      onComplete:()=>opening.classList.add('v45-name-visible')
     },4.52);
 }
 
