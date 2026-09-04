@@ -1,0 +1,184 @@
+/* Sakura V4.9 — Interior Living Background System
+   Reference-derived motion grammar only; all visual assets are local Sakura assets.
+   Opening V4.5.2 remains untouched. Save The Date keeps its own V4.7.3 engine. */
+:root{
+  --v49-ease:cubic-bezier(.22,.61,.36,1);
+  --v49-soft:cubic-bezier(.25,.46,.45,.94);
+}
+
+.scene-event,
+.scene-story,
+.scene-gallery,
+.scene-gift,
+.scene-rsvp,
+.scene-wishes,
+.scene-closing{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+}
+
+/* Living art stage sits above the section color, below readability veils and content. */
+.v49-scene-bg{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  overflow:hidden;
+  pointer-events:none;
+  background:#ead8c4;
+}
+.v49-scene-bg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:5;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at 50% 43%,rgba(255,249,236,.10),transparent 44%),
+    linear-gradient(180deg,rgba(69,35,45,.025),transparent 34%,rgba(59,31,40,.055));
+}
+.v49-bg-layer{
+  position:absolute;
+  inset:-4%;
+  width:108%;
+  height:108%;
+  opacity:0;
+  z-index:1;
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
+  transform:translate3d(0,0,0) scale(1.035);
+  transform-origin:50% 50%;
+  will-change:opacity,transform;
+  backface-visibility:hidden;
+  filter:saturate(1.11) contrast(1.035) brightness(.96);
+  transition:opacity 2.2s var(--v49-ease),filter 2.2s var(--v49-soft);
+}
+.v49-bg-layer[data-art="world"]{
+  background-image:url('/assets/Sakura-v45/sakura-background-color.jpg.jpg');
+}
+.v49-bg-layer[data-art="glow"]{
+  background-image:url('/assets/Sakura-v45/sakura-name-frame-background.jpg');
+}
+.v49-bg-layer.is-active{opacity:1;z-index:3}
+.v49-bg-layer.is-previous{opacity:0;z-index:2}
+
+/* Per-scene optical grade. Color stays strong; artwork remains visible. */
+.v49-scene-grade{
+  position:absolute;
+  inset:0;
+  z-index:4;
+  pointer-events:none;
+  mix-blend-mode:soft-light;
+}
+.scene-event .v49-scene-grade{
+  background:linear-gradient(180deg,rgba(119,44,63,.05),rgba(230,175,140,.04) 55%,rgba(89,40,55,.10));
+}
+.scene-story .v49-scene-grade{
+  background:radial-gradient(circle at 18% 20%,rgba(218,117,145,.14),transparent 32%),linear-gradient(180deg,rgba(255,230,208,.06),rgba(120,75,103,.09));
+}
+.scene-gallery .v49-scene-grade{
+  background:radial-gradient(circle at 82% 18%,rgba(88,139,139,.12),transparent 30%),linear-gradient(180deg,rgba(121,54,77,.08),rgba(67,35,51,.18));
+}
+.scene-gift .v49-scene-grade{
+  background:radial-gradient(ellipse at 50% 18%,rgba(255,226,157,.22),transparent 44%),linear-gradient(180deg,rgba(181,119,72,.05),rgba(93,48,57,.09));
+}
+.scene-rsvp .v49-scene-grade{
+  background:linear-gradient(180deg,rgba(226,151,160,.07),transparent 48%,rgba(109,70,85,.08));
+}
+.scene-wishes .v49-scene-grade{
+  background:radial-gradient(circle at 16% 18%,rgba(225,133,161,.13),transparent 30%),linear-gradient(180deg,rgba(255,230,209,.05),rgba(104,71,89,.08));
+}
+.scene-closing .v49-scene-grade{
+  background:radial-gradient(ellipse at 50% 18%,rgba(255,225,174,.17),transparent 44%),linear-gradient(180deg,rgba(123,54,75,.08),rgba(69,34,48,.22));
+}
+
+/* Critical layer repair: old pseudo artwork no longer covers the living background. */
+.scene-event::before,
+.scene-story::before,
+.scene-gallery::before,
+.scene-gift::before,
+.scene-rsvp::before,
+.scene-wishes::before,
+.scene-closing::before{
+  z-index:1!important;
+  background-image:none!important;
+  mix-blend-mode:normal!important;
+  opacity:.18!important;
+  filter:none!important;
+  transform:none!important;
+  pointer-events:none!important;
+}
+.scene-event::after,
+.scene-story::after,
+.scene-gallery::after,
+.scene-gift::after,
+.scene-rsvp::after,
+.scene-wishes::after,
+.scene-closing::after{
+  z-index:1!important;
+  opacity:.22!important;
+  pointer-events:none!important;
+}
+
+/* Keep the current strong color story as translucent ink over the moving artwork. */
+.scene-event::before{background:linear-gradient(180deg,rgba(247,220,193,.25),rgba(139,64,78,.13))!important}
+.scene-story::before{background:linear-gradient(180deg,rgba(246,218,203,.21),rgba(170,99,120,.14))!important}
+.scene-gallery::before{background:linear-gradient(180deg,rgba(161,84,96,.16),rgba(78,45,61,.26))!important}
+.scene-gift::before{background:linear-gradient(180deg,rgba(239,199,136,.25),rgba(150,92,65,.13))!important}
+.scene-rsvp::before{background:linear-gradient(180deg,rgba(245,219,199,.21),rgba(181,119,126,.12))!important}
+.scene-wishes::before{background:linear-gradient(180deg,rgba(244,215,196,.22),rgba(154,91,111,.13))!important}
+.scene-closing::before{background:linear-gradient(180deg,rgba(204,133,118,.18),rgba(91,44,65,.29))!important}
+
+/* Content remains safely above the moving art. */
+.scene-event>.inv-shell,
+.scene-story>.inv-shell,
+.scene-gallery>.inv-shell,
+.scene-gift>.inv-shell,
+.scene-rsvp>.inv-shell,
+.scene-wishes>.inv-shell,
+.scene-closing>.inv-shell{
+  position:relative!important;
+  z-index:6!important;
+}
+
+/* Cards become slightly more translucent so motion is visible but text stays readable. */
+.scene-event .event-card,
+.scene-story .story-carousel,
+.scene-story .story-card,
+.scene-gift .gift-card,
+.scene-rsvp .form-card,
+.scene-wishes .message-card,
+.scene-closing>.inv-shell{
+  backdrop-filter:blur(9px) saturate(1.05)!important;
+  -webkit-backdrop-filter:blur(9px) saturate(1.05)!important;
+}
+.scene-event .event-card{background:linear-gradient(155deg,rgba(255,249,238,.80),rgba(241,218,189,.66))!important}
+.scene-story .story-carousel{background:rgba(247,229,207,.46)!important}
+.scene-story .story-card{background:linear-gradient(155deg,rgba(255,248,234,.84),rgba(239,214,190,.70))!important}
+.scene-gift .gift-card{background:linear-gradient(155deg,rgba(255,248,233,.84),rgba(239,214,177,.68))!important}
+.scene-rsvp .form-card{background:linear-gradient(155deg,rgba(255,249,238,.86),rgba(244,222,199,.70))!important}
+.scene-wishes .message-card{background:linear-gradient(155deg,rgba(255,249,238,.82),rgba(242,219,193,.68))!important}
+
+/* Fade sections emulate long Elementor-style fades without hard cuts. */
+.v49-mode-fade .v49-bg-layer{
+  transition-duration:3.3s!important;
+}
+
+/* Slide-left sections use only a short camera drift, never a harsh card slide. */
+.v49-mode-slide .v49-bg-layer{
+  transition:opacity 2.65s var(--v49-ease),filter 2.65s var(--v49-soft)!important;
+}
+
+@media(max-width:600px){
+  .v49-bg-layer{
+    inset:-5%;width:110%;height:110%;
+    transition-duration:2.6s;
+  }
+  .v49-mode-fade .v49-bg-layer{transition-duration:3s!important}
+  .v49-mode-slide .v49-bg-layer{transition-duration:2.45s!important}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .v49-bg-layer{transition:none!important;transform:none!important}
+}
