@@ -1,0 +1,403 @@
+/* Sakura V4.8 — Full Interior Color Story
+   Scope starts at Event and continues through Closing.
+   Opening V4.5.2, Couple V4.6.1, Date V4.7 remain untouched. */
+:root{
+  --v48-ivory:#f4e7d2;
+  --v48-paper:#fbf3e5;
+  --v48-burgundy:#6d2b3a;
+  --v48-burgundy-deep:#55202d;
+  --v48-rose:#b86f7b;
+  --v48-blush:#d9a3a4;
+  --v48-champagne:#c9a66a;
+  --v48-champagne-light:#ead6ad;
+  --v48-cocoa:#9a7062;
+  --v48-plum:#805269;
+  --v48-moss:#718064;
+  --v48-teal:#6f9291;
+  --v48-ink:#654941;
+}
+
+/* Common luxury behavior for all interior scenes below Save The Date. */
+.scene-event,
+.scene-story,
+.scene-gallery,
+.scene-gift,
+.scene-rsvp,
+.scene-wishes,
+.scene-closing{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  color:var(--v48-ink);
+}
+
+.scene-event>.inv-shell,
+.scene-story>.inv-shell,
+.scene-gallery>.inv-shell,
+.scene-gift>.inv-shell,
+.scene-rsvp>.inv-shell,
+.scene-wishes>.inv-shell,
+.scene-closing>.inv-shell{
+  position:relative;
+  z-index:4;
+}
+
+.scene-event .inv-eyebrow,
+.scene-story .inv-eyebrow,
+.scene-gallery .inv-eyebrow,
+.scene-gift .inv-eyebrow,
+.scene-rsvp .inv-eyebrow,
+.scene-wishes .inv-eyebrow,
+.scene-closing .inv-eyebrow{
+  color:var(--v48-champagne)!important;
+  letter-spacing:.28em!important;
+}
+
+.scene-event .inv-title,
+.scene-story .inv-title,
+.scene-gift .inv-title,
+.scene-rsvp .inv-title,
+.scene-wishes .inv-title{
+  color:var(--v48-burgundy)!important;
+}
+
+/* -------------------------------------------------
+   EVENT — warm ivory + burgundy ceremonial wash
+-------------------------------------------------- */
+.scene-event{
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(255,248,231,.92),rgba(248,229,204,.58) 43%,transparent 70%),
+    linear-gradient(180deg,#f5e9d5 0%,#efdcc1 48%,#e7c9ac 100%)!important;
+  padding-top:92px!important;
+  padding-bottom:104px!important;
+}
+.scene-event::before{
+  content:"";
+  position:absolute;
+  inset:-1.5%;
+  z-index:0;
+  pointer-events:none;
+  background:url('/assets/Sakura-v45/sakura-decor-overlay-source.jpg.jpg') center/cover no-repeat;
+  opacity:.16;
+  filter:contrast(1.72) brightness(1.12) saturate(1.06) sepia(.05);
+  mix-blend-mode:multiply;
+  transform:scale(1.015);
+}
+.scene-event::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 15% 18%,rgba(157,62,84,.09),transparent 28%),
+    radial-gradient(circle at 86% 78%,rgba(113,128,100,.07),transparent 30%),
+    linear-gradient(180deg,transparent 0 69%,rgba(95,44,56,.065) 100%);
+}
+.scene-event .event-grid{
+  gap:24px!important;
+}
+.scene-event .event-card{
+  background:
+    linear-gradient(155deg,rgba(255,250,240,.88),rgba(242,223,194,.78))!important;
+  border-color:rgba(111,46,59,.30)!important;
+  box-shadow:
+    0 24px 48px rgba(89,51,43,.10),
+    inset 0 0 0 1px rgba(232,210,167,.18)!important;
+  backdrop-filter:blur(8px) saturate(1.04);
+  -webkit-backdrop-filter:blur(8px) saturate(1.04);
+}
+.scene-event .event-card small{color:var(--v48-champagne)!important;letter-spacing:.22em}
+.scene-event .event-card h3{color:var(--v48-burgundy)!important}
+.scene-event .event-card p{color:#72574f!important}
+.scene-event .vintage-btn{
+  background:linear-gradient(180deg,#7b3343,#632635)!important;
+  color:#fff5e7!important;
+  border-color:rgba(255,240,212,.22)!important;
+  box-shadow:0 10px 22px rgba(98,37,53,.18)!important;
+}
+
+/* -------------------------------------------------
+   STORY — romantic blush editorial section
+-------------------------------------------------- */
+.scene-story{
+  background:
+    radial-gradient(ellipse at 50% 18%,rgba(255,245,225,.74),transparent 44%),
+    radial-gradient(circle at 12% 25%,rgba(206,127,142,.16),transparent 30%),
+    radial-gradient(circle at 85% 72%,rgba(134,87,108,.10),transparent 31%),
+    linear-gradient(180deg,#f1dfc8 0%,#e9cdbf 44%,#dfb8ae 100%)!important;
+  padding-top:100px!important;
+  padding-bottom:116px!important;
+}
+.scene-story::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    linear-gradient(rgba(255,244,225,.25),rgba(239,203,191,.15)),
+    url('/assets/Sakura-v45/sakura-background-color.jpg.jpg') center/cover no-repeat;
+  opacity:.20;
+  filter:saturate(.88) sepia(.16) brightness(1.06);
+  mix-blend-mode:multiply;
+  transform:scale(1.045);
+}
+.scene-story .story-carousel{
+  background:rgba(247,229,207,.54)!important;
+  border:1px solid rgba(125,57,73,.15)!important;
+  box-shadow:0 26px 58px rgba(92,53,50,.11)!important;
+  backdrop-filter:blur(12px) saturate(1.04);
+  -webkit-backdrop-filter:blur(12px) saturate(1.04);
+}
+.scene-story .story-card{
+  background:linear-gradient(155deg,rgba(255,248,234,.90),rgba(239,214,190,.82))!important;
+  border-color:rgba(201,166,106,.20)!important;
+}
+.scene-story .story-card span{color:var(--v48-champagne)!important}
+.scene-story .story-card h3{color:var(--v48-burgundy)!important}
+.scene-story .story-card p{color:#76584f!important}
+.scene-story .story-controls button{
+  background:rgba(252,241,222,.78)!important;
+  color:var(--v48-burgundy)!important;
+  border-color:rgba(111,46,59,.20)!important;
+}
+
+/* -------------------------------------------------
+   GALLERY — richest color moment in the sequence
+-------------------------------------------------- */
+.scene-gallery{
+  background:
+    radial-gradient(circle at 18% 12%,rgba(223,151,158,.18),transparent 31%),
+    radial-gradient(circle at 84% 70%,rgba(111,146,145,.12),transparent 32%),
+    linear-gradient(180deg,#d6aa91 0%,#bc846f 48%,#9f695e 100%)!important;
+  padding-top:96px!important;
+  padding-bottom:110px!important;
+}
+.scene-gallery::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(72,35,44,.04),rgba(72,35,44,.16)),
+    url('/assets/Sakura-v45/sakura-decor-overlay-source.jpg.jpg') center/cover no-repeat;
+  opacity:.18;
+  filter:contrast(1.45) saturate(1.06) brightness(.98);
+  mix-blend-mode:multiply;
+}
+.scene-gallery .inv-eyebrow{color:rgba(255,226,176,.85)!important}
+.scene-gallery .inv-title{color:#fff0db!important;text-shadow:0 3px 16px rgba(76,36,42,.18)!important}
+.scene-gallery .gallery-grid{
+  padding:14px!important;
+  border-radius:28px!important;
+  background:rgba(107,57,54,.13)!important;
+  box-shadow:0 22px 50px rgba(79,40,42,.12),inset 0 0 0 1px rgba(255,238,211,.12)!important;
+}
+.scene-gallery .gallery-tile{
+  border-color:rgba(255,237,213,.18)!important;
+  box-shadow:0 14px 28px rgba(79,40,42,.14)!important;
+  background:
+    linear-gradient(145deg,rgba(191,135,113,.94),rgba(133,79,77,.92))!important;
+}
+.scene-gallery .gallery-tile.gallery-art{
+  background:
+    linear-gradient(rgba(96,48,52,.04),rgba(96,48,52,.16)),
+    url('/assets/Sakura-v45/sakura-background-color.jpg.jpg') center/cover no-repeat!important;
+  filter:saturate(.92) sepia(.10);
+}
+.scene-gallery .gallery-tile span{color:#fff3e3!important;text-shadow:0 2px 8px rgba(71,37,40,.36)!important}
+
+/* -------------------------------------------------
+   GIFT — champagne / warm gold luxury
+-------------------------------------------------- */
+.scene-gift{
+  background:
+    radial-gradient(ellipse at 50% 12%,rgba(255,246,218,.82),transparent 44%),
+    radial-gradient(circle at 88% 34%,rgba(184,111,123,.09),transparent 30%),
+    linear-gradient(180deg,#f0dfc4 0%,#e6cba9 52%,#d8b88f 100%)!important;
+  padding-top:96px!important;
+  padding-bottom:112px!important;
+}
+.scene-gift::before{
+  content:"";
+  position:absolute;
+  inset:-1%;
+  z-index:0;
+  pointer-events:none;
+  background:url('/assets/Sakura-v45/sakura-decor-overlay-source.jpg.jpg') center/cover no-repeat;
+  opacity:.19;
+  filter:contrast(1.68) brightness(1.08) saturate(.94) sepia(.18);
+  mix-blend-mode:multiply;
+}
+.scene-gift .gift-card{
+  background:linear-gradient(155deg,rgba(255,248,233,.90),rgba(239,214,177,.78))!important;
+  border-color:rgba(165,119,65,.26)!important;
+  box-shadow:0 26px 58px rgba(104,70,42,.12),inset 0 0 0 1px rgba(255,244,219,.30)!important;
+}
+.scene-gift .bank-name,
+.scene-gift .bank-number{color:var(--v48-burgundy)!important}
+.scene-gift .bank-owner{color:#775b4e!important}
+
+/* -------------------------------------------------
+   RSVP — clean peach-ivory reset after richer Gallery/Gift
+-------------------------------------------------- */
+.scene-rsvp{
+  background:
+    radial-gradient(circle at 76% 12%,rgba(216,163,164,.13),transparent 30%),
+    linear-gradient(180deg,#f5e7d5 0%,#edd5bf 48%,#dfc0a5 100%)!important;
+  padding-top:94px!important;
+  padding-bottom:108px!important;
+}
+.scene-rsvp::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(255,248,234,.44),rgba(236,205,183,.10)),
+    url('/assets/Sakura-v45/sakura-name-frame-background.jpg') center/cover no-repeat;
+  opacity:.12;
+  filter:saturate(.78) sepia(.16) brightness(1.10);
+  mix-blend-mode:multiply;
+}
+.scene-rsvp .form-card{
+  background:linear-gradient(155deg,rgba(255,249,238,.92),rgba(244,222,199,.82))!important;
+  border-color:rgba(115,53,64,.18)!important;
+  box-shadow:0 26px 54px rgba(92,51,45,.10)!important;
+}
+.scene-rsvp .field label{color:#9c7565!important}
+.scene-rsvp input,
+.scene-rsvp select{
+  background:rgba(255,247,233,.78)!important;
+  color:#70524b!important;
+  border-color:rgba(137,81,72,.18)!important;
+}
+.scene-rsvp .vintage-btn{
+  background:linear-gradient(180deg,#803647,#642736)!important;
+  color:#fff4e4!important;
+  box-shadow:0 10px 22px rgba(99,39,53,.17)!important;
+}
+
+/* -------------------------------------------------
+   WISHES — soft sakura cream, intimate and calm
+-------------------------------------------------- */
+.scene-wishes{
+  background:
+    radial-gradient(circle at 14% 13%,rgba(221,157,170,.13),transparent 30%),
+    radial-gradient(circle at 89% 72%,rgba(111,146,145,.09),transparent 29%),
+    linear-gradient(180deg,#f3e4ce 0%,#ead6bb 54%,#dec3a8 100%)!important;
+  padding-top:98px!important;
+  padding-bottom:116px!important;
+}
+.scene-wishes::before{
+  content:"";
+  position:absolute;
+  inset:-1%;
+  z-index:0;
+  pointer-events:none;
+  background:url('/assets/Sakura-v45/sakura-decor-overlay-source.jpg.jpg') center/cover no-repeat;
+  opacity:.17;
+  filter:contrast(1.66) brightness(1.10) saturate(.98);
+  mix-blend-mode:multiply;
+}
+.scene-wishes .message-card{
+  background:linear-gradient(155deg,rgba(255,249,238,.87),rgba(242,219,193,.77))!important;
+  border-color:rgba(115,53,64,.16)!important;
+  box-shadow:0 18px 38px rgba(91,53,46,.08)!important;
+}
+.scene-wishes .message-card strong{color:var(--v48-burgundy)!important}
+.scene-wishes .message-card p{color:#775a51!important}
+
+/* -------------------------------------------------
+   CLOSING — richer rose-brown dusk finale
+-------------------------------------------------- */
+.scene-closing{
+  background:
+    radial-gradient(ellipse at 50% 22%,rgba(255,240,210,.48),transparent 48%),
+    radial-gradient(circle at 16% 18%,rgba(177,93,111,.12),transparent 29%),
+    linear-gradient(180deg,#e2c3a8 0%,#c99580 47%,#9d665d 100%)!important;
+  padding-top:112px!important;
+  padding-bottom:128px!important;
+}
+.scene-closing::before{
+  content:"";
+  position:absolute;
+  inset:-1%;
+  z-index:0;
+  pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(91,40,53,.04),rgba(91,40,53,.16)),
+    url('/assets/Sakura-v45/sakura-decor-overlay-source.jpg.jpg') center/cover no-repeat;
+  opacity:.28;
+  filter:contrast(1.55) brightness(.98) saturate(.96) sepia(.08);
+  mix-blend-mode:multiply;
+}
+.scene-closing::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,241,214,.06),transparent 46%,rgba(72,31,40,.18));
+}
+.scene-closing>.inv-shell{
+  width:min(92%,390px)!important;
+  padding:46px 28px 42px!important;
+  border-radius:44% 44% 28px 28px/12% 12% 28px 28px!important;
+  background:linear-gradient(155deg,rgba(255,246,229,.86),rgba(232,197,167,.74))!important;
+  border:1px solid rgba(111,46,59,.23)!important;
+  box-shadow:0 28px 64px rgba(74,34,39,.16),inset 0 0 0 1px rgba(234,214,174,.17)!important;
+  backdrop-filter:blur(8px) saturate(1.03);
+  -webkit-backdrop-filter:blur(8px) saturate(1.03);
+}
+.scene-closing .closing-name{
+  color:var(--v48-burgundy-deep)!important;
+  text-shadow:0 2px 16px rgba(255,237,207,.32)!important;
+}
+.scene-closing .inv-copy,
+.scene-closing .closing-note{color:#705249!important}
+
+/* Smooth visual handoff between sections instead of hard color cuts. */
+.scene-event,
+.scene-story,
+.scene-gallery,
+.scene-gift,
+.scene-rsvp,
+.scene-wishes,
+.scene-closing{
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),inset 0 -1px 0 rgba(85,42,44,.045);
+}
+
+@media(max-width:600px){
+  .scene-event,
+  .scene-story,
+  .scene-gallery,
+  .scene-gift,
+  .scene-rsvp,
+  .scene-wishes,
+  .scene-closing{
+    padding-left:18px!important;
+    padding-right:18px!important;
+  }
+  .scene-event::before{opacity:.14}
+  .scene-story::before{opacity:.18}
+  .scene-gallery::before{opacity:.16}
+  .scene-gift::before{opacity:.17}
+  .scene-rsvp::before{opacity:.10}
+  .scene-wishes::before{opacity:.15}
+  .scene-closing::before{opacity:.24}
+  .scene-closing>.inv-shell{width:min(100%,360px)!important;padding:40px 24px 38px!important}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .scene-event::before,
+  .scene-story::before,
+  .scene-gallery::before,
+  .scene-gift::before,
+  .scene-rsvp::before,
+  .scene-wishes::before,
+  .scene-closing::before{transform:none!important}
+}
