@@ -1,11 +1,16 @@
-/* Sakura V4.4 — LOCKED: User Video Master → Final Name */
+/* Sakura V4.4.1 — LOCKED: HQ User Video Master → Final Name */
 const systemReducedMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const params=new URLSearchParams(location.search);
 const reduceMotion=params.get('motion')==='reduced';
 const opening=document.querySelector('.scene-opening');
 const cover=document.querySelector('#sakuraV2');
 const openButton=document.querySelector('#openInvitation');
-const partUrl='/assets/sakura-video/v44-tiny.part?v=440';
+const partUrls=[
+  '/assets/sakura-video/v441h-01.part?v=441',
+  '/assets/sakura-video/v441h-01-tail.part?v=441',
+  ...Array.from({length:10},(_,i)=>`/assets/sakura-video/v441h-${String(i+2).padStart(2,'0')}.part?v=441`)
+];
+const expectedBase64Length=181548;
 const finalNameAt=8.65;
 let started=false;
 let nameShown=false;
@@ -22,7 +27,7 @@ let wasPlayingBeforeHide=false;
 
 function mark(state){
   if(document.body)document.body.dataset.v44State=state;
-  document.documentElement.dataset.sakuraOpeningEngine='v4.4';
+  document.documentElement.dataset.sakuraOpeningEngine='v4.4.1';
   document.documentElement.dataset.systemReducedMotion=systemReducedMotion?'1':'0';
 }
 
@@ -55,8 +60,7 @@ function base64ToBlobUrl(base64){
   const binary=atob(clean);
   const bytes=new Uint8Array(binary.length);
   for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
-  const blob=new Blob([bytes],{type:'video/mp4'});
-  return URL.createObjectURL(blob);
+  return URL.createObjectURL(new Blob([bytes],{type:'video/mp4'}));
 }
 
 function loadVideoAsset(){
@@ -64,29 +68,42 @@ function loadVideoAsset(){
   assetPromise=(async()=>{
     if(!video)throw new Error('video-stage-missing');
     mark('asset-loading');
-    const response=await fetch(partUrl,{cache:'no-store'});
-    if(!response.ok)throw new Error(`video-part-${response.status}`);
-    const encoded=await response.text();
-    if(encoded.trim().length<1000)throw new Error('video-part-too-small');
+
+    const responses=await Promise.all(partUrls.map(url=>fetch(url,{cache:'no-store'})));
+    responses.forEach((response,index)=>{
+      if(!response.ok)throw new Error(`video-part-${index+1}-${response.status}`);
+    });
+
+    const chunks=await Promise.all(responses.map(response=>response.text()));
+    const encoded=chunks.join('').replace(/\s+/g,'');
+    if(encoded.length!==expectedBase64Length){
+      throw new Error(`video-parts-incomplete-${encoded.length}`);
+    }
+
     objectUrl=base64ToBlobUrl(encoded);
     video.src=objectUrl;
     video.muted=true;
     video.playsInline=true;
+
     await new Promise((resolve,reject)=>{
       if(video.readyState>=2){resolve();return}
       const ready=()=>{cleanup();resolve()};
       const fail=()=>{cleanup();reject(new Error('video-decode-failed'))};
-      const cleanup=()=>{video.removeEventListener('loadeddata',ready);video.removeEventListener('error',fail)};
+      const cleanup=()=>{
+        video.removeEventListener('loadeddata',ready);
+        video.removeEventListener('error',fail);
+      };
       video.addEventListener('loadeddata',ready,{once:true});
       video.addEventListener('error',fail,{once:true});
       video.load();
     });
+
     video.classList.add('is-ready');
     stage?.classList.add('is-video-ready');
     mark('asset-ready');
     return video;
   })().catch(error=>{
-    console.warn('[Sakura V4.4] video fallback:',error);
+    console.warn('[Sakura V4.4.1] HQ video fallback:',error);
     mark('asset-fallback');
     return null;
   });
@@ -100,7 +117,11 @@ function revealName(){
   const gsap=window.gsap;
   if(gsap){
     gsap.killTweensOf(title);
-    gsap.fromTo(title,{opacity:0,y:14,scale:.94,filter:'blur(7px)'},{opacity:1,y:0,scale:1,filter:'blur(0px)',duration:.86,ease:'power3.out',onStart:()=>opening.classList.add('v44-name-visible')});
+    gsap.fromTo(
+      title,
+      {opacity:0,y:14,scale:.94,filter:'blur(7px)'},
+      {opacity:1,y:0,scale:1,filter:'blur(0px)',duration:.86,ease:'power3.out',onStart:()=>opening.classList.add('v44-name-visible')}
+    );
   }else{
     opening.classList.add('v44-name-visible');
   }
@@ -139,17 +160,18 @@ async function playVideo(){
     return;
   }
 
+  const readyVideo=await loadVideoAsset();
+  if(!readyVideo){
+    mark('poster-fallback-playing');
+    fallbackTimer=setTimeout(finish,1200);
+    return;
+  }
+
   clearTimeout(fallbackTimer);
   fallbackTimer=setTimeout(()=>{
     if(!nameShown)revealName();
     if(!video||video.error)finish();
-  },9000);
-
-  const readyVideo=await loadVideoAsset();
-  if(!readyVideo){
-    mark('poster-fallback-playing');
-    return;
-  }
+  },12000);
 
   try{
     readyVideo.pause();
@@ -158,7 +180,7 @@ async function playVideo(){
     await readyVideo.play();
     mark('video-playing');
   }catch(error){
-    console.warn('[Sakura V4.4] play fallback:',error);
+    console.warn('[Sakura V4.4.1] play fallback:',error);
     mark('play-fallback');
   }
 }
@@ -187,12 +209,13 @@ function onVisibility(){
 
 suppressGlobalOpeningReveal();
 buildStage();
-window.__SAKURA_TARGET_VERSION='v4.4';
-document.body.dataset.sakuraFinalCandidate='v4.4';
-document.title='Sakura Vintage V4.4 Video Master · Dini Anif Effect Lab';
-const labState=document.querySelector('.lab-state');if(labState)labState.textContent='Sakura Vintage · V4.4 Video Master';
+window.__SAKURA_TARGET_VERSION='v4.4.1';
+document.body.dataset.sakuraFinalCandidate='v4.4.1';
+document.title='Sakura Vintage V4.4.1 HQ Video Rescue · Dini Anif Effect Lab';
+const labState=document.querySelector('.lab-state');
+if(labState)labState.textContent='Sakura Vintage · V4.4.1 HQ Video Rescue';
 
-/* Preload/decode before the user opens the invitation. */
+/* Preload all HQ chunks before the user opens the invitation. */
 if(!reduceMotion)loadVideoAsset();
 
 video?.addEventListener('timeupdate',onVideoProgress);
@@ -209,7 +232,8 @@ if(cover){
 if(coverHasPassedReveal())requestAnimationFrame(start);
 
 window.addEventListener('pagehide',()=>{
-  clearTimeout(armTimer);clearTimeout(fallbackTimer);
+  clearTimeout(armTimer);
+  clearTimeout(fallbackTimer);
   coverObserver?.disconnect();
   video?.pause();
   video?.removeEventListener('timeupdate',onVideoProgress);
