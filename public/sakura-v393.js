@@ -29,12 +29,12 @@ document.head.appendChild(v45Link);
 await import('./sakura-v45.js?v=452');
 document.body.dataset.sakuraFinalCandidate='v4.5.2';
 
-/* V4.7.2 restores the interior cinematic slideshow only for Save The Date. */
+/* V4.7.3: Save The Date slideshow is the primary image layer; readability veil stays above it but remains faint. */
 let v47Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v47.css'));
 if(!v47Link){v47Link=document.createElement('link');v47Link.rel='stylesheet'}
-v47Link.href='/sakura-v47.css?v=472';
+v47Link.href='/sakura-v47.css?v=473';
 document.head.appendChild(v47Link);
-await import('./sakura-v47.js?v=483');
+await import('./sakura-v47.js?v=473');
 
 /* V4.8.3 smooths section-to-section color handoffs and slideshow optical dissolve. */
 let v483Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v483.css'));
