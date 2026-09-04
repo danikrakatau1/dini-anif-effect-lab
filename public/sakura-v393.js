@@ -29,25 +29,25 @@ document.head.appendChild(v45Link);
 await import('./sakura-v45.js?v=452');
 document.body.dataset.sakuraFinalCandidate='v4.5.3';
 
-/* Keep Date visual styling only; its old independent slideshow engine is disabled. */
+/* Keep Date visual styling only; old V4.7 independent slideshow JS remains disabled. */
 let v47Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v47.css'));
 if(!v47Link){v47Link=document.createElement('link');v47Link.rel='stylesheet'}
 v47Link.href='/sakura-v47.css?v=473';
 document.head.appendChild(v47Link);
 
-/* Keep smooth section seam CSS, but no separate observer/animation engine. */
+/* Keep the seam styling only; no separate seam animation observer. */
 let v483Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v483.css'));
 if(!v483Link){v483Link=document.createElement('link');v483Link.rel='stylesheet'}
 v483Link.href='/sakura-v483.css?v=483';
 document.head.appendChild(v483Link);
 
-/* V4.9.1 LITE: one shared 2-layer slideshow for Date → Closing. */
-let v491Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v491.css'));
-if(!v491Link){v491Link=document.createElement('link');v491Link.rel='stylesheet'}
-v491Link.href='/sakura-v491.css?v=491';
-document.head.appendChild(v491Link);
-await import('./sakura-v491.js?v=491');
-document.documentElement.dataset.sakuraInterior='v4.9.1-lite';
+/* V4.9.2 NATURAL: Date gets one local 2-image slideshow; lower sections use one artwork + slow drift. */
+let v492Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v492.css'));
+if(!v492Link){v492Link=document.createElement('link');v492Link.rel='stylesheet'}
+v492Link.href='/sakura-v492.css?v=492';
+document.head.appendChild(v492Link);
+await import('./sakura-v492.js?v=492');
+document.documentElement.dataset.sakuraInterior='v4.9.2-natural';
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse = matchMedia('(pointer: coarse)').matches;
@@ -104,7 +104,7 @@ function setupFakeCameraDepth(){
 }
 
 function setupButterflies(){
-  /* Decorative flight is desktop-only now; iPhone/low-power gets the lighter background slideshow instead. */
+  /* Decorative flight is desktop-only; iPhone/low-power stays light. */
   if(reduceMotion || lowPower || coarse) return ()=>{};
   const targets = sections.filter(s=>['couple','event','wishes','closing'].includes(s.dataset.sakuraScene));
   targets.forEach((section,sceneIndex)=>{
