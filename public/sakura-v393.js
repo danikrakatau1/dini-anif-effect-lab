@@ -20,36 +20,34 @@ if(!document.querySelector(`link[href="${v396Href}"]`)){
   const link=document.createElement('link');link.rel='stylesheet';link.href=v396Href;document.head.appendChild(link);
 }
 
-/* V4.5.2 is the only opening engine. Version JS/CSS together and keep the CSS last. */
+/* Opening core remains V4.5.2. V4.5.3 plaque is loaded directly by index.html. */
 window.__SAKURA_TARGET_VERSION='v4.5.2';
 let v45Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v45.css'));
 if(!v45Link){v45Link=document.createElement('link');v45Link.rel='stylesheet'}
 v45Link.href='/sakura-v45.css?v=452';
 document.head.appendChild(v45Link);
 await import('./sakura-v45.js?v=452');
-document.body.dataset.sakuraFinalCandidate='v4.5.2';
+document.body.dataset.sakuraFinalCandidate='v4.5.3';
 
-/* V4.7.3: Save The Date slideshow is the primary image layer; readability veil stays above it but remains faint. */
+/* Keep Date visual styling only; its old independent slideshow engine is disabled. */
 let v47Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v47.css'));
 if(!v47Link){v47Link=document.createElement('link');v47Link.rel='stylesheet'}
 v47Link.href='/sakura-v47.css?v=473';
 document.head.appendChild(v47Link);
-await import('./sakura-v47.js?v=473');
 
-/* V4.8.3 smooths section-to-section color handoffs and slideshow optical dissolve. */
+/* Keep smooth section seam CSS, but no separate observer/animation engine. */
 let v483Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v483.css'));
 if(!v483Link){v483Link=document.createElement('link');v483Link.rel='stylesheet'}
 v483Link.href='/sakura-v483.css?v=483';
 document.head.appendChild(v483Link);
-await import('./sakura-v483.js?v=483');
 
-/* V4.9 brings the reference-derived living-background grammar to every lower interior scene. */
-let v49Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v49.css'));
-if(!v49Link){v49Link=document.createElement('link');v49Link.rel='stylesheet'}
-v49Link.href='/sakura-v49.css?v=490';
-document.head.appendChild(v49Link);
-await import('./sakura-v49.js?v=490');
-document.documentElement.dataset.sakuraInterior='v4.9';
+/* V4.9.1 LITE: one shared 2-layer slideshow for Date → Closing. */
+let v491Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v491.css'));
+if(!v491Link){v491Link=document.createElement('link');v491Link.rel='stylesheet'}
+v491Link.href='/sakura-v491.css?v=491';
+document.head.appendChild(v491Link);
+await import('./sakura-v491.js?v=491');
+document.documentElement.dataset.sakuraInterior='v4.9.1-lite';
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse = matchMedia('(pointer: coarse)').matches;
@@ -66,7 +64,7 @@ function setupDelayedPanels(){
     entries.forEach(entry=>{
       const section = entry.target;
       if(entry.isIntersecting && entry.intersectionRatio >= .28 && section.dataset.v393Panel !== 'ready'){
-        const delay = lowPower ? 220 : (coarse ? 280 : 420);
+        const delay = lowPower ? 180 : (coarse ? 220 : 360);
         clearTimeout(timers.get(section));
         const timer = setTimeout(()=>{
           section.dataset.v393Panel='ready';
@@ -106,12 +104,13 @@ function setupFakeCameraDepth(){
 }
 
 function setupButterflies(){
-  if(reduceMotion) return ()=>{};
+  /* Decorative flight is desktop-only now; iPhone/low-power gets the lighter background slideshow instead. */
+  if(reduceMotion || lowPower || coarse) return ()=>{};
   const targets = sections.filter(s=>['couple','event','wishes','closing'].includes(s.dataset.sakuraScene));
   targets.forEach((section,sceneIndex)=>{
     const layer=document.createElement('div');
     layer.className='v393-butterfly-layer';
-    const amount = lowPower||coarse ? 1 : 3;
+    const amount=2;
     layer.innerHTML=Array.from({length:amount},(_,i)=>{
       const left=12+((sceneIndex*23+i*31)%72);
       const top=12+((sceneIndex*17+i*27)%56);
