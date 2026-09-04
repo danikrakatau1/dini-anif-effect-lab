@@ -1,0 +1,208 @@
+/* Sakura V4.9.2 — Natural Interior Motion
+   Date = local 2-image slideshow. Lower sections = one local artwork + subtle camera drift.
+   No fixed shared slideshow; optimized for iPhone/Safari. */
+:root{
+  --v492-ease:cubic-bezier(.22,.61,.36,1);
+}
+
+/* Kill the experimental shared fixed stage if an old cached engine created it. */
+.v491-shared-stage{display:none!important}
+
+.scene-date,
+.scene-event,
+.scene-story,
+.scene-gallery,
+.scene-gift,
+.scene-rsvp,
+.scene-wishes,
+.scene-closing{
+  position:relative!important;
+  isolation:isolate;
+  overflow:hidden;
+}
+
+/* -------------------------------------------------
+   SAVE THE DATE — the only true slideshow below opening
+-------------------------------------------------- */
+.scene-date{
+  background:#dfc2ae!important;
+}
+.v492-date-stage{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  overflow:hidden;
+  pointer-events:none;
+  background:#dfc2ae;
+}
+.v492-date-slide{
+  position:absolute;
+  inset:-3%;
+  width:106%;
+  height:106%;
+  opacity:0;
+  background:center/cover no-repeat;
+  transform:translate3d(.15%,.1%,0) scale(1.025);
+  transition:
+    opacity 2.45s var(--v492-ease),
+    transform 9.6s cubic-bezier(.22,.61,.36,1);
+  backface-visibility:hidden;
+  will-change:opacity,transform;
+}
+.v492-date-slide.is-active{
+  opacity:1;
+  transform:translate3d(-.35%,-.24%,0) scale(1.065);
+}
+.v492-date-grade{
+  position:absolute;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at 50% 38%,rgba(255,246,226,.10),transparent 46%),
+    linear-gradient(180deg,rgba(98,43,59,.04),rgba(255,234,207,.05) 50%,rgba(89,41,55,.10));
+}
+.scene-date::before,
+.scene-date::after{
+  content:none!important;
+  display:none!important;
+}
+.scene-date>.living-wash{opacity:.10!important}
+.scene-date>.inv-shell{position:relative!important;z-index:4!important}
+
+/* -------------------------------------------------
+   LOWER SECTIONS — one artwork each, no slideshow swapping
+-------------------------------------------------- */
+.scene-event::before,
+.scene-story::before,
+.scene-gallery::before,
+.scene-gift::before,
+.scene-rsvp::before,
+.scene-wishes::before,
+.scene-closing::before{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  inset:-3%!important;
+  z-index:0!important;
+  pointer-events:none!important;
+  background-repeat:no-repeat!important;
+  background-size:cover!important;
+  transform:translate3d(0,0,0) scale(1.035)!important;
+  transition:transform 10.5s cubic-bezier(.22,.61,.36,1),opacity 1s ease!important;
+  opacity:.72!important;
+  mix-blend-mode:normal!important;
+  filter:none!important;
+  backface-visibility:hidden;
+}
+.scene-event.v492-active::before,
+.scene-story.v492-active::before,
+.scene-gallery.v492-active::before,
+.scene-gift.v492-active::before,
+.scene-rsvp.v492-active::before,
+.scene-wishes.v492-active::before,
+.scene-closing.v492-active::before{
+  transform:translate3d(-.28%,-.18%,0) scale(1.065)!important;
+}
+
+/* Different crop/asset per section so the page evolves naturally. */
+.scene-event::before{
+  background-image:url('/assets/Sakura-v45/sakura-background-color.jpg.jpg')!important;
+  background-position:50% 48%!important;
+}
+.scene-story::before{
+  background-image:url('/assets/Sakura-v45/sakura-name-frame-background.jpg')!important;
+  background-position:50% 48%!important;
+}
+.scene-gallery::before{
+  background-image:url('/assets/Sakura-v45/sakura-background-color.jpg.jpg')!important;
+  background-position:46% 54%!important;
+}
+.scene-gift::before{
+  background-image:url('/assets/Sakura-v45/sakura-name-frame-background.jpg')!important;
+  background-position:54% 47%!important;
+}
+.scene-rsvp::before{
+  background-image:url('/assets/Sakura-v45/sakura-background-color.jpg.jpg')!important;
+  background-position:50% 56%!important;
+}
+.scene-wishes::before{
+  background-image:url('/assets/Sakura-v45/sakura-name-frame-background.jpg')!important;
+  background-position:48% 48%!important;
+}
+.scene-closing::before{
+  background-image:url('/assets/Sakura-v45/sakura-background-color.jpg.jpg')!important;
+  background-position:52% 50%!important;
+}
+
+/* Light section-specific tint sits above art, below content. */
+.scene-event::after,
+.scene-story::after,
+.scene-gallery::after,
+.scene-gift::after,
+.scene-rsvp::after,
+.scene-wishes::after,
+.scene-closing::after{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:1!important;
+  pointer-events:none!important;
+  opacity:1!important;
+  transform:none!important;
+  filter:none!important;
+  mix-blend-mode:normal!important;
+}
+.scene-event::after{background:linear-gradient(180deg,rgba(246,222,198,.38),rgba(120,55,71,.20))!important}
+.scene-story::after{background:linear-gradient(180deg,rgba(244,216,204,.34),rgba(150,82,106,.22))!important}
+.scene-gallery::after{background:linear-gradient(180deg,rgba(124,63,78,.17),rgba(72,39,55,.36))!important}
+.scene-gift::after{background:linear-gradient(180deg,rgba(247,215,158,.34),rgba(140,82,65,.18))!important}
+.scene-rsvp::after{background:linear-gradient(180deg,rgba(245,220,202,.37),rgba(158,93,105,.19))!important}
+.scene-wishes::after{background:linear-gradient(180deg,rgba(244,216,200,.35),rgba(133,75,99,.21))!important}
+.scene-closing::after{background:linear-gradient(180deg,rgba(190,117,108,.22),rgba(76,37,55,.44))!important}
+
+.scene-event>.inv-shell,
+.scene-story>.inv-shell,
+.scene-gallery>.inv-shell,
+.scene-gift>.inv-shell,
+.scene-rsvp>.inv-shell,
+.scene-wishes>.inv-shell,
+.scene-closing>.inv-shell{
+  position:relative!important;
+  z-index:3!important;
+}
+
+/* Keep Safari cheap: no backdrop blur in scrolling interior. */
+.scene-event .event-card,
+.scene-story .story-carousel,
+.scene-story .story-card,
+.scene-gift .gift-card,
+.scene-rsvp .form-card,
+.scene-wishes .message-card{
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+@media(max-width:600px){
+  .v492-date-slide{
+    inset:-2%;
+    width:104%;
+    height:104%;
+    transition:opacity 2.25s var(--v492-ease),transform 10.2s linear;
+  }
+  .v492-date-slide.is-active{transform:translate3d(-.20%,-.14%,0) scale(1.05)}
+  .scene-event::before,.scene-story::before,.scene-gallery::before,.scene-gift::before,
+  .scene-rsvp::before,.scene-wishes::before,.scene-closing::before{
+    transition:transform 11.5s linear,opacity .8s ease!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .v492-date-slide,
+  .scene-event::before,.scene-story::before,.scene-gallery::before,.scene-gift::before,
+  .scene-rsvp::before,.scene-wishes::before,.scene-closing::before{
+    transition:none!important;
+    transform:none!important;
+  }
+}
