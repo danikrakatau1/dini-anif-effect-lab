@@ -1,0 +1,184 @@
+/* Sakura V4.9.1 — Lightweight Shared Interior Slideshow
+   One 2-layer stage for Date → Closing. Optimized for iPhone/Safari. */
+:root{
+  --v491-maroon:#652737;
+  --v491-gold:#c8a269;
+  --v491-ink:#684b43;
+}
+
+#invitationMain{
+  position:relative;
+  isolation:isolate;
+}
+
+/* ONE background stage for the whole interior, centered to the locked portrait web stage. */
+.v491-shared-stage{
+  position:fixed;
+  top:0;
+  left:50%;
+  width:min(100vw,430px);
+  height:100vh;
+  height:100svh;
+  transform:translateX(-50%);
+  z-index:0;
+  overflow:hidden;
+  pointer-events:none;
+  opacity:0;
+  background:#ead8c4;
+  transition:opacity .55s ease;
+  contain:strict;
+}
+.v491-shared-stage.is-visible{opacity:1}
+
+.v491-slide{
+  position:absolute;
+  inset:-2.5%;
+  width:105%;
+  height:105%;
+  z-index:1;
+  opacity:0;
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
+  transform:translate3d(0,0,0) scale(1.012);
+  transition:
+    opacity 1.85s cubic-bezier(.22,.61,.36,1),
+    transform 8.2s cubic-bezier(.22,.61,.36,1);
+  backface-visibility:hidden;
+}
+.v491-slide.is-active{
+  opacity:1;
+  transform:translate3d(-.35%,-.22%,0) scale(1.048);
+}
+
+/* One cheap tone layer; no blend-mode/filter stacks. */
+.v491-tone{
+  position:absolute;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at 50% 42%,rgba(255,245,222,.08),transparent 44%),
+    linear-gradient(180deg,rgba(54,82,82,.035),transparent 34%,rgba(78,36,51,.09));
+}
+
+/* Date → Closing becomes translucent color ink over the shared artwork. */
+.scene-date,
+.scene-event,
+.scene-story,
+.scene-gallery,
+.scene-gift,
+.scene-rsvp,
+.scene-wishes,
+.scene-closing{
+  position:relative!important;
+  z-index:1!important;
+  isolation:isolate;
+  overflow:hidden;
+}
+
+.scene-date{
+  background:linear-gradient(180deg,rgba(235,218,198,.40),rgba(194,141,133,.44))!important;
+}
+.scene-event{
+  background:linear-gradient(180deg,rgba(241,218,193,.46),rgba(151,78,88,.36))!important;
+}
+.scene-story{
+  background:linear-gradient(180deg,rgba(238,207,196,.42),rgba(165,96,118,.38))!important;
+}
+.scene-gallery{
+  background:linear-gradient(180deg,rgba(161,91,103,.40),rgba(91,51,67,.53))!important;
+}
+.scene-gift{
+  background:linear-gradient(180deg,rgba(237,207,155,.45),rgba(164,105,77,.40))!important;
+}
+.scene-rsvp{
+  background:linear-gradient(180deg,rgba(239,215,198,.44),rgba(181,119,128,.36))!important;
+}
+.scene-wishes{
+  background:linear-gradient(180deg,rgba(235,207,191,.43),rgba(151,91,111,.39))!important;
+}
+.scene-closing{
+  background:linear-gradient(180deg,rgba(198,131,118,.38),rgba(91,44,65,.55))!important;
+}
+
+/* Disable old section artwork/grade pseudo layers: they were covering the slideshow and costing GPU time. */
+.scene-date::before,.scene-date::after,
+.scene-event::before,.scene-event::after,
+.scene-story::before,.scene-story::after,
+.scene-gallery::before,.scene-gallery::after,
+.scene-gift::before,.scene-gift::after,
+.scene-rsvp::before,.scene-rsvp::after,
+.scene-wishes::before,.scene-wishes::after,
+.scene-closing::before,.scene-closing::after{
+  content:none!important;
+  display:none!important;
+}
+
+.scene-date>.living-wash,
+.scene-story>.living-wash,
+.scene-gift>.living-wash,
+.scene-wishes>.living-wash,
+.scene-event>.section-ambient,
+.scene-rsvp>.section-ambient,
+.scene-closing>.section-ambient,
+.scene-gallery>.gallery-ambient{
+  opacity:.12!important;
+}
+
+.scene-date>.inv-shell,
+.scene-event>.inv-shell,
+.scene-story>.inv-shell,
+.scene-gallery>.inv-shell,
+.scene-gift>.inv-shell,
+.scene-rsvp>.inv-shell,
+.scene-wishes>.inv-shell,
+.scene-closing>.inv-shell{
+  position:relative!important;
+  z-index:3!important;
+}
+
+/* Heavy Safari backdrop blurs removed. Opacity provides the paper/glass feel instead. */
+.scene-event .event-card,
+.scene-story .story-carousel,
+.scene-story .story-card,
+.scene-gift .gift-card,
+.scene-rsvp .form-card,
+.scene-wishes .message-card{
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.scene-event .event-card{
+  background:linear-gradient(155deg,rgba(255,249,238,.91),rgba(241,218,189,.84))!important;
+}
+.scene-story .story-carousel{background:rgba(247,229,207,.82)!important}
+.scene-story .story-card{background:linear-gradient(155deg,rgba(255,248,234,.93),rgba(239,214,190,.84))!important}
+.scene-gift .gift-card{background:linear-gradient(155deg,rgba(255,248,233,.93),rgba(239,214,177,.84))!important}
+.scene-rsvp .form-card{background:linear-gradient(155deg,rgba(255,249,238,.94),rgba(244,222,199,.86))!important}
+.scene-wishes .message-card{background:linear-gradient(155deg,rgba(255,249,238,.92),rgba(242,219,193,.84))!important}
+
+/* Make the living background visibly present, not buried. */
+.scene-date .inv-title,
+.scene-event .inv-title,
+.scene-story .inv-title,
+.scene-gift .inv-title,
+.scene-rsvp .inv-title,
+.scene-wishes .inv-title{color:var(--v491-maroon)!important}
+.scene-gallery .inv-title,
+.scene-closing .closing-name{color:#fff0dc!important;text-shadow:0 3px 18px rgba(70,35,45,.20)!important}
+
+@media(max-width:600px){
+  .v491-shared-stage{width:100vw}
+  .v491-slide{
+    inset:-2%;
+    width:104%;
+    height:104%;
+    transition:opacity 1.65s cubic-bezier(.22,.61,.36,1),transform 8.6s linear;
+  }
+  .v491-slide.is-active{transform:translate3d(-.22%,-.16%,0) scale(1.035)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .v491-slide{transition:opacity .25s linear!important;transform:none!important}
+  .v491-slide.is-active{transform:none!important}
+}
