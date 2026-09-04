@@ -1,0 +1,216 @@
+/* Sakura V4.5.3 — Luxury Name Plaque Refinement
+   Only refines the final name frame. The color master video/background remains untouched. */
+:root{
+  --v453-wine:#5b2130;
+  --v453-wine-soft:#783548;
+  --v453-gold:#c7a15f;
+  --v453-gold-hi:#f1ddb2;
+  --v453-ivory:#f8ecd8;
+}
+
+/* Retire the tall full-stage frame. */
+.scene-opening .v45-border,
+.scene-opening .v45-crest{display:none!important}
+
+/* The old broad center bloom was washing out the Fuji. Keep only a focused name halo. */
+.scene-opening .v451-center-bloom{
+  background:
+    radial-gradient(ellipse at 50% 48%,rgba(255,244,214,.16) 0%,rgba(245,214,165,.075) 22%,rgba(223,168,127,.018) 42%,transparent 57%),
+    radial-gradient(ellipse at 50% 49%,rgba(176,77,103,.022),transparent 48%)!important;
+}
+
+/* Name holder becomes a short editorial plaque instead of a tall ceremonial cage. */
+.scene-opening>.inv-shell{
+  width:min(82%,334px)!important;
+  max-width:334px!important;
+  min-height:126px!important;
+  padding:22px 20px!important;
+  isolation:isolate;
+}
+
+.v453-plaque{
+  position:absolute;
+  left:50%;
+  top:50%;
+  z-index:0;
+  width:100%;
+  height:116px;
+  transform:translate3d(-50%,-50%,0) scale(.965);
+  opacity:0;
+  pointer-events:none;
+  border:1px solid rgba(91,33,48,.68);
+  border-radius:30px;
+  background:
+    radial-gradient(ellipse at 50% 42%,rgba(255,250,239,.29),rgba(248,232,204,.15) 52%,rgba(240,214,180,.08) 100%),
+    linear-gradient(145deg,rgba(255,249,236,.24),rgba(238,208,172,.12));
+  box-shadow:
+    0 18px 42px rgba(71,38,43,.075),
+    inset 0 0 0 1px rgba(255,251,240,.28),
+    inset 0 0 24px rgba(255,240,210,.09);
+  backdrop-filter:blur(3.5px) saturate(1.03);
+  -webkit-backdrop-filter:blur(3.5px) saturate(1.03);
+  will-change:opacity,transform,filter;
+}
+
+.v453-plaque::before{
+  content:"";
+  position:absolute;
+  inset:8px;
+  border:1px solid rgba(199,161,95,.72);
+  border-radius:23px;
+  box-shadow:0 0 10px rgba(239,216,172,.06);
+}
+
+/* Thin lacquer-like side accents. */
+.v453-plaque::after{
+  content:"";
+  position:absolute;
+  left:20%;
+  right:20%;
+  bottom:14px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(199,161,95,.18),rgba(241,221,178,.72),rgba(199,161,95,.18),transparent);
+  transform:scaleX(.35);
+  transform-origin:center;
+  opacity:0;
+}
+
+.v453-jewel{
+  position:absolute;
+  left:50%;
+  top:-1px;
+  z-index:2;
+  width:19px;
+  height:19px;
+  transform:translate3d(-50%,-50%,0) rotate(45deg) scale(.55);
+  opacity:0;
+  pointer-events:none;
+  border:1px solid rgba(199,161,95,.86);
+  background:linear-gradient(135deg,rgba(255,248,232,.88),rgba(226,196,144,.56));
+  box-shadow:
+    0 5px 14px rgba(71,40,40,.08),
+    inset 0 0 0 1px rgba(255,252,243,.52),
+    0 0 13px rgba(232,199,136,.08);
+}
+.v453-jewel::before,
+.v453-jewel::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%) rotate(-45deg);
+  background:linear-gradient(90deg,var(--v453-gold),var(--v453-gold-hi),var(--v453-gold));
+}
+.v453-jewel::before{width:7px;height:.7px}
+.v453-jewel::after{width:.7px;height:7px}
+
+.v453-jewel-line{
+  position:absolute;
+  left:50%;
+  top:-1px;
+  z-index:1;
+  width:104px;
+  height:1px;
+  transform:translate3d(-50%,-50%,0) scaleX(.25);
+  opacity:0;
+  background:linear-gradient(90deg,transparent,rgba(199,161,95,.55) 30%,transparent 44%,transparent 56%,rgba(199,161,95,.55) 70%,transparent);
+  transform-origin:center;
+}
+
+/* The name is sharper and more editorial, with breathing room inside the plaque. */
+.scene-opening .inv-title{
+  z-index:4!important;
+  width:100%;
+  font-size:clamp(37px,10.25vw,48px)!important;
+  letter-spacing:.045em!important;
+  line-height:.98!important;
+  text-shadow:0 4px 14px rgba(74,36,42,.055)!important;
+}
+.scene-opening.v45-name-visible .inv-title{
+  letter-spacing:-.02em!important;
+}
+
+/* Plaque choreography begins only after the video world has settled. */
+.scene-opening.v45-frame-visible .v453-plaque{
+  animation:v453PlaqueIn .92s cubic-bezier(.22,.61,.36,1) both;
+}
+.scene-opening.v45-frame-visible .v453-plaque::after{
+  animation:v453AccentLine .72s .48s cubic-bezier(.22,.61,.36,1) both;
+}
+.scene-opening.v45-frame-visible .v453-jewel{
+  animation:v453JewelIn .68s .36s cubic-bezier(.2,.72,.22,1) both;
+}
+.scene-opening.v45-frame-visible .v453-jewel-line{
+  animation:v453JewelLine .76s .46s cubic-bezier(.22,.61,.36,1) both;
+}
+
+/* One restrained champagne glint after the name lands. */
+.v453-name-glint{
+  position:absolute;
+  inset:12px 18px;
+  z-index:3;
+  overflow:hidden;
+  border-radius:20px;
+  opacity:0;
+  pointer-events:none;
+}
+.v453-name-glint::before{
+  content:"";
+  position:absolute;
+  top:-25%;
+  bottom:-25%;
+  left:-32%;
+  width:13%;
+  transform:skewX(-18deg);
+  background:linear-gradient(90deg,transparent,rgba(255,239,200,.08),rgba(255,247,221,.42),rgba(231,199,142,.08),transparent);
+  filter:blur(1px);
+}
+.scene-opening.v45-name-visible .v453-name-glint{
+  animation:v453GlintShell .76s .28s ease both;
+}
+.scene-opening.v45-name-visible .v453-name-glint::before{
+  animation:v453GlintMove .76s .28s cubic-bezier(.3,.65,.26,1) both;
+}
+
+@keyframes v453PlaqueIn{
+  0%{opacity:0;transform:translate3d(-50%,-47%,0) scale(.965);filter:blur(2.4px)}
+  48%{opacity:.78}
+  100%{opacity:1;transform:translate3d(-50%,-50%,0) scale(1);filter:blur(0)}
+}
+@keyframes v453AccentLine{
+  from{opacity:0;transform:scaleX(.25)}
+  to{opacity:1;transform:scaleX(1)}
+}
+@keyframes v453JewelIn{
+  from{opacity:0;transform:translate3d(-50%,-50%,0) rotate(45deg) scale(.55)}
+  to{opacity:1;transform:translate3d(-50%,-50%,0) rotate(45deg) scale(1)}
+}
+@keyframes v453JewelLine{
+  from{opacity:0;transform:translate3d(-50%,-50%,0) scaleX(.25)}
+  to{opacity:.86;transform:translate3d(-50%,-50%,0) scaleX(1)}
+}
+@keyframes v453GlintShell{
+  0%,100%{opacity:0}
+  18%,76%{opacity:.68}
+}
+@keyframes v453GlintMove{
+  from{left:-32%}
+  to{left:121%}
+}
+
+@media(max-width:350px){
+  .scene-opening>.inv-shell{width:min(84%,294px)!important;min-height:116px!important;padding:18px!important}
+  .v453-plaque{height:106px;border-radius:27px}
+  .v453-plaque::before{inset:7px;border-radius:20px}
+  .scene-opening .inv-title{font-size:clamp(34px,10.2vw,43px)!important}
+  .v453-jewel-line{width:88px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .scene-opening.v45-frame-visible .v453-plaque,
+  .scene-opening.v45-frame-visible .v453-plaque::after,
+  .scene-opening.v45-frame-visible .v453-jewel,
+  .scene-opening.v45-frame-visible .v453-jewel-line{animation-duration:.01ms!important;animation-delay:0ms!important}
+  .scene-opening.v45-name-visible .v453-name-glint,
+  .scene-opening.v45-name-visible .v453-name-glint::before{animation:none!important}
+}
