@@ -1,0 +1,120 @@
+/* Sakura V4.8.3 — Smooth Handoff
+   Transition polish only. No opening redesign. */
+:root{
+  --v483-ease:cubic-bezier(.22,.61,.36,1);
+  --v483-soft:cubic-bezier(.25,.46,.45,.94);
+}
+
+/* Soft color bridge at the top of each interior section. */
+.v483-seam{
+  position:absolute;
+  left:0;
+  right:0;
+  top:0;
+  height:clamp(64px,10svh,104px);
+  z-index:3;
+  pointer-events:none;
+  opacity:.92;
+  background:linear-gradient(180deg,var(--v483-seam,rgba(250,240,224,.72)) 0%,rgba(255,255,255,0) 100%);
+  filter:blur(.01px);
+  transform:translate3d(0,-1px,0);
+}
+
+/* A very faint luminous veil prevents hard color cuts while scrolling. */
+.v483-seam::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(255,248,232,.16),transparent 67%);
+  opacity:.65;
+}
+
+/* Only interior sections; opening remains untouched. */
+.scene-couple,
+.scene-date,
+.scene-event,
+.scene-story,
+.scene-gallery,
+.scene-gift,
+.scene-rsvp,
+.scene-wishes,
+.scene-closing{
+  backface-visibility:hidden;
+  transform:translateZ(0);
+}
+
+/* Smooth optical settling of decorative backgrounds as a section becomes dominant. */
+.scene-couple::before,
+.scene-event::before,
+.scene-story::before,
+.scene-gallery::before,
+.scene-gift::before,
+.scene-rsvp::before,
+.scene-wishes::before,
+.scene-closing::before{
+  transition:
+    opacity 1.35s var(--v483-ease),
+    filter 1.55s var(--v483-soft),
+    transform 2.4s var(--v483-ease)!important;
+}
+
+/* Story / cards do not visually snap when the active scene changes. */
+.scene-event .event-card,
+.scene-story .story-carousel,
+.scene-story .story-card,
+.scene-gallery .gallery-grid,
+.scene-gallery .gallery-tile,
+.scene-gift .gift-card,
+.scene-rsvp .form-card,
+.scene-wishes .message-card,
+.scene-closing>.inv-shell{
+  transition:
+    box-shadow .9s var(--v483-ease),
+    border-color .9s ease,
+    background-color 1.1s ease,
+    filter 1.1s ease!important;
+}
+
+/* Save The Date slideshow: long optical dissolve, no flash or hard reset. */
+.v47-slide{
+  transition:
+    opacity 2.35s var(--v483-ease),
+    filter 2.35s var(--v483-soft)!important;
+  animation:none!important;
+  will-change:opacity,transform;
+  transform-origin:50% 50%;
+}
+.v47-slide.is-active{opacity:1!important;z-index:2}
+.v47-slide.is-previous{z-index:1}
+.v47-slideshow{background:#d6c5ae!important}
+
+/* Slideshow controls should glide rather than pop. */
+.v47-slide-dots i{
+  transition:
+    width .7s var(--v483-ease),
+    background-color .7s ease,
+    opacity .7s ease!important;
+}
+
+/* Existing interior Story carousel gets a calmer motion signature too. */
+.story-track{
+  transition:transform .9s var(--v483-ease)!important;
+}
+.story-card{
+  transition:
+    opacity .8s var(--v483-ease),
+    transform .9s var(--v483-ease),
+    box-shadow .9s ease!important;
+}
+
+@media(max-width:600px){
+  .v483-seam{height:78px;opacity:.88}
+  .v47-slide{transition-duration:2.15s!important}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .v483-seam{filter:none}
+  .v47-slide,
+  .story-track,
+  .story-card{transition:none!important}
+}
