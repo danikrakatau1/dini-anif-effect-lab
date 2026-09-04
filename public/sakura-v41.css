@@ -1,37 +1,29 @@
-/* Sakura V4.3 — LOCKED Single-Camera World Reveal → Name Frame → Final Name */
-:root{--v43-maroon:#742f3a;--v43-gold:#bd955d;--v43-paper:rgba(250,240,220,.91)}
+/* Sakura V4.4 — LOCKED Video Master Opening → Final Name */
+:root{--v44-maroon:#742f3a;--v44-cream:#ead9bf}
 
-/* V4.3 owns only the post-cover opening scene. No segmented artwork layers remain. */
-.scene-opening{min-height:100vh;min-height:100svh;overflow:hidden;background:#ead9bf!important;isolation:isolate;contain:paint}
-.scene-opening>.v394-opening-cinema,.scene-opening>.v395-stage,.scene-opening>.v396-stage,.scene-opening>.v40-stage,.scene-opening>.v41-stage,.scene-opening>.v42-world-stage{display:none!important}
+/* V4.4 owns only the post-cover opening scene. */
+.scene-opening{min-height:100vh;min-height:100svh;overflow:hidden;background:var(--v44-cream)!important;isolation:isolate;contain:paint}
+.scene-opening>.v394-opening-cinema,.scene-opening>.v395-stage,.scene-opening>.v396-stage,.scene-opening>.v40-stage,.scene-opening>.v41-stage,.scene-opening>.v42-world-stage,.scene-opening>.v43-stage{display:none!important}
 .scene-opening>.living-wash,.scene-opening>.section-petal{display:none!important}
 
-/* ---------- ONE WORLD / ONE CAMERA ---------- */
-.scene-opening>.v43-stage{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;background:#ead9bf}
-.v43-stage>.v43-world,.v43-stage>.v43-atmosphere{position:absolute;inset:0;pointer-events:none}
-.v43-world{z-index:1;overflow:hidden;background:#ead9bf}
-.v43-world img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 50%;transform:translate3d(0,0,0) scale(1);transform-origin:50% 44%;backface-visibility:hidden;will-change:transform,filter}
-.v43-atmosphere{z-index:2;opacity:0;background:radial-gradient(circle at 52% 42%,rgba(255,239,204,.16),transparent 39%),linear-gradient(180deg,rgba(255,248,228,.015),transparent 64%,rgba(94,57,45,.038))}
+/* One flattened user-supplied cinematic source. No crop/mask/layer reconstruction. */
+.scene-opening>.v44-stage{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;background:var(--v44-cream)}
+.v44-video,.v44-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block}
+.v44-video{z-index:2;background:var(--v44-cream);opacity:0;transition:opacity .18s ease}
+.v44-video.is-ready{opacity:1}
+.v44-poster{z-index:1;background:url('/assets/sakura-v2-landscape.png') center/cover no-repeat;opacity:1}
+.v44-stage.is-video-ready .v44-poster{opacity:0}
+.v44-atmosphere{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.05;background:radial-gradient(circle at 50% 43%,rgba(255,244,220,.15),transparent 42%),linear-gradient(180deg,rgba(255,250,235,.015),transparent 65%,rgba(78,45,37,.025))}
 
-/* ---------- LOCKED NAME FRAME ---------- */
-.scene-opening>.inv-shell{position:relative!important;z-index:12!important;width:calc(100% - 72px)!important;max-width:330px!important;min-height:196px!important;margin:auto!important;padding:62px 26px 46px!important;display:flex!important;align-items:center!important;justify-content:center!important;opacity:0;transform:translate3d(0,18px,0) scale(.95);background:linear-gradient(180deg,rgba(252,246,233,.93),rgba(244,228,203,.89))!important;border:0!important;border-radius:46% 46% 30px 30px/24% 24% 30px 30px!important;box-shadow:0 24px 58px rgba(69,43,36,.13),inset 0 0 0 1px rgba(255,250,238,.52)!important;overflow:visible!important}
+/* The frame is already inside the video. The DOM panel is only a transparent name holder. */
+.scene-opening>.inv-shell{position:relative!important;z-index:12!important;width:calc(100% - 92px)!important;max-width:310px!important;min-height:190px!important;margin:auto!important;padding:0 12px!important;display:flex!important;align-items:center!important;justify-content:center!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;overflow:visible!important;opacity:1!important;transform:none!important;pointer-events:none}
 .scene-opening>.inv-shell::before{display:none!important}
-.scene-opening .inv-eyebrow,.scene-opening .inv-rule,.scene-opening .inv-copy{display:none!important}
+.scene-opening .inv-eyebrow,.scene-opening .inv-rule,.scene-opening .inv-copy,.scene-opening .v42-name-frame,.scene-opening .v43-name-frame{display:none!important}
 
-.v43-name-frame{position:absolute;inset:8px;z-index:1;pointer-events:none;opacity:0}
-.v43-name-frame svg{display:block;width:100%;height:100%;overflow:visible}
-.v43-name-frame path{fill:none;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round}
-.v43-name-frame .v43-frame-outer{stroke:rgba(116,47,58,.9);stroke-width:1.7}
-.v43-name-frame .v43-frame-inner{stroke:rgba(189,149,93,.74);stroke-width:1.05}
-.v43-name-frame .v43-frame-accent{stroke:rgba(189,149,93,.72);stroke-width:1.05}
+/* LOCKED climax: only the name is added after the frame drawn by the video is complete. */
+.scene-opening .inv-title{position:relative;z-index:3;margin:0!important;color:var(--v44-maroon)!important;font-family:"Bodoni Moda",serif!important;font-size:clamp(42px,12vw,61px)!important;font-weight:400!important;line-height:.98!important;letter-spacing:-.045em!important;text-align:center!important;white-space:nowrap;opacity:0;transform:translate3d(0,14px,0) scale(.94);filter:blur(7px)!important;text-shadow:0 2px 17px rgba(255,247,229,.55)}
+.scene-opening.v44-name-visible .inv-title{opacity:1!important;transform:none!important;filter:none!important}
 
-.scene-opening .inv-title{position:relative;z-index:3;margin:0!important;color:var(--v43-maroon)!important;font-family:"Bodoni Moda",serif!important;font-size:clamp(42px,12vw,62px)!important;font-weight:400!important;line-height:.98!important;letter-spacing:-.045em!important;text-align:center!important;white-space:nowrap;opacity:0;transform:translate3d(0,16px,0) scale(.95);filter:blur(6px)!important;text-shadow:0 2px 16px rgba(255,247,229,.48)}
-
-.scene-opening.v43-complete>.inv-shell{opacity:1!important;transform:none!important}
-.scene-opening.v43-complete .v43-name-frame{opacity:1!important}
-.scene-opening.v43-complete .inv-title{opacity:1!important;transform:none!important;filter:none!important}
-
-@media(max-width:350px){.scene-opening>.inv-shell{width:calc(100% - 50px)!important;min-height:178px!important;padding:56px 20px 42px!important}.scene-opening .inv-title{font-size:clamp(38px,12vw,52px)!important}}
-@media(pointer:coarse){.v43-world img{will-change:auto}}
+@media(max-width:350px){.scene-opening>.inv-shell{width:calc(100% - 72px)!important}.scene-opening .inv-title{font-size:clamp(37px,12vw,50px)!important}}
 
 /* Effect Lab keeps motion ON by default. Use ?motion=reduced for explicit static QA. */
