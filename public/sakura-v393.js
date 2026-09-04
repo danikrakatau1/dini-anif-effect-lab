@@ -29,6 +29,13 @@ document.head.appendChild(v45Link);
 await import('./sakura-v45.js?v=452');
 document.body.dataset.sakuraFinalCandidate='v4.5.2';
 
+/* V4.7 restores the interior cinematic slideshow only for Save The Date. */
+let v47Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v47.css'));
+if(!v47Link){v47Link=document.createElement('link');v47Link.rel='stylesheet'}
+v47Link.href='/sakura-v47.css?v=470';
+document.head.appendChild(v47Link);
+await import('./sakura-v47.js?v=470');
+
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse = matchMedia('(pointer: coarse)').matches;
 const lowPower = navigator.connection?.saveData || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
