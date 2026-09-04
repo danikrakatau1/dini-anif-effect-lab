@@ -43,6 +43,14 @@ v483Link.href='/sakura-v483.css?v=483';
 document.head.appendChild(v483Link);
 await import('./sakura-v483.js?v=483');
 
+/* V4.9 brings the reference-derived living-background grammar to every lower interior scene. */
+let v49Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v49.css'));
+if(!v49Link){v49Link=document.createElement('link');v49Link.rel='stylesheet'}
+v49Link.href='/sakura-v49.css?v=490';
+document.head.appendChild(v49Link);
+await import('./sakura-v49.js?v=490');
+document.documentElement.dataset.sakuraInterior='v4.9';
+
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse = matchMedia('(pointer: coarse)').matches;
 const lowPower = navigator.connection?.saveData || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
