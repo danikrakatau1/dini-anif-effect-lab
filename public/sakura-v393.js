@@ -29,12 +29,19 @@ document.head.appendChild(v45Link);
 await import('./sakura-v45.js?v=452');
 document.body.dataset.sakuraFinalCandidate='v4.5.2';
 
-/* V4.7.1 restores the interior cinematic slideshow only for Save The Date. */
+/* V4.7.2 restores the interior cinematic slideshow only for Save The Date. */
 let v47Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v47.css'));
 if(!v47Link){v47Link=document.createElement('link');v47Link.rel='stylesheet'}
-v47Link.href='/sakura-v47.css?v=471';
+v47Link.href='/sakura-v47.css?v=472';
 document.head.appendChild(v47Link);
-await import('./sakura-v47.js?v=470');
+await import('./sakura-v47.js?v=483');
+
+/* V4.8.3 smooths section-to-section color handoffs and slideshow optical dissolve. */
+let v483Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v483.css'));
+if(!v483Link){v483Link=document.createElement('link');v483Link.rel='stylesheet'}
+v483Link.href='/sakura-v483.css?v=483';
+document.head.appendChild(v483Link);
+await import('./sakura-v483.js?v=483');
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse = matchMedia('(pointer: coarse)').matches;
