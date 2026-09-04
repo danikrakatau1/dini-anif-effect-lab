@@ -1,10 +1,10 @@
-/* Sakura V4.5.1 — Luxury Color Master → Champagne Frame → Signature Name */
+/* Sakura V4.5.2 — Rich Vintage Color → Champagne Frame → Signature Name */
 const params=new URLSearchParams(location.search);
 const reduceMotion=params.get('motion')==='reduced';
 const opening=document.querySelector('.scene-opening');
 const cover=document.querySelector('#sakuraV2');
 const openButton=document.querySelector('#openInvitation');
-const videoUrl='/assets/Sakura-v45/sakura-opening-color.mp4.mp4?v=451';
+const videoUrl='/assets/Sakura-v45/sakura-opening-color.mp4.mp4?v=452';
 
 let started=false;
 let completed=false;
@@ -29,8 +29,8 @@ let finalTimeline=null;
 let wasPlayingBeforeHide=false;
 
 function mark(state){
-  if(document.body)document.body.dataset.v451State=state;
-  document.documentElement.dataset.sakuraOpeningEngine='v4.5.1';
+  if(document.body)document.body.dataset.v452State=state;
+  document.documentElement.dataset.sakuraOpeningEngine='v4.5.2';
 }
 
 function suppressGlobalOpeningReveal(){
@@ -101,7 +101,11 @@ function resetFinalState(){
   opening.classList.remove('v45-final-bg','v45-frame-visible','v45-name-visible','v45-complete','v451-luxury-settle');
   finalTimeline?.kill();
   finalTimeline=null;
-  if(nameBg){nameBg.style.opacity='0';nameBg.style.transform='scale(1.018)';nameBg.style.filter='saturate(.96) contrast(1.015) brightness(.985)'}
+  if(nameBg){
+    nameBg.style.opacity='0';
+    nameBg.style.transform='scale(1.018)';
+    nameBg.style.filter='saturate(1.12) contrast(1.035) brightness(.992)';
+  }
   if(edgeShade)edgeShade.style.opacity='0';
   if(centerBloom)centerBloom.style.opacity='0';
   if(grain)grain.style.opacity='0';
@@ -119,7 +123,11 @@ function resetFinalState(){
 }
 
 function setStaticFinal(){
-  if(nameBg){nameBg.style.opacity='1';nameBg.style.transform='scale(1)'}
+  if(nameBg){
+    nameBg.style.opacity='1';
+    nameBg.style.transform='scale(1)';
+    nameBg.style.filter='saturate(1.12) contrast(1.035) brightness(.992)';
+  }
   if(edgeShade)edgeShade.style.opacity='1';
   if(centerBloom)centerBloom.style.opacity='1';
   if(grain)grain.style.opacity='.10';
@@ -156,7 +164,7 @@ function loadVideoAsset(){
     mark('asset-ready');
     return video;
   })().catch(error=>{
-    console.warn('[Sakura V4.5.1] color video fallback:',error);
+    console.warn('[Sakura V4.5.2] color video fallback:',error);
     mark('asset-fallback');
     return null;
   });
@@ -187,7 +195,7 @@ function playFinalSequence(){
   finalStarted=true;
   const moving=[nameBg,edgeShade,centerBloom,grain,border,outer,inner,crest,goldSweep,title].filter(Boolean);
   gsap.killTweensOf(moving);
-  gsap.set(nameBg,{opacity:0,scale:1.018});
+  gsap.set(nameBg,{opacity:0,scale:1.018,filter:'saturate(1.12) contrast(1.035) brightness(.992)'});
   gsap.set(edgeShade,{opacity:0});
   gsap.set(centerBloom,{opacity:0,scale:.985});
   gsap.set(grain,{opacity:0});
@@ -198,33 +206,20 @@ function playFinalSequence(){
 
   finalTimeline=gsap.timeline({defaults:{overwrite:'auto'},onComplete:finish});
   finalTimeline
-    /* A short breath after the video, then the color still becomes calmer and richer. */
     .call(()=>mark('final-world'),null,.28)
     .to(nameBg,{opacity:1,scale:1,duration:.88,ease:'sine.inOut',onComplete:()=>opening.classList.add('v45-final-bg')},.34)
     .to(edgeShade,{opacity:1,duration:.82,ease:'sine.out'},.48)
     .to(centerBloom,{opacity:1,scale:1,duration:.90,ease:'sine.out'},.56)
     .to(grain,{opacity:.10,duration:.58,ease:'sine.out',onComplete:()=>opening.classList.add('v451-luxury-settle')},.78)
-
-    /* Ink first: slower, deeper maroon line. */
     .to(border,{opacity:1,duration:.10,onStart:()=>mark('frame-maroon')},1.18)
     .to(outer,{strokeDashoffset:0,duration:.92,ease:'power1.inOut'},1.24)
-
-    /* Champagne inner line follows, slightly faster and lighter. */
     .to(inner,{strokeDashoffset:0,duration:.68,ease:'power1.inOut',onStart:()=>mark('frame-champagne')},2.20)
-
-    /* Jewelry mark instead of a large badge. */
     .to(crest,{opacity:1,scale:1,rotation:45,duration:.42,ease:'back.out(1.35)',onStart:()=>mark('jewel-mark')},2.94)
     .call(()=>{opening.classList.add('v45-frame-visible');mark('frame-complete')},null,3.34)
-
-    /* Exactly one soft metallic sweep, then quiet. */
     .to(goldSweep,{opacity:.72,duration:.08,ease:'none',onStart:()=>mark('gold-sweep')},3.42)
     .to(goldSweep,{xPercent:122,duration:.66,ease:'power2.inOut'},3.45)
     .to(goldSweep,{opacity:0,duration:.16,ease:'sine.out'},4.05)
-
-    /* Silence/breath before the signature name. */
     .call(()=>mark('name-breath'),null,4.28)
-
-    /* Final signature: tracking closes gently while blur resolves to crisp type. */
     .to(title,{
       opacity:1,
       y:0,
@@ -266,7 +261,7 @@ async function playVideo(){
     await readyVideo.play();
     mark('video-playing');
   }catch(error){
-    console.warn('[Sakura V4.5.1] play fallback:',error);
+    console.warn('[Sakura V4.5.2] play fallback:',error);
     fallbackTimer=setTimeout(playFinalSequence,800);
   }
 }
@@ -290,12 +285,12 @@ function onVisibility(){
 
 suppressGlobalOpeningReveal();
 buildStage();
-window.__SAKURA_TARGET_VERSION='v4.5.1';
+window.__SAKURA_TARGET_VERSION='v4.5.2';
 document.documentElement.dataset.forceV45Motion='1';
-document.body.dataset.sakuraFinalCandidate='v4.5.1';
-document.title='Sakura Vintage V4.5.1 Luxury Finish · Dini Anif Effect Lab';
+document.body.dataset.sakuraFinalCandidate='v4.5.2';
+document.title='Sakura Vintage V4.5.2 Rich Color Luxury · Dini Anif Effect Lab';
 const labState=document.querySelector('.lab-state');
-if(labState)labState.textContent='Sakura Vintage · V4.5.1 Luxury Finish';
+if(labState)labState.textContent='Sakura Vintage · V4.5.2 Rich Color Luxury';
 
 if(!reduceMotion)loadVideoAsset();
 video?.addEventListener('ended',onVideoEnded);
