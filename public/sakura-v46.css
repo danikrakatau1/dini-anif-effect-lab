@@ -1,4 +1,4 @@
-/* Sakura V4.6 — Interior Luxury Pass 01: Mempelai */
+/* Sakura V4.6.1 — Interior Luxury Pass 01: Mempelai + Transparent Sakura Decor */
 :root{
   --v46-ivory:#f4e8d3;
   --v46-ivory-deep:#e9d3b7;
@@ -16,20 +16,27 @@
   min-height:88svh;
   overflow:hidden;
   background:
-    radial-gradient(ellipse at 50% 20%,rgba(255,247,226,.82) 0%,rgba(255,244,222,.38) 30%,transparent 58%),
+    radial-gradient(ellipse at 50% 20%,rgba(255,247,226,.78) 0%,rgba(255,244,222,.34) 30%,transparent 58%),
     linear-gradient(180deg,#f4e8d5 0%,#eedcc3 48%,#e7cfb3 100%)!important;
 }
 
+/* User-provided Sakura decor source becomes a transparent-looking printed layer.
+   The high contrast pushes the baked checkerboard toward white; multiply then makes
+   those white zones visually disappear into the ivory base while colored artwork remains. */
 .scene-couple::before{
   content:"";
   position:absolute;
-  inset:0;
+  inset:-1.5%;
   z-index:0;
   pointer-events:none;
-  background:
-    radial-gradient(circle at 12% 14%,rgba(188,98,112,.10),transparent 25%),
-    radial-gradient(circle at 87% 77%,rgba(82,119,103,.08),transparent 27%),
-    linear-gradient(115deg,transparent 18%,rgba(255,251,239,.18) 43%,rgba(255,247,229,.05) 62%,transparent 82%);
+  background:url('/assets/Sakura-v45/sakura-decor-overlay-source.jpg.jpg') center/cover no-repeat;
+  opacity:.22;
+  filter:contrast(1.72) brightness(1.10) saturate(1.10);
+  mix-blend-mode:multiply;
+  transform:scale(1.015);
+  transform-origin:center;
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 47%,rgba(0,0,0,.88) 63%,rgba(0,0,0,.96) 100%);
+  mask-image:linear-gradient(to bottom,#000 0%,#000 47%,rgba(0,0,0,.88) 63%,rgba(0,0,0,.96) 100%);
 }
 
 .scene-couple::after{
@@ -47,10 +54,10 @@
 
 .scene-couple .section-ambient{
   z-index:0;
-  opacity:.62;
+  opacity:.34;
   background:
-    radial-gradient(circle at 22% 22%,rgba(255,238,205,.42),transparent 28%),
-    radial-gradient(circle at 78% 74%,rgba(130,64,76,.07),transparent 31%)!important;
+    radial-gradient(circle at 22% 22%,rgba(255,238,205,.34),transparent 28%),
+    radial-gradient(circle at 78% 74%,rgba(130,64,76,.055),transparent 31%)!important;
   animation:v46CoupleAmbient 16s ease-in-out infinite alternate;
 }
 
@@ -106,7 +113,7 @@
   border:1px solid rgba(123,64,68,.17)!important;
   border-radius:30px!important;
   background:
-    linear-gradient(145deg,rgba(255,250,239,.88),rgba(239,218,188,.76))!important;
+    linear-gradient(145deg,rgba(255,250,239,.84),rgba(239,218,188,.70))!important;
   box-shadow:
     0 24px 56px rgba(88,48,43,.11),
     inset 0 1px 0 rgba(255,255,255,.64),
@@ -146,8 +153,8 @@
 .scene-couple .couple-card .card-glow{
   inset:auto -15% -30% 18%;
   height:68%;
-  opacity:.52;
-  background:radial-gradient(circle,rgba(255,235,197,.44),transparent 67%);
+  opacity:.48;
+  background:radial-gradient(circle,rgba(255,235,197,.42),transparent 67%);
   filter:blur(24px);
 }
 
@@ -226,8 +233,8 @@
 .scene-couple .couple-card:nth-child(3):hover{transform:translateY(-8px) rotate(.2deg)}
 
 @keyframes v46CoupleAmbient{
-  from{transform:translate3d(-.7%,-.25%,0) scale(1);opacity:.48}
-  to{transform:translate3d(.9%,.45%,0) scale(1.018);opacity:.68}
+  from{transform:translate3d(-.7%,-.25%,0) scale(1);opacity:.30}
+  to{transform:translate3d(.9%,.45%,0) scale(1.018);opacity:.40}
 }
 @keyframes v46AmpBreath{
   0%,100%{transform:translateY(0);box-shadow:0 9px 22px rgba(92,51,44,.08),inset 0 0 0 4px rgba(255,250,239,.34)}
@@ -238,6 +245,12 @@
   .scene-couple{
     min-height:auto;
     padding:86px 20px 96px!important;
+  }
+  .scene-couple::before{
+    inset:-1%;
+    opacity:.20;
+    background-position:50% 50%;
+    filter:contrast(1.76) brightness(1.11) saturate(1.08);
   }
   .scene-couple::after{
     inset:14px 10px;
