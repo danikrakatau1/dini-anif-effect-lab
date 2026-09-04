@@ -1,0 +1,166 @@
+/* Sakura V5.0 — Tools Motion Engine Adapter
+   Donor architecture: single owner + observer + timeline + rAF decor motion.
+   Runtime is fully local to Dini Anif Effect Lab. */
+:root{
+  --v50-ease:cubic-bezier(.22,.61,.36,1);
+  --v50-maroon:#67293a;
+  --v50-gold:#c9a46d;
+}
+
+.scene-date,
+.scene-event,
+.scene-story,
+.scene-gallery,
+.scene-gift,
+.scene-rsvp,
+.scene-wishes,
+.scene-closing{
+  position:relative!important;
+  isolation:isolate;
+  overflow:hidden;
+}
+
+/* Kill prior slideshow experiment surfaces if stale CSS is cached. */
+.v491-shared-stage,
+.v492-date-stage,
+.v49-scene-bg{display:none!important}
+
+/* ===== SAVE THE DATE: only true two-scene living dissolve ===== */
+.v50-date-stage{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  overflow:hidden;
+  pointer-events:none;
+  background:#ead8c4;
+}
+.v50-date-slide{
+  position:absolute;
+  inset:-3%;
+  width:106%;
+  height:106%;
+  opacity:0;
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
+  transform:translate3d(var(--v50-x,0),var(--v50-y,0),0) scale(var(--v50-scale,1.025));
+  transform-origin:50% 50%;
+  transition:
+    opacity 1.85s var(--v50-ease),
+    transform 10.5s cubic-bezier(.22,.61,.36,1);
+  backface-visibility:hidden;
+}
+.v50-date-slide.is-active{opacity:1}
+.v50-date-slide[data-variant="a"]{
+  --v50-x:-.35%;--v50-y:-.18%;--v50-scale:1.072;
+}
+.v50-date-slide[data-variant="b"]{
+  --v50-x:.42%;--v50-y:-.28%;--v50-scale:1.066;
+}
+.v50-date-grade{
+  position:absolute;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at 50% 42%,rgba(255,247,226,.10),transparent 46%),
+    linear-gradient(180deg,rgba(78,45,53,.025),transparent 38%,rgba(75,39,50,.08));
+}
+.scene-date{
+  background:linear-gradient(180deg,#ead8c4,#d8aaa4)!important;
+}
+.scene-date::before,.scene-date::after{
+  content:none!important;
+  display:none!important;
+}
+.scene-date>.living-wash{opacity:.10!important;z-index:1!important}
+.scene-date>.inv-shell{position:relative!important;z-index:4!important}
+.scene-date .count-item{
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  background:linear-gradient(155deg,rgba(255,249,238,.92),rgba(242,219,194,.84))!important;
+}
+
+/* ===== LOWER SCENES: one full artwork + engine-driven local camera ===== */
+.v50-living-art{
+  position:absolute;
+  inset:-3.2%;
+  z-index:0;
+  width:106.4%;
+  height:106.4%;
+  pointer-events:none;
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
+  transform:
+    translate3d(var(--v50-parallax-x,0px),var(--v50-parallax-y,0px),0)
+    scale(var(--v50-parallax-scale,1.035));
+  transform-origin:50% 50%;
+  transition:transform .72s cubic-bezier(.22,.61,.36,1),opacity .7s ease;
+  opacity:.93;
+  backface-visibility:hidden;
+}
+.v50-living-art::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,rgba(255,245,227,.035),transparent 42%,rgba(78,39,52,.07));
+}
+.v50-active>.v50-living-art{will-change:transform}
+
+/* Cached legacy pseudo artwork must never cover the engine-owned artwork. */
+.scene-event::before,.scene-event::after,
+.scene-story::before,.scene-story::after,
+.scene-gallery::before,.scene-gallery::after,
+.scene-gift::before,.scene-gift::after,
+.scene-rsvp::before,.scene-rsvp::after,
+.scene-wishes::before,.scene-wishes::after,
+.scene-closing::before,.scene-closing::after{
+  content:none!important;
+  display:none!important;
+}
+
+.scene-event{background:linear-gradient(180deg,rgba(243,220,195,.54),rgba(150,77,89,.34))!important}
+.scene-story{background:linear-gradient(180deg,rgba(241,216,205,.48),rgba(164,98,120,.34))!important}
+.scene-gallery{background:linear-gradient(180deg,rgba(159,90,104,.42),rgba(87,49,66,.50))!important}
+.scene-gift{background:linear-gradient(180deg,rgba(240,210,161,.50),rgba(159,100,75,.34))!important}
+.scene-rsvp{background:linear-gradient(180deg,rgba(241,217,200,.50),rgba(180,120,129,.32))!important}
+.scene-wishes{background:linear-gradient(180deg,rgba(238,211,195,.48),rgba(151,91,111,.34))!important}
+.scene-closing{background:linear-gradient(180deg,rgba(199,132,119,.40),rgba(91,44,65,.52))!important}
+
+.scene-event>.inv-shell,
+.scene-story>.inv-shell,
+.scene-gallery>.inv-shell,
+.scene-gift>.inv-shell,
+.scene-rsvp>.inv-shell,
+.scene-wishes>.inv-shell,
+.scene-closing>.inv-shell{
+  position:relative!important;
+  z-index:3!important;
+}
+
+.scene-event .event-card,
+.scene-story .story-carousel,
+.scene-story .story-card,
+.scene-gift .gift-card,
+.scene-rsvp .form-card,
+.scene-wishes .message-card{
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+.scene-event .event-card{background:linear-gradient(155deg,rgba(255,249,238,.91),rgba(241,218,189,.84))!important}
+.scene-story .story-carousel{background:rgba(247,229,207,.82)!important}
+.scene-story .story-card{background:linear-gradient(155deg,rgba(255,248,234,.93),rgba(239,214,190,.84))!important}
+.scene-gift .gift-card{background:linear-gradient(155deg,rgba(255,248,233,.93),rgba(239,214,177,.84))!important}
+.scene-rsvp .form-card{background:linear-gradient(155deg,rgba(255,249,238,.94),rgba(244,222,199,.86))!important}
+.scene-wishes .message-card{background:linear-gradient(155deg,rgba(255,249,238,.92),rgba(242,219,193,.84))!important}
+
+@media(max-width:600px){
+  .v50-date-slide{inset:-2.2%;width:104.4%;height:104.4%;transition:opacity 1.7s var(--v50-ease),transform 11.2s linear}
+  .v50-living-art{inset:-2.2%;width:104.4%;height:104.4%;transition:transform .85s cubic-bezier(.22,.61,.36,1)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .v50-date-slide{transition:opacity .3s linear!important;transform:none!important}
+  .v50-living-art{transform:none!important;transition:none!important}
+}
