@@ -1,53 +1,171 @@
-/* Sakura V4.4.2 — LOCKED Direct Master Video → Transparent Final Name */
-:root{--v44-maroon:#742f3a;--v44-cream:#ead9bf}
+/* Sakura V4.4.3 — LOCKED Direct Master Video → Locked Name Frame → Final Name */
+:root{
+  --v443-maroon:#742f3a;
+  --v443-gold:#bd955d;
+  --v443-cream:#ead9bf;
+}
 
-/* V4.4.2 owns only the post-cover opening scene. */
-.scene-opening{min-height:100vh;min-height:100svh;overflow:hidden;background:var(--v44-cream)!important;isolation:isolate;contain:paint}
-.scene-opening>.v394-opening-cinema,.scene-opening>.v395-stage,.scene-opening>.v396-stage,.scene-opening>.v40-stage,.scene-opening>.v41-stage,.scene-opening>.v42-world-stage,.scene-opening>.v43-stage{display:none!important}
-.scene-opening>.living-wash,.scene-opening>.section-petal{display:none!important}
+/* V4.4.3 owns only the post-cover opening scene. */
+.scene-opening{
+  min-height:100vh;
+  min-height:100svh;
+  overflow:hidden;
+  background:var(--v443-cream)!important;
+  isolation:isolate;
+  contain:paint;
+}
+.scene-opening>.v394-opening-cinema,
+.scene-opening>.v395-stage,
+.scene-opening>.v396-stage,
+.scene-opening>.v40-stage,
+.scene-opening>.v41-stage,
+.scene-opening>.v42-world-stage,
+.scene-opening>.v43-stage{display:none!important}
+.scene-opening>.living-wash,
+.scene-opening>.section-petal{display:none!important}
 
-/* One direct user-supplied MP4. No multipart/base64 reconstruction. */
-.scene-opening>.v44-stage{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;background:var(--v44-cream)}
-.v44-video,.v44-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block}
-.v44-video{z-index:2;background:var(--v44-cream);opacity:0;transition:opacity .18s ease}
+/* Direct user MP4 remains the visual master. */
+.scene-opening>.v44-stage{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  overflow:hidden;
+  pointer-events:none;
+  background:var(--v443-cream);
+}
+.v44-video,.v44-poster{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:50% 50%;
+  display:block;
+}
+.v44-video{
+  z-index:2;
+  background:var(--v443-cream);
+  opacity:0;
+  transition:opacity .18s ease;
+}
 .v44-video.is-ready{opacity:1}
-.v44-poster{z-index:1;background:url('/assets/sakura-v2-landscape.png') center/cover no-repeat;opacity:1}
+.v44-poster{
+  z-index:1;
+  background:url('/assets/sakura-v2-landscape.png') center/cover no-repeat;
+  opacity:1;
+}
 .v44-stage.is-video-ready .v44-poster{opacity:0}
-.v44-atmosphere{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.035;background:radial-gradient(circle at 50% 43%,rgba(255,244,220,.1),transparent 44%),linear-gradient(180deg,rgba(255,250,235,.01),transparent 68%,rgba(78,45,37,.018))}
+.v44-atmosphere{
+  position:absolute;
+  inset:0;
+  z-index:3;
+  pointer-events:none;
+  opacity:.035;
+  background:
+    radial-gradient(circle at 50% 43%,rgba(255,244,220,.10),transparent 44%),
+    linear-gradient(180deg,rgba(255,250,235,.01),transparent 68%,rgba(78,45,37,.018));
+}
 
-/* FULL TRANSPARENCY LOCK: holder may position the name, but must never blur/paint the video. */
+/* RESTORED LOCKED FRAME — exact visual DNA from the earlier V4.2 lock. */
 .scene-opening>.inv-shell{
-  position:relative!important;z-index:12!important;
-  width:calc(100% - 92px)!important;max-width:310px!important;min-height:190px!important;
-  margin:auto!important;padding:0 12px!important;
-  display:flex!important;align-items:center!important;justify-content:center!important;
-  background:none!important;background-color:transparent!important;background-image:none!important;
-  border:0!important;border-radius:0!important;box-shadow:none!important;
-  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
-  filter:none!important;opacity:1!important;transform:none!important;
-  clip-path:none!important;mask:none!important;-webkit-mask:none!important;
-  overflow:visible!important;pointer-events:none!important;
+  position:relative!important;
+  z-index:12!important;
+  width:calc(100% - 72px)!important;
+  max-width:330px!important;
+  min-height:196px!important;
+  margin:auto!important;
+  padding:62px 26px 46px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  opacity:0;
+  transform:translate3d(0,12px,0) scale(.965);
+  background:linear-gradient(180deg,rgba(252,246,233,.92),rgba(244,228,203,.88))!important;
+  border:0!important;
+  border-radius:46% 46% 30px 30px/24% 24% 30px 30px!important;
+  box-shadow:0 24px 58px rgba(69,43,36,.13),inset 0 0 0 1px rgba(255,250,238,.52)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  overflow:visible!important;
+  pointer-events:none!important;
 }
-.scene-opening>.inv-shell::before,.scene-opening>.inv-shell::after{
-  content:none!important;display:none!important;background:none!important;
-  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
-  filter:none!important;box-shadow:none!important;border:0!important;
+.scene-opening>.inv-shell::before,
+.scene-opening>.inv-shell::after{
+  content:none!important;
+  display:none!important;
 }
-.scene-opening .inv-eyebrow,.scene-opening .inv-rule,.scene-opening .inv-copy,.scene-opening .v42-name-frame,.scene-opening .v43-name-frame{display:none!important}
+.scene-opening .inv-eyebrow,
+.scene-opening .inv-rule,
+.scene-opening .inv-copy,
+.scene-opening .v42-name-frame,
+.scene-opening .v43-name-frame{display:none!important}
 
-/* LOCKED climax: Faqih & Dini is the only DOM element added over the finished video. */
+.v443-name-frame{
+  position:absolute;
+  inset:8px;
+  z-index:1;
+  pointer-events:none;
+  opacity:0;
+}
+.v443-name-frame svg{
+  display:block;
+  width:100%;
+  height:100%;
+  overflow:visible;
+}
+.v443-name-frame path{
+  fill:none;
+  vector-effect:non-scaling-stroke;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.v443-name-frame .v443-frame-outer{
+  stroke:rgba(116,47,58,.88);
+  stroke-width:1.7;
+}
+.v443-name-frame .v443-frame-inner{
+  stroke:rgba(189,149,93,.72);
+  stroke-width:1.05;
+}
+.v443-name-frame .v443-frame-accent{
+  stroke:rgba(189,149,93,.68);
+  stroke-width:1.05;
+}
+
+/* LOCKED NAME — the final visual element. */
 .scene-opening .inv-title{
-  position:relative;z-index:3;margin:0!important;
-  color:var(--v44-maroon)!important;font-family:"Bodoni Moda",serif!important;
-  font-size:clamp(42px,12vw,61px)!important;font-weight:400!important;
-  line-height:.98!important;letter-spacing:-.045em!important;text-align:center!important;white-space:nowrap;
-  background:none!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
-  opacity:0;transform:translate3d(0,14px,0) scale(.94);filter:blur(7px)!important;
-  text-shadow:0 2px 17px rgba(255,247,229,.55)
+  position:relative;
+  z-index:3;
+  margin:0!important;
+  color:var(--v443-maroon)!important;
+  font-family:"Bodoni Moda",serif!important;
+  font-size:clamp(42px,12vw,62px)!important;
+  font-weight:400!important;
+  line-height:.98!important;
+  letter-spacing:-.045em!important;
+  text-align:center!important;
+  white-space:nowrap;
+  background:none!important;
+  box-shadow:none!important;
+  opacity:0;
+  transform:translate3d(0,13px,0) scale(.965);
+  filter:blur(5px)!important;
+  text-shadow:0 2px 16px rgba(255,247,229,.48);
 }
-.scene-opening .inv-title::before,.scene-opening .inv-title::after{content:none!important;display:none!important}
-.scene-opening.v44-name-visible .inv-title{opacity:1!important;transform:none!important;filter:none!important}
+.scene-opening .inv-title::before,
+.scene-opening .inv-title::after{content:none!important;display:none!important}
 
-@media(max-width:350px){.scene-opening>.inv-shell{width:calc(100% - 72px)!important}.scene-opening .inv-title{font-size:clamp(37px,12vw,50px)!important}}
+.scene-opening.v443-frame-visible>.inv-shell{opacity:1!important;transform:none!important}
+.scene-opening.v443-frame-visible .v443-name-frame{opacity:1!important}
+.scene-opening.v443-name-visible .inv-title{opacity:1!important;transform:none!important;filter:none!important}
+
+@media(max-width:350px){
+  .scene-opening>.inv-shell{
+    width:calc(100% - 50px)!important;
+    min-height:178px!important;
+    padding:56px 20px 42px!important;
+  }
+  .scene-opening .inv-title{font-size:clamp(38px,12vw,52px)!important}
+}
 
 /* Effect Lab keeps motion ON by default. Use ?motion=reduced for explicit static QA. */
