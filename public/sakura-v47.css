@@ -1,0 +1,233 @@
+/* Sakura V4.7 — Interior Luxury Pass 02: Save The Date + Cinematic Background Slideshow */
+:root{
+  --v47-burgundy:#5d2230;
+  --v47-gold:#c9a66a;
+  --v47-gold-light:#edd7a7;
+  --v47-ivory:#f3e6d0;
+  --v47-ink:#5c4240;
+}
+
+/* Opening V4.5.2 and Mempelai V4.6.1 remain untouched. */
+.scene-date{
+  position:relative;
+  isolation:isolate;
+  min-height:96svh;
+  overflow:hidden;
+  background:var(--v47-ivory)!important;
+  background-image:none!important;
+  background-attachment:initial!important;
+  animation:none!important;
+}
+.scene-date::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at 50% 43%,rgba(255,248,229,.72) 0%,rgba(255,245,221,.43) 24%,rgba(248,224,190,.15) 46%,transparent 67%),
+    linear-gradient(180deg,rgba(37,85,91,.06),transparent 28%,transparent 68%,rgba(91,37,55,.12));
+}
+.scene-date::after{
+  content:"";
+  position:absolute;
+  inset:19px 14px;
+  z-index:5;
+  pointer-events:none;
+  border:1px solid rgba(99,42,52,.20);
+  border-radius:40% 40% 28px 28px/7% 7% 28px 28px;
+  box-shadow:inset 0 0 0 1px rgba(201,166,106,.16),inset 0 0 46px rgba(255,247,226,.08);
+}
+
+/* Slideshow stage inserted by V4.7 JS. */
+.v47-slideshow{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  overflow:hidden;
+  pointer-events:none;
+  background:#d8c8b1;
+}
+.v47-slide{
+  position:absolute;
+  inset:-2.2%;
+  width:104.4%;
+  height:104.4%;
+  opacity:0;
+  transform:scale(1.018) translate3d(0,0,0);
+  background-position:center;
+  background-size:cover;
+  background-repeat:no-repeat;
+  filter:saturate(1.09) contrast(1.025) brightness(.96);
+  transition:opacity 1.55s ease-in-out;
+  will-change:opacity,transform;
+  backface-visibility:hidden;
+}
+.v47-slide[data-slide="0"]{
+  background-image:url('/assets/Sakura-v45/sakura-background-color.jpg.jpg');
+  background-position:50% 48%;
+}
+.v47-slide[data-slide="1"]{
+  background-image:url('/assets/Sakura-v45/sakura-name-frame-background.jpg');
+  background-position:50% 50%;
+}
+.v47-slide.is-active{opacity:1;z-index:2}
+.v47-slide.is-previous{opacity:0;z-index:1}
+
+/* A single running slide slowly moves, like a camera breathing rather than a CSS zoom. */
+.scene-date.v47-running .v47-slide.is-active{
+  animation:v47KenBurns 7.2s cubic-bezier(.36,0,.24,1) forwards;
+}
+@keyframes v47KenBurns{
+  from{transform:scale(1.022) translate3d(.25%,.12%,0)}
+  to{transform:scale(1.075) translate3d(-.42%,-.32%,0)}
+}
+
+/* User Sakura source as faint printed foreground. Checkerboard visually disappears through high-key multiply. */
+.v47-decor{
+  position:absolute;
+  inset:-1.2%;
+  z-index:3;
+  pointer-events:none;
+  background:url('/assets/Sakura-v45/sakura-decor-overlay-source.jpg.jpg') center/cover no-repeat;
+  opacity:.13;
+  filter:contrast(1.78) brightness(1.12) saturate(1.06);
+  mix-blend-mode:multiply;
+  transform:scale(1.012);
+}
+
+/* Color depth and vignette keep the slideshow from looking like a raw photo swap. */
+.v47-grade{
+  position:absolute;
+  inset:0;
+  z-index:4;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 50% 18%,rgba(78,149,151,.08),transparent 37%),
+    radial-gradient(circle at 14% 18%,rgba(202,99,126,.10),transparent 31%),
+    radial-gradient(circle at 87% 80%,rgba(89,111,72,.08),transparent 33%),
+    radial-gradient(ellipse at center,transparent 50%,rgba(56,36,43,.08) 82%,rgba(45,29,36,.14) 100%);
+  mix-blend-mode:soft-light;
+}
+
+.v47-slide-dots{
+  position:absolute;
+  left:50%;
+  bottom:max(30px,env(safe-area-inset-bottom));
+  z-index:7;
+  display:flex;
+  gap:7px;
+  transform:translateX(-50%);
+  opacity:.72;
+}
+.v47-slide-dots i{
+  display:block;
+  width:5px;
+  height:5px;
+  border-radius:999px;
+  background:rgba(255,244,218,.46);
+  box-shadow:0 0 0 1px rgba(89,37,48,.16);
+  transition:width .45s cubic-bezier(.2,.7,.2,1),background .45s ease;
+}
+.v47-slide-dots i.is-active{
+  width:21px;
+  background:rgba(235,211,163,.88);
+}
+
+.scene-date>.living-wash{display:none!important}
+.scene-date>.inv-shell{
+  position:relative;
+  z-index:6;
+  width:min(720px,100%)!important;
+  padding:clamp(28px,5vw,54px) clamp(20px,4vw,44px)!important;
+  border:1px solid rgba(112,58,61,.14);
+  border-radius:34px;
+  background:linear-gradient(145deg,rgba(255,250,239,.69),rgba(238,217,186,.53));
+  box-shadow:0 26px 70px rgba(66,43,43,.12),inset 0 1px 0 rgba(255,255,255,.62),inset 0 0 0 1px rgba(201,166,106,.05);
+  backdrop-filter:blur(8px) saturate(1.04);
+  -webkit-backdrop-filter:blur(8px) saturate(1.04);
+}
+.scene-date>.inv-shell::before{
+  content:"";
+  position:absolute;
+  inset:9px;
+  pointer-events:none;
+  border:1px solid rgba(201,166,106,.13);
+  border-radius:26px;
+}
+.scene-date .inv-eyebrow{
+  color:var(--v47-gold)!important;
+  letter-spacing:.31em!important;
+  font-size:11px!important;
+}
+.scene-date .inv-title{
+  color:var(--v47-burgundy)!important;
+  font-size:clamp(48px,7.3vw,82px)!important;
+  text-shadow:0 2px 24px rgba(255,247,227,.50);
+}
+.scene-date .inv-copy{
+  width:min(580px,100%)!important;
+  margin-top:20px!important;
+  color:var(--v47-ink)!important;
+  font-size:clamp(15px,1.7vw,18px)!important;
+  line-height:1.68!important;
+}
+
+.scene-date .countdown-grid{
+  width:min(610px,100%)!important;
+  margin-top:34px!important;
+  gap:10px!important;
+}
+.scene-date .count-item{
+  min-width:0;
+  padding:21px 8px 18px!important;
+  border:1px solid rgba(118,60,63,.13)!important;
+  border-radius:20px!important;
+  background:linear-gradient(160deg,rgba(255,249,235,.76),rgba(232,207,172,.58))!important;
+  box-shadow:0 12px 30px rgba(74,45,44,.08),inset 0 1px 0 rgba(255,255,255,.65)!important;
+  backdrop-filter:blur(7px);
+}
+.scene-date .count-item::before{inset:6px!important;border-radius:14px!important;border-color:rgba(201,166,106,.12)!important}
+.scene-date .count-item strong{
+  color:var(--v47-burgundy)!important;
+  font-size:clamp(31px,4.5vw,51px)!important;
+}
+.scene-date .count-item span{
+  color:#76574f!important;
+  letter-spacing:.17em!important;
+}
+
+@media(max-width:600px){
+  .scene-date{
+    min-height:100svh;
+    padding:88px 18px 96px!important;
+  }
+  .scene-date::after{inset:14px 10px;border-radius:36% 36% 24px 24px/5% 5% 24px 24px}
+  .v47-slide{inset:-4%;width:108%;height:108%}
+  .v47-decor{inset:-2%;opacity:.11}
+  .scene-date>.inv-shell{
+    width:min(100%,390px)!important;
+    padding:36px 16px 32px!important;
+    border-radius:28px;
+  }
+  .scene-date>.inv-shell::before{inset:7px;border-radius:21px}
+  .scene-date .inv-title{font-size:clamp(44px,12.5vw,58px)!important}
+  .scene-date .inv-copy{font-size:15px!important;line-height:1.62!important}
+  .scene-date .countdown-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:6px!important;margin-top:28px!important}
+  .scene-date .count-item{padding:17px 4px 14px!important;border-radius:16px!important}
+  .scene-date .count-item::before{inset:5px!important;border-radius:11px!important}
+  .scene-date .count-item strong{font-size:clamp(27px,8.6vw,38px)!important}
+  .scene-date .count-item span{font-size:9px!important;letter-spacing:.09em!important}
+  .v47-slide-dots{bottom:max(25px,env(safe-area-inset-bottom))}
+}
+
+@media(pointer:coarse){
+  .v47-slide{will-change:auto}
+  .scene-date.v47-running .v47-slide.is-active{animation-duration:8.2s}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .scene-date .v47-slide{animation:none!important;transition:none!important}
+  .scene-date .v47-slide:not(.is-active){display:none!important}
+  .v47-slide-dots{display:none!important}
+}
