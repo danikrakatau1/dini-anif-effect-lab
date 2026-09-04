@@ -1,0 +1,204 @@
+/* Sakura V4.5 — Color Master Video → Color Frame Background → Locked V4.1.2 Name Frame */
+:root{
+  --v45-maroon:#742f3a;
+  --v45-gold:#bd955d;
+  --v45-cream:#efe2cf;
+}
+
+.scene-opening{
+  min-height:100vh;
+  min-height:100svh;
+  overflow:hidden;
+  background:var(--v45-cream)!important;
+  isolation:isolate;
+  contain:paint;
+}
+
+.scene-opening>.v394-opening-cinema,
+.scene-opening>.v395-stage,
+.scene-opening>.v396-stage,
+.scene-opening>.v40-stage,
+.scene-opening>.v41-stage,
+.scene-opening>.v42-world-stage,
+.scene-opening>.v43-stage,
+.scene-opening>.v44-stage{display:none!important}
+.scene-opening>.living-wash,
+.scene-opening>.section-petal{display:none!important}
+
+/* One color master video. */
+.scene-opening>.v45-stage{
+  position:absolute;
+  inset:0;
+  z-index:1;
+  overflow:hidden;
+  pointer-events:none;
+  background:var(--v45-cream);
+}
+.v45-poster,
+.v45-video,
+.v45-name-bg,
+.v45-atmosphere{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+}
+.v45-poster{
+  z-index:1;
+  background:url('/assets/Sakura-v45/sakura-background-color.jpg.jpg') center/cover no-repeat;
+  opacity:1;
+}
+.v45-video{
+  z-index:2;
+  display:block;
+  object-fit:cover;
+  object-position:50% 50%;
+  background:var(--v45-cream);
+  opacity:0;
+  transition:opacity .18s ease;
+}
+.v45-video.is-ready{opacity:1}
+.v45-stage.is-video-ready .v45-poster{opacity:0}
+
+/* User-provided color still becomes the finished name-frame world. */
+.v45-name-bg{
+  z-index:3;
+  background:url('/assets/Sakura-v45/sakura-name-frame-background.jpg') center/cover no-repeat;
+  opacity:0;
+  transform:scale(1.012);
+  will-change:opacity,transform;
+}
+.v45-atmosphere{
+  z-index:4;
+  pointer-events:none;
+  opacity:.045;
+  background:
+    radial-gradient(circle at 50% 48%,rgba(255,249,238,.14),transparent 36%),
+    linear-gradient(180deg,rgba(255,255,255,.015),transparent 70%,rgba(54,65,60,.035));
+}
+
+/* V4.1.2 LOCKED FRAME GRAMMAR: thin full-stage maroon + gold draw, no chunky card. */
+.v45-border{
+  position:absolute;
+  z-index:12;
+  inset:24px 17px;
+  opacity:0;
+  pointer-events:none;
+}
+.v45-border svg{
+  display:block;
+  width:100%;
+  height:100%;
+  overflow:visible;
+}
+.v45-border path{
+  fill:none;
+  vector-effect:non-scaling-stroke;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.v45-border-outer{stroke:rgba(116,47,58,.84);stroke-width:1.6}
+.v45-border-inner{stroke:rgba(189,149,93,.68);stroke-width:1.05}
+
+.v45-crest{
+  position:absolute;
+  z-index:13;
+  left:50%;
+  top:49px;
+  width:42px;
+  height:42px;
+  transform:translateX(-50%) scale(.5) rotate(45deg);
+  opacity:0;
+  border:1px solid rgba(189,149,93,.72);
+  background:rgba(250,240,220,.72);
+  box-shadow:0 6px 18px rgba(81,48,39,.08);
+}
+.v45-crest::before,
+.v45-crest::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%) rotate(-45deg);
+  background:var(--v45-gold);
+}
+.v45-crest::before{width:12px;height:1px}
+.v45-crest::after{width:1px;height:12px}
+
+/* No Prindavan central card: this is only a positioning holder for the locked name. */
+.scene-opening>.inv-shell{
+  position:relative!important;
+  z-index:20!important;
+  width:min(78%,320px)!important;
+  max-width:320px!important;
+  min-height:140px!important;
+  margin:auto!important;
+  padding:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:none!important;
+  background-color:transparent!important;
+  background-image:none!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  filter:none!important;
+  opacity:1!important;
+  transform:none!important;
+  overflow:visible!important;
+  pointer-events:none!important;
+}
+.scene-opening>.inv-shell::before,
+.scene-opening>.inv-shell::after{content:none!important;display:none!important}
+
+.scene-opening .inv-eyebrow,
+.scene-opening .inv-rule,
+.scene-opening .inv-copy,
+.scene-opening .v443-name-frame{display:none!important}
+
+/* Locked name: restrained size, breathing room, final reveal. */
+.scene-opening .inv-title{
+  position:relative;
+  z-index:3;
+  margin:0!important;
+  color:var(--v45-maroon)!important;
+  font-family:"Bodoni Moda",serif!important;
+  font-size:clamp(38px,10.4vw,54px)!important;
+  font-weight:400!important;
+  line-height:1!important;
+  letter-spacing:-.04em!important;
+  text-align:center!important;
+  white-space:nowrap;
+  background:none!important;
+  box-shadow:none!important;
+  text-shadow:0 2px 14px rgba(255,247,229,.42);
+  opacity:0;
+  transform:translate3d(0,11px,0) scale(.97);
+  filter:blur(5px)!important;
+}
+.scene-opening .inv-title::before,
+.scene-opening .inv-title::after{content:none!important;display:none!important}
+
+.scene-opening.v45-name-visible .inv-title{
+  opacity:1!important;
+  transform:none!important;
+  filter:none!important;
+}
+.scene-opening.v45-frame-visible .v45-border{opacity:1!important}
+.scene-opening.v45-frame-visible .v45-crest{opacity:1!important}
+.scene-opening.v45-final-bg .v45-name-bg{opacity:1!important;transform:scale(1)!important}
+
+@media(max-width:350px){
+  .v45-border{inset:18px 12px}
+  .v45-crest{top:42px}
+  .scene-opening>.inv-shell{width:min(80%,286px)!important}
+  .scene-opening .inv-title{font-size:clamp(35px,10.8vw,47px)!important}
+}
+
+/* Explicit static QA only. */
+@media(prefers-reduced-motion:reduce){
+  html:not([data-force-v45-motion="1"]) .v45-video{display:none!important}
+}
