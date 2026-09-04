@@ -1,4 +1,4 @@
-/* Sakura V4.7 — Interior Luxury Pass 02: Save The Date + Cinematic Background Slideshow */
+/* Sakura V4.7.1 — Interior Luxury Pass 02: Save The Date + Cinematic Background Slideshow */
 :root{
   --v47-burgundy:#5d2230;
   --v47-gold:#c9a66a;
@@ -7,7 +7,7 @@
   --v47-ink:#5c4240;
 }
 
-/* Opening V4.5.2 and Mempelai V4.6.1 remain untouched. */
+/* Opening V4.5.2 and Mempelai V4.6.2 remain untouched. */
 .scene-date{
   position:relative;
   isolation:isolate;
@@ -74,7 +74,6 @@
 .v47-slide.is-active{opacity:1;z-index:2}
 .v47-slide.is-previous{opacity:0;z-index:1}
 
-/* A single running slide slowly moves, like a camera breathing rather than a CSS zoom. */
 .scene-date.v47-running .v47-slide.is-active{
   animation:v47KenBurns 7.2s cubic-bezier(.36,0,.24,1) forwards;
 }
@@ -83,20 +82,19 @@
   to{transform:scale(1.075) translate3d(-.42%,-.32%,0)}
 }
 
-/* User Sakura source as faint printed foreground. Checkerboard visually disappears through high-key multiply. */
+/* Clean white decor derivative: no checkerboard, only original artwork over white. */
 .v47-decor{
   position:absolute;
   inset:-1.2%;
   z-index:3;
   pointer-events:none;
-  background:url('/assets/Sakura-v45/sakura-decor-overlay-source.jpg.jpg') center/cover no-repeat;
-  opacity:.13;
-  filter:contrast(1.78) brightness(1.12) saturate(1.06);
+  background:url('/assets/Sakura-v45/sakura-decor-overlay-white.webp?v=471') center/cover no-repeat;
+  opacity:.24;
+  filter:saturate(1.05) contrast(1.02);
   mix-blend-mode:multiply;
   transform:scale(1.012);
 }
 
-/* Color depth and vignette keep the slideshow from looking like a raw photo swap. */
 .v47-grade{
   position:absolute;
   inset:0;
@@ -198,18 +196,11 @@
 }
 
 @media(max-width:600px){
-  .scene-date{
-    min-height:100svh;
-    padding:88px 18px 96px!important;
-  }
+  .scene-date{min-height:100svh;padding:88px 18px 96px!important}
   .scene-date::after{inset:14px 10px;border-radius:36% 36% 24px 24px/5% 5% 24px 24px}
   .v47-slide{inset:-4%;width:108%;height:108%}
-  .v47-decor{inset:-2%;opacity:.11}
-  .scene-date>.inv-shell{
-    width:min(100%,390px)!important;
-    padding:36px 16px 32px!important;
-    border-radius:28px;
-  }
+  .v47-decor{inset:-2%;opacity:.21}
+  .scene-date>.inv-shell{width:min(100%,390px)!important;padding:36px 16px 32px!important;border-radius:28px}
   .scene-date>.inv-shell::before{inset:7px;border-radius:21px}
   .scene-date .inv-title{font-size:clamp(44px,12.5vw,58px)!important}
   .scene-date .inv-copy{font-size:15px!important;line-height:1.62!important}
