@@ -1,5 +1,5 @@
-/* Sakura V5.0 — Tools Motion Engine Adapter
-   Donor architecture: single owner + observer + timeline + rAF decor motion.
+/* Sakura V5.0.1 — Tools Motion Engine Adapter + Slideshow Recovery
+   Donor architecture remains single-owner/observer/timeline/rAF.
    Runtime is fully local to Dini Anif Effect Lab. */
 :root{
   --v50-ease:cubic-bezier(.22,.61,.36,1);
@@ -25,37 +25,48 @@
 .v492-date-stage,
 .v49-scene-bg{display:none!important}
 
-/* ===== SAVE THE DATE: only true two-scene living dissolve ===== */
+/* ===== SAVE THE DATE: reliable two-surface / three-source living slideshow ===== */
 .v50-date-stage{
-  position:absolute;
-  inset:0;
-  z-index:0;
-  overflow:hidden;
-  pointer-events:none;
+  position:absolute!important;
+  inset:0!important;
+  z-index:0!important;
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  overflow:hidden!important;
+  pointer-events:none!important;
   background:#ead8c4;
 }
 .v50-date-slide{
-  position:absolute;
-  inset:-3%;
-  width:106%;
-  height:106%;
-  opacity:0;
-  background-position:center;
-  background-size:cover;
-  background-repeat:no-repeat;
+  position:absolute!important;
+  inset:-3%!important;
+  width:106%!important;
+  height:106%!important;
+  max-width:none!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  display:block!important;
+  visibility:visible!important;
+  opacity:0!important;
   transform:translate3d(var(--v50-x,0),var(--v50-y,0),0) scale(var(--v50-scale,1.025));
   transform-origin:50% 50%;
   transition:
-    opacity 1.85s var(--v50-ease),
-    transform 10.5s cubic-bezier(.22,.61,.36,1);
+    opacity 1.45s var(--v50-ease),
+    transform 9.8s cubic-bezier(.22,.61,.36,1);
   backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
 }
-.v50-date-slide.is-active{opacity:1}
+.v50-date-slide.is-active{
+  opacity:1!important;
+}
 .v50-date-slide[data-variant="a"]{
-  --v50-x:-.35%;--v50-y:-.18%;--v50-scale:1.072;
+  --v50-x:-.45%;--v50-y:-.20%;--v50-scale:1.075;
 }
 .v50-date-slide[data-variant="b"]{
-  --v50-x:.42%;--v50-y:-.28%;--v50-scale:1.066;
+  --v50-x:.48%;--v50-y:-.30%;--v50-scale:1.064;
+}
+.v50-date-slide[data-variant="c"]{
+  --v50-x:-.18%;--v50-y:.34%;--v50-scale:1.082;
 }
 .v50-date-grade{
   position:absolute;
@@ -63,8 +74,8 @@
   z-index:2;
   pointer-events:none;
   background:
-    radial-gradient(ellipse at 50% 42%,rgba(255,247,226,.10),transparent 46%),
-    linear-gradient(180deg,rgba(78,45,53,.025),transparent 38%,rgba(75,39,50,.08));
+    radial-gradient(ellipse at 50% 42%,rgba(255,247,226,.07),transparent 43%),
+    linear-gradient(180deg,rgba(78,45,53,.018),transparent 40%,rgba(75,39,50,.055));
 }
 .scene-date{
   background:linear-gradient(180deg,#ead8c4,#d8aaa4)!important;
@@ -73,12 +84,12 @@
   content:none!important;
   display:none!important;
 }
-.scene-date>.living-wash{opacity:.10!important;z-index:1!important}
+.scene-date>.living-wash{opacity:.07!important;z-index:1!important;pointer-events:none!important}
 .scene-date>.inv-shell{position:relative!important;z-index:4!important}
 .scene-date .count-item{
   backdrop-filter:none!important;
   -webkit-backdrop-filter:none!important;
-  background:linear-gradient(155deg,rgba(255,249,238,.92),rgba(242,219,194,.84))!important;
+  background:linear-gradient(155deg,rgba(255,249,238,.90),rgba(242,219,194,.82))!important;
 }
 
 /* ===== LOWER SCENES: one full artwork + engine-driven local camera ===== */
@@ -156,7 +167,12 @@
 .scene-wishes .message-card{background:linear-gradient(155deg,rgba(255,249,238,.92),rgba(242,219,193,.84))!important}
 
 @media(max-width:600px){
-  .v50-date-slide{inset:-2.2%;width:104.4%;height:104.4%;transition:opacity 1.7s var(--v50-ease),transform 11.2s linear}
+  .v50-date-slide{
+    inset:-2.2%!important;
+    width:104.4%!important;
+    height:104.4%!important;
+    transition:opacity 1.35s var(--v50-ease),transform 10.6s linear;
+  }
   .v50-living-art{inset:-2.2%;width:104.4%;height:104.4%;transition:transform .85s cubic-bezier(.22,.61,.36,1)}
 }
 
