@@ -1,4 +1,4 @@
-/* Sakura V5.0.1 — Tools Motion Engine Adapter + Slideshow Recovery
+/* Sakura V5.0.2 — Tools Motion Engine Adapter + Guaranteed Date Slideshow
    Donor architecture remains single-owner/observer/timeline/rAF.
    Runtime is fully local to Dini Anif Effect Lab. */
 :root{
@@ -25,11 +25,11 @@
 .v492-date-stage,
 .v49-scene-bg{display:none!important}
 
-/* ===== SAVE THE DATE: reliable two-surface / three-source living slideshow ===== */
+/* ===== SAVE THE DATE: guaranteed visible slideshow layer ===== */
 .v50-date-stage{
   position:absolute!important;
   inset:0!important;
-  z-index:0!important;
+  z-index:1!important;
   display:block!important;
   visibility:visible!important;
   opacity:1!important;
@@ -48,6 +48,7 @@
   display:block!important;
   visibility:visible!important;
   opacity:0!important;
+  z-index:1;
   transform:translate3d(var(--v50-x,0),var(--v50-y,0),0) scale(var(--v50-scale,1.025));
   transform-origin:50% 50%;
   transition:
@@ -71,11 +72,11 @@
 .v50-date-grade{
   position:absolute;
   inset:0;
-  z-index:2;
+  z-index:3;
   pointer-events:none;
   background:
-    radial-gradient(ellipse at 50% 42%,rgba(255,247,226,.07),transparent 43%),
-    linear-gradient(180deg,rgba(78,45,53,.018),transparent 40%,rgba(75,39,50,.055));
+    radial-gradient(ellipse at 50% 42%,rgba(255,247,226,.06),transparent 43%),
+    linear-gradient(180deg,rgba(78,45,53,.015),transparent 40%,rgba(75,39,50,.045));
 }
 .scene-date{
   background:linear-gradient(180deg,#ead8c4,#d8aaa4)!important;
@@ -84,12 +85,19 @@
   content:none!important;
   display:none!important;
 }
-.scene-date>.living-wash{opacity:.07!important;z-index:1!important;pointer-events:none!important}
-.scene-date>.inv-shell{position:relative!important;z-index:4!important}
+.scene-date>.living-wash{
+  opacity:.055!important;
+  z-index:2!important;
+  pointer-events:none!important;
+}
+.scene-date>.inv-shell{
+  position:relative!important;
+  z-index:4!important;
+}
 .scene-date .count-item{
   backdrop-filter:none!important;
   -webkit-backdrop-filter:none!important;
-  background:linear-gradient(155deg,rgba(255,249,238,.90),rgba(242,219,194,.82))!important;
+  background:linear-gradient(155deg,rgba(255,249,238,.88),rgba(242,219,194,.79))!important;
 }
 
 /* ===== LOWER SCENES: one full artwork + engine-driven local camera ===== */
@@ -177,6 +185,9 @@
 }
 
 @media(prefers-reduced-motion:reduce){
-  .v50-date-slide{transition:opacity .3s linear!important;transform:none!important}
+  .v50-date-slide{
+    transition:opacity .45s linear!important;
+    transform:none!important;
+  }
   .v50-living-art{transform:none!important;transition:none!important}
 }
