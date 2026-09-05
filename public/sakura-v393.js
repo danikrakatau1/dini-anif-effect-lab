@@ -41,13 +41,13 @@ if(!v483Link){v483Link=document.createElement('link');v483Link.rel='stylesheet'}
 v483Link.href='/sakura-v483.css?v=483';
 document.head.appendChild(v483Link);
 
-/* V5.0 TOOLS ENGINE ADAPTER: single owner for interior artwork motion. */
+/* V5.0.1 TOOLS ENGINE ADAPTER: single owner + reliable local slideshow. */
 let v50Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v50.css'));
 if(!v50Link){v50Link=document.createElement('link');v50Link.rel='stylesheet'}
-v50Link.href='/sakura-v50.css?v=500';
+v50Link.href='/sakura-v50.css?v=501';
 document.head.appendChild(v50Link);
-await import('./sakura-v50.js?v=500');
-document.documentElement.dataset.sakuraInterior='v5.0-tools-engine';
+await import('./sakura-v50.js?v=501');
+document.documentElement.dataset.sakuraInterior='v5.0.1-tools-engine';
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse = matchMedia('(pointer: coarse)').matches;
