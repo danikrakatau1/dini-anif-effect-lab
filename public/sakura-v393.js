@@ -1,5 +1,5 @@
 /* Sakura V3.9.3 — Clean stable interior runtime */
-/* Opening remains V4.5.2 + V4.5.3 plaque. Interior returns to the V4.8.3 visual stack. */
+/* Opening remains V4.5.2 + V4.5.3 plaque. Interior uses V4.8.3 visual stack + V5.1 reference rhythm. */
 window.__SAKURA_TARGET_VERSION='v3.9.6';
 
 const v394Href='/sakura-v394.css';
@@ -28,22 +28,29 @@ document.head.appendChild(v45Link);
 await import('./sakura-v45.js?v=452');
 document.body.dataset.sakuraFinalCandidate='v4.5.3';
 
-/* Date keeps its established visual styling, but NO slideshow JS is loaded. */
+/* Date keeps its established visual styling; V5.1 owns the local background rhythm. */
 let v47Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v47.css'));
 if(!v47Link){v47Link=document.createElement('link');v47Link.rel='stylesheet'}
 v47Link.href='/sakura-v47.css?v=473';
 document.head.appendChild(v47Link);
 
-/* V4.8.3 is the last active interior polish layer. */
+/* V4.8.3 keeps the color story + smooth section seams. */
 let v483Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v483.css'));
 if(!v483Link){v483Link=document.createElement('link');v483Link.rel='stylesheet'}
 v483Link.href='/sakura-v483.css?v=483';
 document.head.appendChild(v483Link);
 await import('./sakura-v483.js?v=483');
-document.documentElement.dataset.sakuraInterior='v4.8.3-clean-reset';
 
-/* Explicitly remove stale experiment DOM if a cached module created it before this runtime. */
-document.querySelectorAll('.v491-shared-stage,.v492-date-stage,.v49-scene-bg,.v50-date-stage,.v50-living-art,.v503-date-stage').forEach(node=>node.remove());
+/* Remove all old slideshow experiment DOM before V5.1 mounts. */
+document.querySelectorAll('.v47-slideshow,.v491-shared-stage,.v492-date-stage,.v49-scene-bg,.v50-date-stage,.v50-living-art,.v503-date-stage').forEach(node=>node.remove());
+
+/* V5.1 — native per-section rhythm inspired by the ART JAWA reference experience. */
+let v51Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v51.css'));
+if(!v51Link){v51Link=document.createElement('link');v51Link.rel='stylesheet'}
+v51Link.href='/sakura-v51.css?v=510';
+document.head.appendChild(v51Link);
+await import('./sakura-v51.js?v=510');
+document.documentElement.dataset.sakuraInterior='v5.1-reference-rhythm';
 
 const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse=matchMedia('(pointer: coarse)').matches;
