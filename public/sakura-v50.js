@@ -1,4 +1,4 @@
-/* Sakura V5.0.1 — Tools Motion Engine Adapter + Slideshow Recovery
+/* Sakura V5.0.2 — Tools Motion Engine Adapter + Guaranteed Date Slideshow
    Architecture transplanted from WeddingVisualEngine as an independent Dini runtime.
    Source tools repo remains read-only. */
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -22,10 +22,10 @@ function createSceneObserver(onEnter,onLeave){
   }
   return new IntersectionObserver(entries=>{
     entries.forEach(entry=>{
-      if(entry.isIntersecting && entry.intersectionRatio>=.18) onEnter?.(entry.target,entry);
-      else if(!entry.isIntersecting || entry.intersectionRatio<.08) onLeave?.(entry.target,entry);
+      if(entry.isIntersecting && entry.intersectionRatio>=.08) onEnter?.(entry.target,entry);
+      else if(!entry.isIntersecting || entry.intersectionRatio<.02) onLeave?.(entry.target,entry);
     });
-  },{threshold:[0,.08,.18,.36,.55],rootMargin:'8% 0px 8% 0px'});
+  },{threshold:[0,.02,.08,.22,.45],rootMargin:'12% 0px 12% 0px'});
 }
 
 class SakuraToolsMotionEngine{
@@ -42,8 +42,10 @@ class SakuraToolsMotionEngine{
     this.dateSourceIndex=0;
     this.dateVisible=false;
     this.dateSwapBusy=false;
+    this.dateCycleCount=0;
     this.sceneObserver=null;
-    this.boundScroll=()=>this.scheduleDecor();
+    this.boundScroll=()=>{this.updateDateViewport();this.scheduleDecor()};
+    this.boundResize=()=>{this.updateDateViewport();this.scheduleDecor()};
     this.boundPointer=e=>this.onPointer(e);
     this.boundVisibility=()=>this.onVisibility();
     this.assets={
@@ -61,7 +63,9 @@ class SakuraToolsMotionEngine{
     this.buildLowerScenes();
     this.bindScenes();
     this.startDecorMotion();
-    document.documentElement.dataset.sakuraInterior='v5.0.1-tools-engine';
+    requestAnimationFrame(()=>this.updateDateViewport());
+    setTimeout(()=>this.updateDateViewport(),450);
+    document.documentElement.dataset.sakuraInterior='v5.0.2-tools-engine';
   }
 
   cleanupLegacy(){
@@ -87,10 +91,8 @@ class SakuraToolsMotionEngine{
     this.dateSlides[0].dataset.sourceIndex='0';
     this.dateSlides[1].dataset.sourceIndex='1';
 
-    /* Warm only the first alternate. Third source loads on demand to keep iPhone memory lighter. */
-    const warm=new Image();
-    warm.decoding='async';
-    warm.src=this.dateSources[1];
+    const warm1=new Image();warm1.decoding='async';warm1.src=this.dateSources[1];
+    const warm2=new Image();warm2.decoding='async';warm2.src=this.dateSources[2];
   }
 
   buildLowerScenes(){
@@ -119,7 +121,8 @@ class SakuraToolsMotionEngine{
   }
 
   bindScenes(){
-    const scenes=[...this.root.querySelectorAll('.scene-date,.scene-event,.scene-story,.scene-gallery,.scene-gift,.scene-rsvp,.scene-wishes,.scene-closing')];
+    /* Date uses direct viewport detection; lower scenes use observer. */
+    const scenes=[...this.root.querySelectorAll('.scene-event,.scene-story,.scene-gallery,.scene-gift,.scene-rsvp,.scene-wishes,.scene-closing')];
     this.sceneObserver=createSceneObserver(
       scene=>this.enterScene(scene),
       scene=>this.leaveScene(scene)
@@ -131,30 +134,41 @@ class SakuraToolsMotionEngine{
     if(this.activeScene && this.activeScene!==scene)this.activeScene.classList.remove('v50-active');
     this.activeScene=scene;
     scene.classList.add('v50-active');
-    if(scene===this.dateScene){
-      this.dateVisible=true;
-      this.scheduleDateSwap();
-    }
     this.scheduleDecor();
   }
 
   leaveScene(scene){
     scene.classList.remove('v50-active');
-    if(scene===this.dateScene){
-      this.dateVisible=false;
-      this.timeline.cancel();
-    }
     if(this.activeScene===scene)this.activeScene=null;
   }
 
-  scheduleDateSwap(){
+  updateDateViewport(){
+    if(!this.dateScene)return;
+    const rect=this.dateScene.getBoundingClientRect();
+    const vh=Math.max(window.innerHeight||document.documentElement.clientHeight||1,1);
+    const near=rect.bottom>(-vh*.18) && rect.top<(vh*1.18);
+
+    if(near && !this.dateVisible){
+      this.dateVisible=true;
+      this.dateScene.classList.add('v50-active','v50-date-running');
+      this.dateCycleCount=0;
+      this.scheduleDateSwap(true);
+    } else if(!near && this.dateVisible){
+      this.dateVisible=false;
+      this.dateScene.classList.remove('v50-active','v50-date-running');
+      this.timeline.cancel();
+    }
+  }
+
+  scheduleDateSwap(first=false){
     this.timeline.cancel();
-    if(reduced || !this.dateVisible || document.hidden || this.dateSlides.length!==2)return;
-    const delay=lowPower?6400:5200;
+    if(!this.dateVisible || document.hidden || this.dateSlides.length!==2)return;
+    const delay=first?950:(lowPower?5600:4400);
     this.timeline.at(delay,async()=>{
       if(!this.dateVisible || document.hidden)return;
       await this.swapDate();
-      if(this.dateVisible && !document.hidden)this.scheduleDateSwap();
+      this.dateCycleCount+=1;
+      if(this.dateVisible && !document.hidden)this.scheduleDateSwap(false);
     });
   }
 
@@ -173,12 +187,14 @@ class SakuraToolsMotionEngine{
       if(currentIndex!==nextSourceIndex){
         incoming.src=nextSrc;
         incoming.dataset.sourceIndex=String(nextSourceIndex);
-        try{await incoming.decode?.()}catch{}
+        try{await Promise.race([incoming.decode?.()||Promise.resolve(),new Promise(r=>setTimeout(r,700))])}catch{}
       }
 
       if(!this.dateVisible || document.hidden)return;
 
       incoming.dataset.variant=['a','b','c'][nextSourceIndex%3];
+      incoming.style.zIndex='2';
+      outgoing.style.zIndex='1';
       incoming.getBoundingClientRect();
       requestAnimationFrame(()=>{
         incoming.classList.add('is-active');
@@ -194,6 +210,7 @@ class SakuraToolsMotionEngine{
 
   startDecorMotion(){
     addEventListener('scroll',this.boundScroll,{passive:true});
+    addEventListener('resize',this.boundResize,{passive:true});
     if(!coarse && !lowPower)this.root.addEventListener('pointermove',this.boundPointer,{passive:true});
     document.addEventListener('visibilitychange',this.boundVisibility);
     this.scheduleDecor();
@@ -216,7 +233,7 @@ class SakuraToolsMotionEngine{
 
   renderDecor(){
     const scene=this.activeScene;
-    if(!scene || scene===this.dateScene)return;
+    if(!scene)return;
     const art=scene.querySelector(':scope > .v50-living-art');
     if(!art)return;
 
@@ -239,7 +256,8 @@ class SakuraToolsMotionEngine{
       this.timeline.cancel();
       return;
     }
-    if(this.dateVisible)this.scheduleDateSwap();
+    this.updateDateViewport();
+    if(this.dateVisible)this.scheduleDateSwap(true);
     this.scheduleDecor();
   }
 
@@ -248,6 +266,7 @@ class SakuraToolsMotionEngine{
     this.sceneObserver?.disconnect();
     if(this.raf)cancelAnimationFrame(this.raf);
     removeEventListener('scroll',this.boundScroll);
+    removeEventListener('resize',this.boundResize);
     this.root?.removeEventListener('pointermove',this.boundPointer);
     document.removeEventListener('visibilitychange',this.boundVisibility);
     this.root?.querySelectorAll('.v50-date-stage,.v50-living-art').forEach(node=>node.remove());
