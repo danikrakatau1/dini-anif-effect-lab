@@ -1,4 +1,4 @@
-/* Sakura V5.0 — Tools Motion Engine Adapter
+/* Sakura V5.0.1 — Tools Motion Engine Adapter + Slideshow Recovery
    Architecture transplanted from WeddingVisualEngine as an independent Dini runtime.
    Source tools repo remains read-only. */
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -39,16 +39,19 @@ class SakuraToolsMotionEngine{
     this.dateStage=null;
     this.dateSlides=[];
     this.dateFront=0;
-    this.dateAssetIndex=0;
+    this.dateSourceIndex=0;
     this.dateVisible=false;
+    this.dateSwapBusy=false;
     this.sceneObserver=null;
     this.boundScroll=()=>this.scheduleDecor();
     this.boundPointer=e=>this.onPointer(e);
     this.boundVisibility=()=>this.onVisibility();
     this.assets={
       world:'/assets/Sakura-v45/sakura-background-color.jpg.jpg',
-      glow:'/assets/Sakura-v45/sakura-name-frame-background.jpg'
+      glow:'/assets/Sakura-v45/sakura-name-frame-background.jpg',
+      vintage:'/assets/sakura-v2-landscape.png'
     };
+    this.dateSources=[this.assets.world,this.assets.glow,this.assets.vintage];
   }
 
   mount(){
@@ -58,7 +61,7 @@ class SakuraToolsMotionEngine{
     this.buildLowerScenes();
     this.bindScenes();
     this.startDecorMotion();
-    document.documentElement.dataset.sakuraInterior='v5.0-tools-engine';
+    document.documentElement.dataset.sakuraInterior='v5.0.1-tools-engine';
   }
 
   cleanupLegacy(){
@@ -74,15 +77,20 @@ class SakuraToolsMotionEngine{
     const stage=document.createElement('div');
     stage.className='v50-date-stage';
     stage.setAttribute('aria-hidden','true');
-    stage.innerHTML='<div class="v50-date-slide is-active" data-variant="a"></div><div class="v50-date-slide" data-variant="b"></div><div class="v50-date-grade"></div>';
+    stage.innerHTML='<img class="v50-date-slide is-active" data-variant="a" alt="" decoding="async" draggable="false"><img class="v50-date-slide" data-variant="b" alt="" decoding="async" draggable="false"><div class="v50-date-grade"></div>';
     scene.insertBefore(stage,scene.firstChild);
     this.dateStage=stage;
     this.dateSlides=[...stage.querySelectorAll('.v50-date-slide')];
 
-    const urls=[this.assets.world,this.assets.glow];
-    this.dateSlides[0].style.backgroundImage=`url('${urls[0]}')`;
-    this.dateSlides[1].style.backgroundImage=`url('${urls[1]}')`;
-    urls.forEach(src=>{const img=new Image();img.decoding='async';img.src=src});
+    this.dateSlides[0].src=this.dateSources[0];
+    this.dateSlides[1].src=this.dateSources[1];
+    this.dateSlides[0].dataset.sourceIndex='0';
+    this.dateSlides[1].dataset.sourceIndex='1';
+
+    /* Warm only the first alternate. Third source loads on demand to keep iPhone memory lighter. */
+    const warm=new Image();
+    warm.decoding='async';
+    warm.src=this.dateSources[1];
   }
 
   buildLowerScenes(){
@@ -142,30 +150,46 @@ class SakuraToolsMotionEngine{
   scheduleDateSwap(){
     this.timeline.cancel();
     if(reduced || !this.dateVisible || document.hidden || this.dateSlides.length!==2)return;
-    const delay=lowPower?8200:7600;
-    this.timeline.at(delay,()=>{
+    const delay=lowPower?6400:5200;
+    this.timeline.at(delay,async()=>{
       if(!this.dateVisible || document.hidden)return;
-      this.swapDate();
-      this.scheduleDateSwap();
+      await this.swapDate();
+      if(this.dateVisible && !document.hidden)this.scheduleDateSwap();
     });
   }
 
-  swapDate(){
+  async swapDate(){
+    if(this.dateSwapBusy || this.dateSlides.length!==2)return;
+    this.dateSwapBusy=true;
+
     const incomingIndex=1-this.dateFront;
     const incoming=this.dateSlides[incomingIndex];
     const outgoing=this.dateSlides[this.dateFront];
-    if(!incoming||!outgoing)return;
+    const nextSourceIndex=(this.dateSourceIndex+1)%this.dateSources.length;
+    const nextSrc=this.dateSources[nextSourceIndex];
 
-    this.dateAssetIndex=(this.dateAssetIndex+1)%2;
-    const src=this.dateAssetIndex===0?this.assets.world:this.assets.glow;
-    incoming.style.backgroundImage=`url('${src}')`;
-    incoming.dataset.variant=incoming.dataset.variant==='a'?'b':'a';
+    try{
+      const currentIndex=Number(incoming.dataset.sourceIndex||-1);
+      if(currentIndex!==nextSourceIndex){
+        incoming.src=nextSrc;
+        incoming.dataset.sourceIndex=String(nextSourceIndex);
+        try{await incoming.decode?.()}catch{}
+      }
 
-    requestAnimationFrame(()=>{
-      incoming.classList.add('is-active');
-      outgoing.classList.remove('is-active');
-    });
-    this.dateFront=incomingIndex;
+      if(!this.dateVisible || document.hidden)return;
+
+      incoming.dataset.variant=['a','b','c'][nextSourceIndex%3];
+      incoming.getBoundingClientRect();
+      requestAnimationFrame(()=>{
+        incoming.classList.add('is-active');
+        outgoing.classList.remove('is-active');
+      });
+
+      this.dateFront=incomingIndex;
+      this.dateSourceIndex=nextSourceIndex;
+    } finally {
+      this.dateSwapBusy=false;
+    }
   }
 
   startDecorMotion(){
