@@ -41,13 +41,20 @@ if(!v483Link){v483Link=document.createElement('link');v483Link.rel='stylesheet'}
 v483Link.href='/sakura-v483.css?v=483';
 document.head.appendChild(v483Link);
 
-/* V5.0.2 TOOLS ENGINE ADAPTER: viewport-triggered guaranteed local slideshow. */
+/* V5.0.2 tools-engine adapter remains the single owner for lower-scene motion. */
 let v50Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v50.css'));
 if(!v50Link){v50Link=document.createElement('link');v50Link.rel='stylesheet'}
 v50Link.href='/sakura-v50.css?v=502';
 document.head.appendChild(v50Link);
 await import('./sakura-v50.js?v=502');
-document.documentElement.dataset.sakuraInterior='v5.0.2-tools-engine';
+
+/* V5.0.3: guaranteed CSS-only Save The Date slideshow. No timer/observer swapping. */
+let v503Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v503.css'));
+if(!v503Link){v503Link=document.createElement('link');v503Link.rel='stylesheet'}
+v503Link.href='/sakura-v503.css?v=503';
+document.head.appendChild(v503Link);
+await import('./sakura-v503.js?v=503');
+document.documentElement.dataset.sakuraInterior='v5.0.3-tools-motion-css-slideshow';
 
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coarse = matchMedia('(pointer: coarse)').matches;
