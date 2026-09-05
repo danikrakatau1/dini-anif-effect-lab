@@ -1,5 +1,5 @@
-/* Sakura V3.9.3 — Living Scene & Cinematic Motion behavior layer */
-/* Legacy opening builders stay disabled; their non-opening decoration remains available. */
+/* Sakura V3.9.3 — Clean stable interior runtime */
+/* Opening remains V4.5.2 + V4.5.3 plaque. Interior returns to the V4.8.3 visual stack. */
 window.__SAKURA_TARGET_VERSION='v3.9.6';
 
 const v394Href='/sakura-v394.css';
@@ -14,13 +14,12 @@ if(!document.querySelector(`link[href="${v395Href}"]`)){
 }
 await import('./sakura-v395.js');
 
-/* V3.9.6 CSS stays as mobile baseline; its opening JS is intentionally not imported. */
 const v396Href='/sakura-v396.css';
 if(!document.querySelector(`link[href="${v396Href}"]`)){
   const link=document.createElement('link');link.rel='stylesheet';link.href=v396Href;document.head.appendChild(link);
 }
 
-/* Opening core remains V4.5.2. V4.5.3 plaque is loaded directly by index.html. */
+/* Opening core is still the locked V4.5.2 engine. */
 window.__SAKURA_TARGET_VERSION='v4.5.2';
 let v45Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v45.css'));
 if(!v45Link){v45Link=document.createElement('link');v45Link.rel='stylesheet'}
@@ -29,51 +28,41 @@ document.head.appendChild(v45Link);
 await import('./sakura-v45.js?v=452');
 document.body.dataset.sakuraFinalCandidate='v4.5.3';
 
-/* Keep Date baseline styling only; all older Date slideshow JS stays disabled. */
+/* Date keeps its established visual styling, but NO slideshow JS is loaded. */
 let v47Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v47.css'));
 if(!v47Link){v47Link=document.createElement('link');v47Link.rel='stylesheet'}
 v47Link.href='/sakura-v47.css?v=473';
 document.head.appendChild(v47Link);
 
-/* Keep smooth section seam CSS only; no separate seam observer. */
+/* V4.8.3 is the last active interior polish layer. */
 let v483Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v483.css'));
 if(!v483Link){v483Link=document.createElement('link');v483Link.rel='stylesheet'}
 v483Link.href='/sakura-v483.css?v=483';
 document.head.appendChild(v483Link);
+await import('./sakura-v483.js?v=483');
+document.documentElement.dataset.sakuraInterior='v4.8.3-clean-reset';
 
-/* V5.0.2 tools-engine adapter remains the single owner for lower-scene motion. */
-let v50Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v50.css'));
-if(!v50Link){v50Link=document.createElement('link');v50Link.rel='stylesheet'}
-v50Link.href='/sakura-v50.css?v=502';
-document.head.appendChild(v50Link);
-await import('./sakura-v50.js?v=502');
+/* Explicitly remove stale experiment DOM if a cached module created it before this runtime. */
+document.querySelectorAll('.v491-shared-stage,.v492-date-stage,.v49-scene-bg,.v50-date-stage,.v50-living-art,.v503-date-stage').forEach(node=>node.remove());
 
-/* V5.0.3: guaranteed CSS-only Save The Date slideshow. No timer/observer swapping. */
-let v503Link=[...document.querySelectorAll('link[rel="stylesheet"]')].find(link=>link.href.includes('/sakura-v503.css'));
-if(!v503Link){v503Link=document.createElement('link');v503Link.rel='stylesheet'}
-v503Link.href='/sakura-v503.css?v=503';
-document.head.appendChild(v503Link);
-await import('./sakura-v503.js?v=503');
-document.documentElement.dataset.sakuraInterior='v5.0.3-tools-motion-css-slideshow';
-
-const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const coarse = matchMedia('(pointer: coarse)').matches;
-const lowPower = navigator.connection?.saveData || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
-const sections = [...document.querySelectorAll('[data-sakura-scene]')];
+const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const coarse=matchMedia('(pointer: coarse)').matches;
+const lowPower=navigator.connection?.saveData || (navigator.hardwareConcurrency && navigator.hardwareConcurrency<=4);
+const sections=[...document.querySelectorAll('[data-sakura-scene]')];
 
 function setupDelayedPanels(){
-  if(!sections.length) return ()=>{};
-  const delayed = sections.filter(section => section.dataset.sakuraScene !== 'opening' && section.querySelector('.paper-card,.story-carousel,.form-card,.gift-card,.message-list'));
-  delayed.forEach(section=>section.dataset.v393Panel = reduceMotion ? 'ready' : 'waiting');
-  if(reduceMotion) return ()=>{};
-  const timers = new Map();
-  const observer = new IntersectionObserver(entries=>{
+  if(!sections.length)return ()=>{};
+  const delayed=sections.filter(section=>section.dataset.sakuraScene!=='opening' && section.querySelector('.paper-card,.story-carousel,.form-card,.gift-card,.message-list'));
+  delayed.forEach(section=>section.dataset.v393Panel=reduceMotion?'ready':'waiting');
+  if(reduceMotion)return ()=>{};
+  const timers=new Map();
+  const observer=new IntersectionObserver(entries=>{
     entries.forEach(entry=>{
-      const section = entry.target;
-      if(entry.isIntersecting && entry.intersectionRatio >= .28 && section.dataset.v393Panel !== 'ready'){
-        const delay = lowPower ? 180 : (coarse ? 220 : 360);
+      const section=entry.target;
+      if(entry.isIntersecting && entry.intersectionRatio>=.28 && section.dataset.v393Panel!=='ready'){
+        const delay=lowPower?160:(coarse?200:320);
         clearTimeout(timers.get(section));
-        const timer = setTimeout(()=>{
+        const timer=setTimeout(()=>{
           section.dataset.v393Panel='ready';
           section.classList.add('panel-focused');
           timers.delete(section);
@@ -87,18 +76,13 @@ function setupDelayedPanels(){
   return ()=>{observer.disconnect();timers.forEach(clearTimeout);timers.clear()};
 }
 
-/* Legacy fake-camera function retained only for rollback reference; V5.0 owns artwork motion. */
-function setupFakeCameraDepth(){return ()=>{}}
-
 function setupButterflies(){
-  /* Decorative flight stays desktop-only; mobile/low-power remains light. */
-  if(reduceMotion || lowPower || coarse) return ()=>{};
-  const targets = sections.filter(s=>['couple','event','wishes','closing'].includes(s.dataset.sakuraScene));
+  if(reduceMotion || lowPower || coarse)return ()=>{};
+  const targets=sections.filter(s=>['couple','event','wishes','closing'].includes(s.dataset.sakuraScene));
   targets.forEach((section,sceneIndex)=>{
     const layer=document.createElement('div');
     layer.className='v393-butterfly-layer';
-    const amount=2;
-    layer.innerHTML=Array.from({length:amount},(_,i)=>{
+    layer.innerHTML=Array.from({length:2},(_,i)=>{
       const left=12+((sceneIndex*23+i*31)%72);
       const top=12+((sceneIndex*17+i*27)%56);
       const flight=12+((i+sceneIndex)%4)*2;
@@ -110,22 +94,25 @@ function setupButterflies(){
   return ()=>document.querySelectorAll('.v393-butterfly-layer').forEach(n=>n.remove());
 }
 
-/* Legacy scene-focus observer retained only for rollback reference; V5.0 owns scene activation. */
-function setupSceneFocus(){return ()=>{}}
-
 function setupCopyFeedback(){
   const buttons=[...document.querySelectorAll('.copy-demo')];
-  const local=[];
+  const cleanup=[];
   buttons.forEach(button=>{
-    const onClick=()=>{button.classList.add('is-copied');const t=setTimeout(()=>button.classList.remove('is-copied'),900);local.push(()=>clearTimeout(t));};
-    button.addEventListener('click',onClick);local.push(()=>button.removeEventListener('click',onClick));
+    const onClick=()=>{
+      button.classList.add('is-copied');
+      const timer=setTimeout(()=>button.classList.remove('is-copied'),900);
+      cleanup.push(()=>clearTimeout(timer));
+    };
+    button.addEventListener('click',onClick);
+    cleanup.push(()=>button.removeEventListener('click',onClick));
   });
-  return ()=>local.forEach(fn=>fn());
+  return ()=>cleanup.forEach(fn=>fn());
 }
 
 function setupVisibilityGuard(){
   const onVisibility=()=>document.documentElement.classList.toggle('v393-paused',document.hidden);
-  document.addEventListener('visibilitychange',onVisibility);onVisibility();
+  document.addEventListener('visibilitychange',onVisibility);
+  onVisibility();
   return ()=>document.removeEventListener('visibilitychange',onVisibility);
 }
 
