@@ -1,0 +1,118 @@
+/* Sakura V5.0.3 — Guaranteed CSS-only Save The Date slideshow
+   No timer, no observer, no runtime swapping. The engine tools adapter remains
+   responsible only for lower-scene living motion. */
+
+.scene-date{
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:hidden!important;
+}
+
+/* Retire every previous Date slideshow surface. */
+.scene-date>.v47-slideshow,
+.scene-date>.v492-date-stage,
+.scene-date>.v50-date-stage{
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
+}
+
+.v503-date-stage{
+  position:absolute!important;
+  inset:0!important;
+  z-index:2!important;
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  overflow:hidden!important;
+  pointer-events:none!important;
+  background:#ddc8b6!important;
+}
+
+.v503-date-slide{
+  position:absolute!important;
+  inset:-3%!important;
+  width:106%!important;
+  height:106%!important;
+  max-width:none!important;
+  display:block!important;
+  visibility:visible!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  opacity:0;
+  transform-origin:50% 50%;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  animation:
+    v503Fade 12s cubic-bezier(.42,0,.20,1) infinite,
+    v503KenBurns 12s linear infinite;
+  will-change:opacity,transform;
+}
+
+/* At t=0 slide A is fully visible, B is fully hidden. */
+.v503-date-slide--a{
+  animation-delay:0s,0s;
+}
+.v503-date-slide--b{
+  animation-delay:-6s,-6s;
+}
+
+@keyframes v503Fade{
+  0%,42%{opacity:1}
+  50%,92%{opacity:0}
+  100%{opacity:1}
+}
+
+@keyframes v503KenBurns{
+  0%{transform:translate3d(-.35%,-.20%,0) scale(1.055)}
+  50%{transform:translate3d(.35%,-.45%,0) scale(1.085)}
+  100%{transform:translate3d(-.20%,.15%,0) scale(1.065)}
+}
+
+.v503-date-grade{
+  position:absolute!important;
+  inset:0!important;
+  z-index:3!important;
+  pointer-events:none!important;
+  background:
+    radial-gradient(ellipse 72% 58% at 50% 44%,rgba(255,248,228,.07),transparent 58%),
+    linear-gradient(180deg,rgba(62,44,47,.025),transparent 34%,rgba(78,41,51,.075));
+}
+
+/* Content always wins over slideshow. */
+.scene-date>.living-wash{
+  position:relative!important;
+  z-index:3!important;
+  opacity:.045!important;
+  pointer-events:none!important;
+}
+.scene-date>.inv-shell{
+  position:relative!important;
+  z-index:5!important;
+}
+.scene-date .count-item{
+  background:linear-gradient(155deg,rgba(255,250,240,.91),rgba(241,218,193,.84))!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+@media(max-width:600px){
+  .v503-date-slide{
+    inset:-2%!important;
+    width:104%!important;
+    height:104%!important;
+  }
+}
+
+/* Accessibility: keep the slideshow change, remove only the camera drift. */
+@media(prefers-reduced-motion:reduce){
+  .v503-date-slide{
+    animation-name:v503Fade!important;
+    animation-duration:12s!important;
+    animation-timing-function:ease-in-out!important;
+    animation-iteration-count:infinite!important;
+    transform:none!important;
+  }
+  .v503-date-slide--a{animation-delay:0s!important}
+  .v503-date-slide--b{animation-delay:-6s!important}
+}
